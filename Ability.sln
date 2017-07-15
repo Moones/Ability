@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.Core", "Ability.Cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ability.Modules", "Ability.Modules", "{D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoneDruid", "Ability.Modules\LoneDruid\LoneDruid.csproj", "{BF65CEAE-4464-4DAD-892F-4D124252D89E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.LoneDruid", "Ability.Modules\LoneDruid\Ability.LoneDruid.csproj", "{BF65CEAE-4464-4DAD-892F-4D124252D89E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
