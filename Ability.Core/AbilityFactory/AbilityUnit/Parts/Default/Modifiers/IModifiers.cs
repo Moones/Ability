@@ -29,6 +29,24 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
         DataProvider<Modifier> ModifierRemoved { get; }
         bool ConsumedAghanim { get; set; }
 
+        float ImmobileDuration { get; }
+
+        bool Invul { get; set; }
+
+        bool Stunned { get; set; }
+
+        bool Rooted { get; set; }
+
+        bool MagicImmune { get; set; }
+
+        bool AttackImmune { get; set; }
+
+        bool Immobile { get; }
+
+        bool Silenced { get; set; }
+
+        bool Disarmed { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

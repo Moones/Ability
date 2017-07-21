@@ -122,6 +122,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </param>
         void RemoveSkill(T skill);
 
+        /// <summary>The delete item.</summary>
+        /// <param name="item">The item.</param>
+        void DeleteItem(T item);
+
         /// <summary>The add talent.</summary>
         /// <param name="talent">The talent.</param>
         void AddTalent(IAbilityTalent talent);

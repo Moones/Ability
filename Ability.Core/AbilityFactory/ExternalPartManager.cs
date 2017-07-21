@@ -11,11 +11,11 @@ namespace Ability.Core.AbilityFactory
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityManager;
 
     using Ensage;

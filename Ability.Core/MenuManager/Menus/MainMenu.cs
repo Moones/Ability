@@ -25,7 +25,7 @@ namespace Ability.Core.MenuManager.Menus
         internal MainMenu()
             : base(Constants.AssemblyName, Constants.AssemblyName, true)
         {
-            this.AddSubMenu(this.ModulesMenu);
+            //this.AddSubMenu(this.ModulesMenu);
             this.AddSubMenu(this.SettingsMenu);
         }
 

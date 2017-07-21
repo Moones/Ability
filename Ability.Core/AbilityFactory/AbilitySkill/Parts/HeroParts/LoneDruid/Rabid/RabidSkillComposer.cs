@@ -10,8 +10,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.LoneDruid.Rab
 
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.LoneDruid.Rabid.CastData;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage.Common.Enums;
 

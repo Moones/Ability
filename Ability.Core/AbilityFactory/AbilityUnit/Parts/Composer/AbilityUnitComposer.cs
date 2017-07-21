@@ -11,7 +11,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer
+namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
 {
     using System;
     using System.Collections.Generic;
@@ -22,23 +22,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.IconDrawer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Level;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ScreenInfo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TurnRate;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility;
-
-    using Ensage;
 
     /// <summary>
     ///     The ability unit composer.
@@ -64,7 +62,28 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer
             //this.AssignPart<IUnitOverlay>(abilityUnit => new UnitOverlay(abilityUnit));
             this.AssignPart<IVisibility>(abilityUnit => new Visibility(abilityUnit));
             this.AssignPart<IUnitDataReceiver>(abilityUnit => new UnitDataReceiver(abilityUnit));
+            this.AssignPart<IItemManager>(abilityUnit => new ItemManager(abilityUnit));
             this.AssignPart<ISkillBook<IAbilitySkill>>(abilityUnit => new SkillBook<IAbilitySkill>(abilityUnit));
+            this.AssignPart<IDisableManager>(
+                unit =>
+                    {
+                        if (unit.IsEnemy)
+                        {
+                            return new DisableManager(unit);
+                        }
+
+                        return null;
+                    });
+            this.AssignPart<IMovementTracker>(
+                unit =>
+                {
+                    if (unit.IsEnemy)
+                    {
+                        return new MovementTracker(unit);
+                    }
+
+                    return null;
+                });
             //this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
             this.AssignPart<IUnitOrderQueue>(
                 unit =>

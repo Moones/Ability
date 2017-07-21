@@ -66,7 +66,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
         /// </param>
         public void ParticleAdded(ParticleEffect particleEffect)
         {
-            this.StartTime = Game.RawGameTime - Game.AvgPing / 1000;
+            this.StartTime = GlobalVariables.Time - Game.AvgPing / 1000;
             this.AbilitySkill.AreaOfEffect.AbilityParticleEffect(particleEffect);
             this.abilityParticleProvider.Next(this);
         }

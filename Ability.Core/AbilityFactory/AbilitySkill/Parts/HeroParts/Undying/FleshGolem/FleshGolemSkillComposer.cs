@@ -6,7 +6,7 @@
     using Ability.Core.AbilityFactory.AbilityModifier.Parts.Heroes.Undying.FleshGolem.ModifierEffectApplier;
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.ModifierGenerator;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage.Common.Enums;
 

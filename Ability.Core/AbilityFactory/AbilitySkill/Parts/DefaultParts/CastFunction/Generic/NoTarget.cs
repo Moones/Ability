@@ -22,7 +22,7 @@
                     () =>
                         {
                             this.Skill.SourceAbility.UseAbility();
-                            return 100;
+                            return this.Skill.IsItem ? 250 : (float)(this.Skill.CastData.CastPoint * 250);
                         }));
 
             return true;
@@ -42,7 +42,7 @@
                     () =>
                     {
                         this.Skill.SourceAbility.UseAbility();
-                        return 100;
+                        return this.Skill.IsItem ? 250 : (float)(this.Skill.CastData.CastPoint * 250);
                     }));
 
             return true;

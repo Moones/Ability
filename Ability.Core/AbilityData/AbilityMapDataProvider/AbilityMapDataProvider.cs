@@ -130,7 +130,7 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
 
         public void OnLoad()
         {
-            this.startTime = Game.RawGameTime;
+            this.startTime = GlobalVariables.Time;
             foreach (var rune in ObjectManager.GetEntities<Rune>())
             {
                 if (rune.RuneType == RuneType.Bounty)
@@ -156,7 +156,7 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
                 return;
             }
 
-            if (Game.RawGameTime - this.startTime > 240)
+            if (GlobalVariables.Time - this.startTime > 240)
             {
                 this.noNeedForUpdate = true;
             }

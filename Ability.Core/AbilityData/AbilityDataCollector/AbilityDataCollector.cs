@@ -274,6 +274,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             {
                 return;
             }
+
+            GlobalVariables.Time = Game.RawGameTime;
             
             //this.AbilityMapDataProvider.Value.OnDraw();
 
@@ -341,6 +343,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                     {
                         return;
                     }
+
+                    GlobalVariables.Time = Game.RawGameTime;
 
                     if (args.NewValue)
                     {
@@ -425,8 +429,10 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
         private void Entity_OnInt32PropertyChange(Entity sender, Int32PropertyChangeEventArgs args)
         {
-            if (args.NewValue.Equals(args.OldValue) || args.PropertyName == "m_flStartSequenceCycle"
-                || args.PropertyName == "m_iFoWFrameNumber" || args.PropertyName == "m_iNetTimeOfDay")
+            if (args.NewValue.Equals(args.OldValue)
+                || args.PropertyName.Equals("m_flstartsequencecycle", StringComparison.InvariantCultureIgnoreCase)
+                || args.PropertyName.Equals("m_ifowframenumber", StringComparison.InvariantCultureIgnoreCase)
+                || args.PropertyName.Equals("m_inettimeofday", StringComparison.InvariantCultureIgnoreCase))
             {
                 return;
             }
@@ -436,47 +442,62 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                 return;
             }
 
-            var propertyName = args.PropertyName;
-            switch (propertyName)
+
+            if (args.PropertyName.Equals(GlobalVariables.PropertyHealth, StringComparison.InvariantCultureIgnoreCase))
             {
-                default:
+                this.AbilityUnitManager.Value.Units.FirstOrDefault(x => x.Value.UnitHandle.Equals(sender.Handle))
+                    .Value?.DataReceiver.HealthChange(args.NewValue);
+                return;
+            }
 
-                    // foreach (var keyValuePair in this.AbilityUnitManager.Value.Units)
-                    // {
-                    // keyValuePair.Value.DataReceiver.Entity_OnInt32PropertyChange(sender, args);
-                    // }
-                    return;
-                case GlobalVariables.PropertyHealth:
-                    this.AbilityUnitManager.Value.Units.FirstOrDefault(x => x.Value.UnitHandle.Equals(sender.Handle))
-                        .Value?.DataReceiver.HealthChange(args.NewValue);
-                    return;
-                case "m_NetworkActivity":
-                    var newNetworkActivity = (NetworkActivity)args.NewValue;
-                    switch (newNetworkActivity)
-                    {
-                        case NetworkActivity.Attack:
-                        case NetworkActivity.Attack2:
-                        case NetworkActivity.AttackEvent:
+            if (args.PropertyName.Equals("m_networkactivity", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var newNetworkActivity = (NetworkActivity)args.NewValue;
+                switch (newNetworkActivity)
+                {
+                    case NetworkActivity.Attack:
+                    case NetworkActivity.Attack2:
+                    case NetworkActivity.AttackEvent:
 
-                            //if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
-                            //{
-                            //    //var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
-                            //    Console.WriteLine("netw changed: " + Game.RawGameTime);
-                            //}
+                        //if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
+                        //{
+                        //    //var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
+                        //    Console.WriteLine("netw changed: " + Game.RawGameTime);
+                        //}
 
-                            //Console.WriteLine(args.PropertyName + " " + args.NewValue);
-                            foreach (var unit in this.AbilityUnitManager.Value.ControllableUnits)
+                        //Console.WriteLine(args.PropertyName + " " + args.NewValue);
+                        foreach (var unit in this.AbilityUnitManager.Value.ControllableUnits)
+                        {
+                            if (unit.Value.SourceUnit.IsAlive)
                             {
-                                if (unit.Value.SourceUnit.IsAlive && unit.Value.UnitHandle.Equals(sender.Handle))
+                                if (unit.Value.UnitHandle.Equals(sender.Handle))
                                 {
+                                    GlobalVariables.Time = Game.RawGameTime;
                                     unit.Value.AttackAnimationTracker.AttackStarted();
                                 }
+                                else if (unit.Value.TargetSelector.TargetIsSet
+                                         && unit.Value.TargetSelector.Target.UnitHandle.Equals(sender.Handle))
+                                {
+                                    GlobalVariables.Time = Game.RawGameTime;
+                                    unit.Value.TargetSelector.TargetStartAttacking.Notify();
+                                }
                             }
+                        }
 
-                            break;
-                    }
+                        break;
+                    case NetworkActivity.Move:
+                        foreach (var unit in this.AbilityUnitManager.Value.ControllableUnits)
+                        {
+                            if (unit.Value.SourceUnit.IsAlive && unit.Value.TargetSelector.TargetIsSet
+                                && unit.Value.TargetSelector.Target.UnitHandle.Equals(sender.Handle))
+                            {
+                                GlobalVariables.Time = Game.RawGameTime;
+                                unit.Value.TargetSelector.TargetStartMoving.Notify();
+                            }
+                        }
 
-                    return;
+                        break;
+                }
             }
         }
 

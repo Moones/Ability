@@ -11,7 +11,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer
+namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCompo
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Charges;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.HitDelay;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillDataReceiver;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
@@ -49,6 +49,16 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCompo
             this.AssignPart<ISkillLevel>(skill => skill.IsItem ? new ItemLevel(skill) : new SkillLevel(skill));
             this.AssignPart<ICooldown>(skill => skill.SourceAbility.GetCooldown(2) <= 0 ? null : new Cooldown(skill));
             this.AssignPart<ISkillCastData>(skill => new SkillCastData(skill));
+            this.AssignPart<IHitDelay>(
+                skill =>
+                    {
+                        if (!skill.Owner.IsEnemy && skill.Owner.SourceUnit.IsControllable)
+                        {
+                            return new HitDelay(skill);
+                        }
+
+                        return null;
+                    });
             this.AssignPart<ICharges>(
                 skill =>
                     {
@@ -76,9 +86,16 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCompo
                     {
                         if (skill.Owner.SourceUnit.IsControllable)
                         {
-                            if (!skill.Owner.IsEnemy && skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.NoTarget))
+                            if (!skill.Owner.IsEnemy)
                             {
-                                return new NoTarget(skill);
+                                if (skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.NoTarget))
+                                {
+                                    return new NoTarget(skill);
+                                }
+                                else if (skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.UnitTarget))
+                                {
+                                    return new DefaultParts.CastFunction.Generic.UnitTarget(skill);
+                                }
                             }
                         }
 

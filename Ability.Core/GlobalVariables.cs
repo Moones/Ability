@@ -25,24 +25,24 @@ namespace Ability.Core
     {
         #region Constants
 
-        public const string PropertyAbilityLevel = "m_iLevel";
+        public const string PropertyAbilityLevel = "m_ilevel";
 
         /// <summary>
         ///     The property ability phase.
         /// </summary>
-        public const string PropertyAbilityPhase = "m_bInAbilityPhase";
+        public const string PropertyAbilityPhase = "m_binabilityphase";
 
-        public const string PropertyCooldown = "m_fCooldown";
+        public const string PropertyCooldown = "m_fcooldown";
 
         /// <summary>
         ///     The property health.
         /// </summary>
-        public const string PropertyHealth = "m_iHealth";
+        public const string PropertyHealth = "m_ihealth";
 
         /// <summary>
         ///     The property visible.
         /// </summary>
-        public const string PropertyVisible = "m_bVisible";
+        public const string PropertyVisible = "m_bvisible";
 
         /// <summary>
         ///     The property x.
@@ -77,6 +77,9 @@ namespace Ability.Core
         ///     Gets or sets the team.
         /// </summary>
         public static Team Team { get; set; }
+
+        /// <summary>Gets or sets the time.</summary>
+        public static float Time { get; set; }
 
         #endregion
     }

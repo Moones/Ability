@@ -66,7 +66,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
 
         public bool PreciseIssue()
         {
-            if (!this.Enabled || !this.issueSleeper.Sleeping)
+            if (!this.Enabled)
             {
                 return false;
             }
@@ -78,14 +78,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                 return false;
             }
 
-            if ((!this.wasMoving && this.Target.SourceUnit.NetworkActivity == NetworkActivity.Move)
-                || (Math.Abs(this.lastRad - this.Target.SourceUnit.RotationRad) > Math.PI / 5))
+            if ((Math.Abs(this.lastRad - this.Target.SourceUnit.RotationRad) > Math.PI / 6)
+                || (this.targetPosition.Distance2D(this.Target.Position.PredictedByLatency) > 35 && !this.moveOrderWasSent))
             {
                 return this.Bodyblock();
             }
 
             return false;
         }
+
+        public bool Bodyblocking { get; set; }
 
         public IAbilityUnit Target => this.Unit.TargetSelector.Target;
 
@@ -101,146 +103,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
             return this.Unit.SourceUnit.Move(Game.MousePosition);
         }
 
-        private ProjectionInfo projectionInfo;
-        private ProjectionInfo projectionInfo2;
-
-        private Vector3 infront;
-
-        private Vector3 unitPosition;
-
-        private Vector3 targetPosition;
-
-        private bool isCloserToFront;
-
-        private bool canBlock;
-
-        private Vector3 direction;
-
-        private Vector3 direction1;
-
-        private Vector3 direction2;
-
-        private Vector3 position;
-
-        private Vector3 position2;
-
-        private float distance;
-
-        private float distance2;
-
-        public bool PreciseBodyBlock()
-        {
-            this.unitPosition = this.Unit.Position.PredictedByLatency;
-            this.targetPosition = this.Target.Position.PredictedByLatency;
-            this.infront = this.Target.SourceUnit.InFront(500);
-            //infront =
-            //    this.Target.SourceUnit.InFront(
-            //        (this.Unit.Position.Current.Distance2D(infront) / this.Unit.SourceUnit.MovementSpeed)
-            //        * this.Target.SourceUnit.MovementSpeed);
-            this.projectionInfo = Vector3Extensions.ProjectOn(
-                this.targetPosition,
-                this.unitPosition,
-                this.infront);
-            this.projectionInfo2 = Vector3Extensions.ProjectOn(
-                this.unitPosition,
-                this.targetPosition,
-                this.infront);
-            this.isCloserToFront = this.unitPosition.Distance2D(this.infront) + this.Unit.SourceUnit.HullRadius
-                                  + this.Target.SourceUnit.HullRadius < this.targetPosition.Distance2D(this.infront);
-            this.canBlock = (this.Unit.SourceUnit.NetworkActivity == NetworkActivity.Move || this.moveOrderWasSent)
-                           && (this.projectionInfo2.IsOnSegment
-                               || this.unitPosition.Distance2D(
-                                   Vector2Extensions.ToVector3(this.projectionInfo2.SegmentPoint))
-                               < this.Target.SourceUnit.HullRadius / 2)
-                           && this.isCloserToFront;
-            if (!this.canBlock && (this.projectionInfo.IsOnSegment
-                || this.targetPosition.Distance2D(Vector2Extensions.ToVector3(this.projectionInfo.SegmentPoint))
-                < this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 20))
-            {
-                this.direction = (this.infront - this.targetPosition).Normalized();
-                this.direction1 = (this.infront - this.targetPosition).Perpendicular().Normalized();
-                this.direction2 = (this.targetPosition - this.infront).Perpendicular().Normalized();
-                //Console.WriteLine(direction1 + " " + direction2);
-
-                this.position = Pathfinding.ExtendUntilWall(
-                    this.targetPosition,
-                    this.direction1,
-                    this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50,
-                    this.Unit.Pathfinder);
-
-                this.position2 = Pathfinding.ExtendUntilWall(
-                    this.targetPosition,
-                    this.direction2,
-                    this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50,
-                    this.Unit.Pathfinder);
-
-
-                this.distance = this.unitPosition.Distance2D(this.position);
-                this.distance2 = this.unitPosition.Distance2D(this.position2);
-
-                var pos = this.position;
-                var dist = this.distance;
-
-                if (this.distance2 < this.distance)
-                {
-                    dist = this.distance2;
-                    pos = this.position2;
-                }
-
-                if (!this.isCloserToFront)
-                {
-                    if (dist > 100)
-                    {
-                        this.infront = Pathfinding.ExtendUntilWall(
-                            this.unitPosition,
-                            (pos - this.unitPosition).Normalized(),
-                            dist + 500,
-                            this.Unit.Pathfinder);
-                    }
-                    else
-                    {
-                        this.infront = Pathfinding.ExtendUntilWall(this.unitPosition, this.direction, 300, this.Unit.Pathfinder);
-                    }
-                }
-                //else
-                //{
-                //    infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 300, this.Pathfinder);
-                //}
-            }
-            else
-            {
-                if (!this.Target.SourceUnit.CanMove())// || this.Target.SourceUnit.NetworkActivity != NetworkActivity.Move)
-                {
-                    return false;
-                }
-
-                if (this.canBlock)
-                {
-                    this.Unit.SourceUnit.Stop();
-                    this.moveOrderWasSent = false;
-                    //this.Unit.SourceUnit.Move(infront);
-                    return true;
-                }
-                else
-                {
-                    this.infront = this.Target.SourceUnit.InFront(250);
-                }
-            }
-
-            this.Unit.SourceUnit.Move(this.infront);
-            this.moveOrderWasSent = true;
-            return true;
-        }
-
         private double lastRad;
 
         private bool wasMoving;
+        private bool targetWasMoving;
+
+        private bool stopped;
+
+        private Vector3 targetPosition;
 
         public bool Bodyblock()
         {
             var unitPosition = this.Unit.Position.PredictedByLatency;
-            var targetPosition = this.Target.Position.PredictedByLatency;
-            var infront = this.Target.SourceUnit.InFront(500);
+            this.targetPosition = this.Target.Position.PredictedByLatency;
+            var infront = this.Target.SourceUnit.InFront(1000);
             //infront =
             //    this.Target.SourceUnit.InFront(
             //        (this.Unit.Position.Current.Distance2D(infront) / this.Unit.SourceUnit.MovementSpeed)
@@ -254,14 +130,77 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                 unitPosition,
                 targetPosition + (backWardsdirection * (unitPosition.Distance2D(targetPosition) + 200)),
                 infront);
-            var isCloserToFront = unitPosition.Distance2D(infront) + this.Unit.SourceUnit.HullRadius
-                                  + this.Target.SourceUnit.HullRadius + 100 < targetPosition.Distance2D(infront);
-            var distanceFromSegment2 = unitPosition.Distance2D(
+            var distanceFromSegment2 = this.Unit.Position.Current.Distance2D(
                  Vector2Extensions.ToVector3(projectionInfo2.SegmentPoint));
+            var isCloserToFront = (projectionInfo2.SegmentPoint.Distance(infront) + this.Unit.SourceUnit.HullRadius
+                                   + this.Target.SourceUnit.HullRadius + 50) < targetPosition.Distance2D(infront)
+                                  && unitPosition.Distance2D(infront) < targetPosition.Distance2D(infront);
+            var angle = this.Unit.SourceUnit.FindRelativeAngle(infront);
+            //Console.WriteLine(angle + " " + Math.PI / 4);
+            var goodposition = (projectionInfo2.IsOnSegment)
+                               && isCloserToFront;
             this.wasMoving = this.Unit.SourceUnit.NetworkActivity == NetworkActivity.Move;
-            var canBlock = (this.wasMoving || this.moveOrderWasSent)
-                           && (projectionInfo2.IsOnSegment
-                               || distanceFromSegment2 < this.Target.SourceUnit.HullRadius / 2) && isCloserToFront;
+            this.targetWasMoving = this.Target.SourceUnit.NetworkActivity == NetworkActivity.Move;
+            this.lastRad = this.Target.SourceUnit.RotationRad;
+            var idleTime = this.Target.MovementTracker.IdleTime();
+            if (isCloserToFront && idleTime < 1)
+            {
+                if (this.Unit.TargetSelector.LastDistanceToTarget
+                    > this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius
+                    + (this.Target.SourceUnit.MovementSpeed * (Game.Ping / 1000) * 2) + 200
+                    || (angle > Math.PI / 6) || !goodposition)
+                {
+                    //Console.WriteLine("1");
+                    this.moveOrderWasSent = true;
+                    this.Bodyblocking = true;
+                    return
+                        this.Unit.SourceUnit.Move(
+                            this.Target.SourceUnit.InFront(
+                                this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 150
+                                + (this.Target.SourceUnit.MovementSpeed * (Game.Ping / 1000) * 2)));
+                }
+            }
+
+            if (goodposition)
+            {
+                if ((this.wasMoving || this.moveOrderWasSent) && this.Target.SourceUnit.CanMove() && idleTime < 1)
+                {
+                    //Console.WriteLine("2");
+                    this.moveOrderWasSent = false;
+                    this.issueSleeper.Sleep(
+                        this.IssueSleep
+                        + ((this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius * 2)
+                           / this.Target.SourceUnit.MovementSpeed) * 1000);
+                    this.Bodyblocking = true;
+                    return this.Stop();
+                }
+
+                if (!this.Target.SourceUnit.CanMove() || idleTime >= 1)
+                {
+                    //Console.WriteLine("3");
+                    this.moveOrderWasSent = false;
+                    return this.CantMove();
+                }
+
+                //Console.WriteLine("5");
+                this.moveOrderWasSent = true;
+                this.issueSleeper.Sleep(
+                    this.IssueSleep
+                    + ((this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius)
+                       / this.Target.SourceUnit.MovementSpeed) * 1000);
+
+                this.Bodyblocking = true;
+                return this.Unit.SourceUnit.Move(
+                    this.Target.SourceUnit.InFront(
+                        this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 200
+                        + (this.Target.SourceUnit.MovementSpeed * (Game.Ping / 1000) * 2)));
+                return this.Stop();
+                //this.moveOrderWasSent = false;
+                return false;
+            }
+
+            //Console.WriteLine("4");
+            var canBlock = (this.wasMoving || this.moveOrderWasSent) && goodposition;
             if (!canBlock && (projectionInfo.IsOnSegment
                 || targetPosition.Distance2D(Vector2Extensions.ToVector3(projectionInfo.SegmentPoint))
                 < this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 20))
@@ -310,27 +249,36 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
             }
             else
             {
-                if (!this.Target.SourceUnit.CanMove() || !this.wasMoving)
-                {
-                    this.moveOrderWasSent = false;
-                    return false;
-                }
+                //if (!this.Target.SourceUnit.CanMove() || !this.targetWasMoving)
+                //{
+                //    this.moveOrderWasSent = false;
+                //    return this.CantMove();
+                //}
+                infront =
+                    this.Target.SourceUnit.InFront(
+                        this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 300
+                        + (this.Target.SourceUnit.MovementSpeed * (Game.Ping / 1000) * 2));
 
-                if (canBlock)
-                {
-                    this.Unit.SourceUnit.Stop();
-                    //this.Unit.SourceUnit.Move(infront);
-                    return true;
-                }
-                else
-                {
-                    infront = this.Target.SourceUnit.InFront(200);
-                }
+                //this.moveOrderWasSent = false;
+                //return false;
             }
 
-            this.Unit.SourceUnit.Move(infront);
             this.moveOrderWasSent = true;
+            this.Unit.SourceUnit.Move(infront);
+            this.Bodyblocking = false;
             return true;
         }
+
+        public virtual bool CantMove()
+        {
+            return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+        }
+
+        public virtual bool Stop()
+        {
+            return this.Unit.SourceUnit.Stop();
+        }
+
+
     }
 }

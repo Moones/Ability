@@ -18,8 +18,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Invoker
 
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Invoker.CastData;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage;
     using Ensage.Common.Extensions;

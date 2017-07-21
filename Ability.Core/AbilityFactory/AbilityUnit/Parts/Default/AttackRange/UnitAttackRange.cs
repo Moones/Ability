@@ -22,9 +22,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
 
         public IAbilityUnit Unit { get; set; }
 
+        private bool dragonLance;
+
+        private bool hurricanePike;
+
         public virtual void Initialize()
         {
             this.Value = this.Unit.SourceUnit.AttackRange;
+            
+            //if (this.Unit.)
         }
 
         public float Value { get; set; }

@@ -22,13 +22,13 @@ namespace Ability.Core.AbilityFactory
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilitySkill.Data;
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilitySkill.Types;
     using Ability.Core.AbilityFactory.AbilityTalent;
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Types;
     using Ability.Core.AbilityFactory.AbilityUnit.Types.Meepo;
     using Ability.Core.AbilityFactory.Database;

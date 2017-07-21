@@ -17,7 +17,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker
 
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;

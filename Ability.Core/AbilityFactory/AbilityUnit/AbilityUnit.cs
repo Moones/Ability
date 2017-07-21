@@ -22,17 +22,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit.Data;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.IconDrawer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Interaction;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Level;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
@@ -137,6 +140,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         public bool IsLocalHero { get; set; }
 
         public bool IsCreep { get; set; }
+
+        public IDisableManager DisableManager { get; set; }
+
+        public IMovementTracker MovementTracker { get; set; }
 
         /// <summary>
         ///     Gets or sets the level.
@@ -397,9 +404,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         public Hero SourceHero { get; }
 
+        public IItemManager ItemManager { get; set; }
+
         public IAttackAnimation AttackAnimation { get; set; }
 
         public IAttackAnimationTracker AttackAnimationTracker { get; set; }
+
+        public bool IsChasing { get; set; }
+
+        public bool IsRetreating { get; set; }
 
         #endregion
     }

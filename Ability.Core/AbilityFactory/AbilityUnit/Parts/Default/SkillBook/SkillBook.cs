@@ -240,23 +240,23 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </param>
         public virtual void AddSkill(T skill)
         {
-            if (skill.Json.IsDamageAmp)
-            {
-                var newDamageAmps = this.damageAmps.ToDictionary(x => x.Key, x => x.Value);
-                newDamageAmps.Add(skill.SkillHandle, skill);
-                this.damageAmps = newDamageAmps;
-                this.DamageAmpsOrderedForCast =
-                    this.damageAmps.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
-            }
-            else
-            {
-                var newSkills = this.skills.ToDictionary(x => x.Key, x => x.Value);
-                newSkills.Add(skill.SkillHandle, skill);
-                this.skills = newSkills;
-                this.SkillsOrderedForCast = this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
-                this.SkillsOrderedForDamageDealt =
-                    this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.DamageDealtPriority);
-            }
+            //if (skill.Json.IsDamageAmp)
+            //{
+            //    var newDamageAmps = this.damageAmps.ToDictionary(x => x.Key, x => x.Value);
+            //    newDamageAmps.Add(skill.SkillHandle, skill);
+            //    this.damageAmps = newDamageAmps;
+            //    this.DamageAmpsOrderedForCast =
+            //        this.damageAmps.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
+            //}
+            //else
+            //{
+            //    var newSkills = this.skills.ToDictionary(x => x.Key, x => x.Value);
+            //    newSkills.Add(skill.SkillHandle, skill);
+            //    this.skills = newSkills;
+            //    this.SkillsOrderedForCast = this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
+            //    this.SkillsOrderedForDamageDealt =
+            //        this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.DamageDealtPriority);
+            //}
 
             if (skill.IsItem)
             {
@@ -268,6 +268,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 {
                     this.HasAghanim = true;
                 }
+
+                this.Unit.ItemManager.ItemAdded(skill);
             }
             else
             {
@@ -292,12 +294,35 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 this.HasBlink = true;
             }
 
-            if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
-            {
-                this.Unit.DataReceiver.SelfModifierGenerators.Add(skill.SkillHandle, skill.ModifierGenerator);
-            }
+            //if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
+            //{
+            //    this.Unit.DataReceiver.SelfModifierGenerators.Add(skill.SkillHandle, skill.ModifierGenerator);
+            //}
 
             this.SkillAdded.Next(skill);
+        }
+
+        public void DeleteItem(T item)
+        {
+            var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
+            newitems.Remove(item.SkillHandle);
+            this.items = newitems;
+
+            if (item.SourceItem.Id == AbilityId.item_ultimate_scepter)
+            {
+                this.HasAghanim = false;
+            }
+
+            this.Unit.ItemManager.ItemRemoved(item);
+
+            var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
+            newallSkills.Remove(item.SkillHandle);
+            this.allSkills = newallSkills;
+
+            if (item.Name == "item_blink")
+            {
+                this.HasBlink = false;
+            }
         }
 
         public void AddTalent(IAbilityTalent talent)
@@ -348,33 +373,36 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         public virtual void RemoveSkill(T skill)
         {
             // Console.WriteLine("remove: " + skill.Name);
-            if (skill.Json.IsDamageAmp)
-            {
-                var newDamageAmps = this.damageAmps.ToDictionary(x => x.Key, x => x.Value);
-                newDamageAmps.Remove(skill.SkillHandle);
-                this.damageAmps = newDamageAmps;
-                this.DamageAmpsOrderedForCast =
-                    this.damageAmps.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
-            }
-            else
-            {
-                var newSkills = this.skills.ToDictionary(x => x.Key, x => x.Value);
-                newSkills.Remove(skill.SkillHandle);
-                this.skills = newSkills;
-                this.SkillsOrderedForCast = this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
-                this.SkillsOrderedForDamageDealt =
-                    this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.DamageDealtPriority);
-            }
+            //if (skill.Json.IsDamageAmp)
+            //{
+            //    var newDamageAmps = this.damageAmps.ToDictionary(x => x.Key, x => x.Value);
+            //    newDamageAmps.Remove(skill.SkillHandle);
+            //    this.damageAmps = newDamageAmps;
+            //    this.DamageAmpsOrderedForCast =
+            //        this.damageAmps.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
+            //}
+            //else
+            //{
+            //    var newSkills = this.skills.ToDictionary(x => x.Key, x => x.Value);
+            //    newSkills.Remove(skill.SkillHandle);
+            //    this.skills = newSkills;
+            //    this.SkillsOrderedForCast = this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.CastPriority);
+            //    this.SkillsOrderedForDamageDealt =
+            //        this.skills.Select(x => x.Value).OrderByDescending(x => x.Json.DamageDealtPriority);
+            //}
 
             if (skill.IsItem)
             {
                 var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
                 newitems.Remove(skill.SkillHandle);
                 this.items = newitems;
+
                 if (skill.SourceItem.Id == AbilityId.item_ultimate_scepter)
                 {
                     this.HasAghanim = false;
                 }
+
+                this.Unit.ItemManager.ItemRemoved(skill);
             }
             else
             {
@@ -399,10 +427,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 this.HasBlink = false;
             }
 
-            if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
-            {
-                this.Unit.DataReceiver.SelfModifierGenerators.Remove(skill.SkillHandle);
-            }
+            //if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
+            //{
+            //    this.Unit.DataReceiver.SelfModifierGenerators.Remove(skill.SkillHandle);
+            //}
 
             skill.Dispose();
             this.SkillRemoved.Next(skill);

@@ -54,7 +54,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         /// <summary>
         ///     Gets the cast point.
         /// </summary>
-        public double CastPoint => this.castPointUpdate?.Value ?? this.Skill.SourceAbility.FindCastPoint();
+        public double CastPoint
+            => this.castPointUpdate?.Value ?? Math.Max(this.Skill.SourceAbility.FindCastPoint(), 0.1);
 
         public bool Queued { get; set; }
 
@@ -98,7 +99,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         {
             this.castPointUpdate = new LevelUpdater<IAbilitySkill, double>(
                 this.Skill,
-                () => this.Skill.SourceAbility.FindCastPoint());
+                () => Math.Max(this.Skill.SourceAbility.FindCastPoint(), 0.1));
             this.speedUpdate = new LevelUpdater<IAbilitySkill, float>(
                 this.Skill,
                 () => this.Skill.SourceAbility.GetProjectileSpeed());

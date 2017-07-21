@@ -8,8 +8,8 @@
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectApplier;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.ModifierGenerator;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
-    
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
+
     using Ensage.Common.Extensions;
 
     using AbilityId = Ensage.AbilityId;

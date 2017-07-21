@@ -88,7 +88,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown
                 this.current = value;
                 if (!this.manualCalculation && !this.lastValue.Equals(this.current))
                 {
-                    this.lastChangeTime = Game.RawGameTime;
+                    this.lastChangeTime = GlobalVariables.Time;
                 }
 
                 if (this.current > this.Max)
@@ -171,7 +171,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown
                 }
 
                 this.manualCalculation = true;
-                var calculatedValue = this.lastValue - Math.Floor(Game.RawGameTime - this.lastChangeTime);
+                var calculatedValue = this.lastValue - Math.Floor(GlobalVariables.Time - this.lastChangeTime);
                 if (calculatedValue <= 0)
                 {
                     this.manualCalculation = false;

@@ -16,7 +16,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
         Notifier TargetDistanceChanged { get; }
 
+        Notifier TargetStartMoving { get; }
+
+        Notifier TargetStartAttacking { get; }
+
         float LastDistanceToTarget { get; set; }
+
+        float MaxTargetDistance { get; set; }
 
         bool TargetIsSet { get; set; }
 
@@ -25,5 +31,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         IAbilityUnit GetTarget();
 
         IAbilityUnit[] GetTargets();
+
+
     }
 }

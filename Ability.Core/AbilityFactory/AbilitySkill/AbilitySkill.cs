@@ -26,6 +26,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectApplier;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.HitDelay;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.ModifierGenerator;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillAreaOfEffect;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
@@ -515,23 +516,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         }
 
         /// <summary>
-        ///     The hit delay.
-        /// </summary>
-        /// <param name="hero">
-        ///     The hero.
-        /// </param>
-        public double HitDelay(Unit hero)
-        {
-            // if (hero == null || !hero.IsValid)
-            // {
-            // return 0;
-            // }
-
-            // return this.CastData.HitDelayDictionary[hero.Handle];
-            return 0;
-        }
-
-        /// <summary>
         ///     The set can hit.
         /// </summary>
         /// <param name="hero">
@@ -595,6 +579,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         public ICastFunction CastFunction { get; set; }
 
         public ICastRange CastRange { get; set; }
+
+        public IHitDelay HitDelay { get; set; }
 
         #endregion
     }

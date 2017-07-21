@@ -19,17 +19,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.IconDrawer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Interaction;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Level;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
@@ -102,6 +105,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         bool IsHero { get; }
 
         Hero SourceHero { get; }
+
+        IItemManager ItemManager { get; set; }
+
+        IDisableManager DisableManager { get; set; }
+
+        IMovementTracker MovementTracker { get; set; }
 
         /// <summary>
         ///     Gets the level.

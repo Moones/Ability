@@ -1,4 +1,4 @@
-﻿namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer
+﻿namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
 {
     using System;
 

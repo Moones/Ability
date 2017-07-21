@@ -44,7 +44,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
         /// </summary>
         public IAbilitySkill AbilitySkill { get; set; }
 
-        public float Duration => Game.RawGameTime - Game.Ping / 1000 - this.StartTime;
+        public float Duration => GlobalVariables.Time - Game.Ping / 1000 - this.StartTime;
 
         /// <summary>
         ///     Gets or sets a value indicating whether running.
@@ -67,7 +67,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
         /// </summary>
         public void Start()
         {
-            this.StartTime = Game.RawGameTime - Game.Ping / 1000;
+            this.StartTime = GlobalVariables.Time - Game.Ping / 1000;
             this.Running = true;
 
             // this.AbilitySkill.AreaOfEffect.AbilityPhase(true);

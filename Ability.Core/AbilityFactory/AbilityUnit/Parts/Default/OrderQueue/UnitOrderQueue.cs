@@ -104,7 +104,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                 }
             }
 
-            Console.WriteLine("processing order " + this.processedOrder.OrderType);
+            //Console.WriteLine("processing order " + this.processedOrder.OrderType);
             var delay = this.processedOrder.Execute();
 
             this.sleeper.Sleep(delay + Game.Ping);
@@ -129,7 +129,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                 return false;
             }
 
-            Console.WriteLine("processing order " + order.OrderType);
+            //Console.WriteLine("processing order " + order.OrderType);
             var delay = order.Execute();
 
             this.sleeper.Sleep(delay + Game.Ping);

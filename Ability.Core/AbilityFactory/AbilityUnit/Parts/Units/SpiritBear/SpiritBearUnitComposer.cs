@@ -11,7 +11,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear
 
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
 

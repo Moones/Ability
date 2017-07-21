@@ -9,7 +9,7 @@
     using Ability.Core.AbilityFactory.AbilityModifier.Parts.Default.ModifierEffectApplier.Workers.DamageManipulation;
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.ModifierGenerator;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillComposer;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilityTalent;
     using Ability.Core.AbilityFactory.Utilities;
 

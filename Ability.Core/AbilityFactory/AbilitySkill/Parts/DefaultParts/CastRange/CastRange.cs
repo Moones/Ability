@@ -9,6 +9,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
     using Ability.Core.AbilityFactory.Utilities;
 
+    using Ensage.Common.Extensions;
+
     public class CastRange : ICastRange
     {
         private float baseValue;
@@ -29,7 +31,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
         public virtual void Initialize()
         {
             this.UpdateValue();
-
             this.Skill.Level.Subscribe(
                 new DataObserver<ISkillLevel>(
                     level =>
@@ -46,7 +47,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         public virtual void UpdateValue()
         {
-            this.BaseValue = this.Skill.SourceAbility.CastRange;
+            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange, 300) + this.Skill.Owner.SourceUnit.HullRadius;
         }
 
         public float BaseValue

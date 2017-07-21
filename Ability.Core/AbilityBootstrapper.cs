@@ -90,6 +90,7 @@ namespace Ability.Core
         [Import(typeof(IAbilityManager))]
         internal Lazy<IAbilityManager> AbilityUnitManager { get; set; }
 
+        /// <summary>Gets or sets the ability data collector.</summary>
         [Import(typeof(IAbilityDataCollector))]
         internal Lazy<IAbilityDataCollector> AbilityDataCollector { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿namespace LoneDruid.ChaseCombo
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackRange;
@@ -88,7 +90,32 @@
             //    + this.SkillBook.Rabid.CastData.EnoughMana + " " + this.SkillBook.Rabid.CastData.IsOnCooldown);
             if (!this.Unit.TargetSelector.TargetIsSet)
             {
-                return false;
+                return this.CastSpellsNoTarget();
+            }
+
+            //Console.WriteLine(this.Target.Modifiers.Immobile);
+            if (!this.Target.DisableManager.WillGetDisabled && !this.Target.Modifiers.Immobile
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.Idle
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.IdleImpatient
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.IdleImpatientSwordTap
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.IdleRare
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.IdleSleeping
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.IdleSleepingEnd
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.RoquelaireLandIdle
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.SwimIdle
+                && this.Target.SourceUnit.NetworkActivity != NetworkActivity.WaitIdle)
+            {
+                if (this.CastDisable())
+                {
+                    return true;
+                }
+            }
+
+            if (this.Unit.ItemManager.Mjollnir.Equipped && this.Unit.ItemManager.Mjollnir.Item.CanCast()
+                && this.Unit.TargetSelector.LastDistanceToTarget
+                < this.Unit.TargetSelector.Target.AttackRange.Value + 100)
+            {
+                return this.Unit.ItemManager.Mjollnir.Item.CastFunction.Cast(this.Unit);
             }
 
             if (this.Unit.TargetSelector.LastDistanceToTarget < 1500
@@ -97,12 +124,40 @@
                 return this.SkillBook.Rabid.CastFunction.Cast();
             }
 
+            if (this.Unit.ItemManager.PhaseBoots.Equipped
+                && this.Unit.TargetSelector.LastDistanceToTarget > this.Unit.AttackRange.Value
+                && this.Unit.ItemManager.PhaseBoots.Item.CanCast())
+            {
+                return this.Unit.ItemManager.PhaseBoots.Item.CastFunction.Cast();
+            }
+
             if (this.SkillBook.BattleCry.CanCast() && this.Unit.TargetSelector.LastDistanceToTarget < 700
                 && (this.Unit.TargetSelector.Target.SourceUnit.IsAttacking()
                     || !this.Unit.TargetSelector.Target.SourceUnit.CanMove()
                     || this.Unit.TargetSelector.Target.SourceUnit.MovementSpeed < 200))
             {
                 return this.SkillBook.BattleCry.CastFunction.Cast();
+            }
+
+            return false;
+        }
+
+        private bool CastDisable()
+        {
+            if (this.Unit.ItemManager.AbyssalBlade.Equipped
+                && this.Unit.ItemManager.AbyssalBlade.Item.CastFunction.Cast())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CastSpellsNoTarget()
+        {
+            if (this.Unit.ItemManager.PhaseBoots.Equipped && this.Unit.ItemManager.PhaseBoots.Item.CanCast())
+            {
+                return this.Unit.ItemManager.PhaseBoots.Item.CastFunction.Cast();
             }
 
             return false;

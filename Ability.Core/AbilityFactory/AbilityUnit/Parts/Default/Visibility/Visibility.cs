@@ -53,7 +53,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility
         /// <summary>
         ///     Gets the fog time.
         /// </summary>
-        public float FogTime => Game.RawGameTime - this.fogTime;
+        public float FogTime => GlobalVariables.Time - this.fogTime;
 
         /// <summary>
         ///     Gets or sets the unit.
@@ -80,7 +80,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility
                 else if (!value && this.visible)
                 {
                     this.visible = false;
-                    this.fogTime = Game.RawGameTime;
+                    this.fogTime = GlobalVariables.Time;
                 }
                 else
                 {

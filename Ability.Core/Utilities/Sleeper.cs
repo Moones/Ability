@@ -40,7 +40,7 @@ namespace Ability.Core.Utilities
         /// <summary>
         ///     Gets a value indicating whether sleeping.
         /// </summary>
-        public bool Sleeping => Game.RawGameTime < this.lastSleepTickCount;
+        public bool Sleeping => GlobalVariables.Time < this.lastSleepTickCount;
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Ability.Core.Utilities
         /// </param>
         public void Sleep(float duration)
         {
-            this.lastSleepTickCount = Game.RawGameTime + duration / 1000;
+            this.lastSleepTickCount = GlobalVariables.Time + duration / 1000;
         }
 
         #endregion

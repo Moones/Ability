@@ -11,7 +11,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Composer
+namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
 {
     using System;
     using System.Collections.Generic;

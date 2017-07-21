@@ -160,7 +160,7 @@ namespace Ability.Core.MenuManager
                             }
                             else if (module.GenerateMenu)
                             {
-                                this.MainMenu.ModulesMenu.AddSubMenu(module.GetMenu());
+                                this.MainMenu.AddSubMenu(module.GetMenu());
                             }
                         }));
 

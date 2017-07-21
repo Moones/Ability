@@ -58,7 +58,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
         /// </summary>
         public void Casted()
         {
-            this.CastTime = Game.RawGameTime;
+            this.CastTime = GlobalVariables.Time;
             this.abilityCastProvider.Next(this);
         }
 

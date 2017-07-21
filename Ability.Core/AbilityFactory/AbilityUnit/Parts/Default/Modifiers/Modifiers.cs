@@ -13,6 +13,9 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 {
+    using System;
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityFactory.Utilities;
 
     using Ensage;
@@ -61,17 +64,33 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
             {
                 this.ConsumedAghanim = true;
             }
+            else if (modifier.IsStunDebuff || this.DisableModifiers.Contains(modifier.Name))
+            {
+                var remainingTime = modifier.RemainingTime;
+                if (modifier.Name == "modifier_eul_cyclone" || modifier.Name == "modifier_invoker_tornado")
+                {
+                    remainingTime += 0.07f;
+                }
+
+                if (remainingTime > this.ImmobileDuration)
+                {
+                    this.immobile = true;
+                    this.immobileModifier = modifier;
+                }
+            }
+
+            this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
+            this.Invul = this.Unit.SourceUnit.IsInvul();
+            this.MagicImmune = this.Unit.SourceUnit.IsMagicImmune();
+            this.Rooted = this.Unit.SourceUnit.IsRooted();
+            this.Stunned = this.Unit.SourceUnit.IsStunned();
+            this.Silenced = this.Unit.SourceUnit.IsSilenced();
+            this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
 
             this.ModifierAdded.Next(modifier);
         }
 
-        public virtual void Dispose()
-        {
-        }
-
-        public virtual void Initialize()
-        {
-        }
+        public bool Disarmed { get; set; }
 
         /// <summary>
         ///     The modifier removed.
@@ -85,9 +104,76 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
             {
                 this.ConsumedAghanim = false;
             }
+            else if (this.immobile && modifier.Handle.Equals(this.immobileModifier.Handle))
+            {
+                this.immobile = false;
+            }
+
+            this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
+            this.Invul = this.Unit.SourceUnit.IsInvul();
+            this.MagicImmune = this.Unit.SourceUnit.IsMagicImmune();
+            this.Rooted = this.Unit.SourceUnit.IsRooted();
+            this.Stunned = this.Unit.SourceUnit.IsStunned();
+            this.Silenced = this.Unit.SourceUnit.IsSilenced();
+            this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
 
             this.ModifierRemoved.Next(modifier);
         }
+
+        private readonly HashSet<string> DisableModifiers = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                                                                       {
+                                                                           "modifier_shadow_demon_disruption",
+                                                                           "modifier_obsidian_destroyer_astral_imprisonment_prison",
+                                                                           "modifier_eul_cyclone",
+                                                                           "modifier_invoker_tornado",
+                                                                           "modifier_bane_nightmare",
+                                                                           "modifier_shadow_shaman_shackles",
+                                                                           "modifier_crystal_maiden_frostbite",
+                                                                           "modifier_ember_spirit_searing_chains",
+                                                                           "modifier_axe_berserkers_call",
+                                                                           "modifier_lone_druid_spirit_bear_entangle_effect",
+                                                                           "modifier_meepo_earthbind",
+                                                                           "modifier_naga_siren_ensnare",
+                                                                           "modifier_storm_spirit_electric_vortex_pull",
+                                                                           "modifier_treant_overgrowth",
+                                                                           "modifier_cyclone",
+                                                                           "modifier_sheepstick_debuff",
+                                                                           "modifier_shadow_shaman_voodoo",
+                                                                           "modifier_lion_voodoo", "modifier_sheepstick",
+                                                                           "modifier_brewmaster_storm_cyclone",
+                                                                           "modifier_puck_phase_shift",
+                                                                           "modifier_dark_troll_warlord_ensnare",
+                                                                           "modifier_invoker_deafening_blast_knockback",
+                                                                           "modifier_pudge_meat_hook"
+                                                                       };
+
+        public virtual void Dispose()
+        {
+        }
+
+        public virtual void Initialize()
+        {
+        }
+
+        public bool Immobile => this.immobile;
+
+        public bool Silenced { get; set; }
+
+        private Modifier immobileModifier;
+
+        private bool immobile;
+
+        public float ImmobileDuration => this.immobile ? this.immobileModifier.RemainingTime : 0;
+
+        public bool Invul { get; set; }
+
+        public bool Stunned { get; set; }
+
+        public bool Rooted { get; set; }
+
+        public bool MagicImmune { get; set; }
+
+        public bool AttackImmune { get; set; }
 
         #endregion
     }

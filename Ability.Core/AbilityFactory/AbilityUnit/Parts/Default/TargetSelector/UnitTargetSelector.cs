@@ -31,6 +31,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
         public float LastDistanceToTarget { get; set; }
 
+        public float MaxTargetDistance { get; set; }
+
         public void Initialize()
         {
             this.Unit.Position.Subscribe(
@@ -144,5 +146,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 this.Unit.Position.PredictedByLatency.Distance2D(this.Target.Position.PredictedByLatency);
             this.TargetDistanceChanged.Notify();
         }
+
+        public Notifier TargetStartMoving { get; } = new Notifier();
+
+        public Notifier TargetStartAttacking { get; } = new Notifier();
     }
 }

@@ -24,6 +24,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectApplier;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.HitDelay;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.ModifierGenerator;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillAreaOfEffect;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
@@ -58,6 +59,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the ability particle.
         /// </summary>
         AbilityParticle AbilityParticle { get; set; }
+
+        IHitDelay HitDelay { get; set; }
 
         /// <summary>
         ///     Gets or sets the cast start.
@@ -311,17 +314,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// <typeparam name="T">The type of part</typeparam>
         /// <returns>The <see cref="T" />.</returns>
         T GetPart<T>() where T : IAbilitySkillPart;
-
-        /// <summary>
-        ///     The hit delay.
-        /// </summary>
-        /// <param name="hero">
-        ///     The hero.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="float" />.
-        /// </returns>
-        double HitDelay(Unit hero);
 
         /// <summary>
         ///     The set can hit.

@@ -134,7 +134,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 return true;
             }
 
-            this.Time = (Game.RawGameTime) * 1000 + Game.Ping;
+            this.Time = (GlobalVariables.Time) * 1000 + Game.Ping;
             this.NextAttack = this.Time - this.Unit.AttackAnimationTracker.NextAttackTime + (this.Unit.TurnRate.GetTurnTime(this.Target) * 1000);
             //Console.WriteLine(time + " " + Game.Ping + " " + this.NextAttackTime + " " + (this.Unit.SourceUnit.GetTurnTime(this.Target.SourceUnit) * 1000));
 
@@ -165,9 +165,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 {
                     return false;
                 }
+                
+                if (this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile || this.Target.Modifiers.AttackImmune
+                    || this.Target.Modifiers.Invul)
+                {
+                    this.MeanWhile = true;
+                    return false;
+                }
 
                 this.MeanWhile = false;
-                if (this.BeforeAttack())
+
+                if (this.Unit.AttackRange.IsInAttackRange(this.Target) && this.BeforeAttack())
                 {
                     this.MoveToAttack = false;
                     this.beforeAttackExecuted = true;
@@ -216,11 +224,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
             if (this.MoveToAttack)
             {
+                if (this.CastSpells())
+                {
+                    return true;
+                }
+
                 this.MoveBeforeAttack();
                 return true;
             }
 
-            return this.MeanWhile && this.Meanwhile();
+            return this.MeanWhile && (this.CastSpells() || this.Meanwhile());
         }
 
         public IAbilityUnit Target => this.Unit.TargetSelector.Target;
@@ -229,12 +242,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual bool BeforeAttack()
         {
-            if (this.Unit.AttackRange.IsInAttackRange(this.Target))
-            {
-                return this.Attack();
-            }
-
-            return false;
+            return this.Attack();
         }
 
         public bool RunAround(IAbilityUnit unit, IAbilityUnit targetUnit)
