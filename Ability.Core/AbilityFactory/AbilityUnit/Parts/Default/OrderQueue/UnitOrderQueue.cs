@@ -13,7 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -25,8 +24,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
     internal class UnitOrderQueue : IUnitOrderQueue
     {
+        #region Fields
+
+        private uint count;
+
+        private uint lastId;
 
         private IUnitOrder processedOrder;
+
+        private bool queueEmpty = true;
+
+        private Sleeper sleeper = new Sleeper();
+
+        #endregion
 
         #region Constructors and Destructors
 
@@ -40,9 +50,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
         #region Public Properties
 
+        public bool Enabled { get; set; }
+
+        public uint Id { get; set; }
+
+        public bool IsWorking { get; set; }
+
         public DataProvider<IUnitOrder> NewOrderQueued { get; } = new DataProvider<IUnitOrder>();
 
         public Notifier QueueEmpty { get; } = new Notifier();
+
+        public DataProvider<IUnitOrder> StartedExecution { get; } = new DataProvider<IUnitOrder>();
 
         public IAbilityUnit Unit { get; set; }
 
@@ -50,14 +68,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
         #region Properties
 
-        private IOrderedEnumerable<KeyValuePair<uint, IUnitOrder>> Queue { get; set; }
-
         private Dictionary<uint, IUnitOrder> OrdersDictionary { get; } = new Dictionary<uint, IUnitOrder>();
+
+        private IOrderedEnumerable<KeyValuePair<uint, IUnitOrder>> Queue { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
-
 
         public void Dispose()
         {
@@ -65,86 +82,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
             this.Queue = null;
             this.NewOrderQueued.Dispose();
             this.QueueEmpty.Dispose();
-        }
-
-        private uint lastId;
-
-        private bool queueEmpty = true;
-
-        private uint count;
-
-        private Sleeper sleeper = new Sleeper();
-
-        public void Update()
-        {
-            
-        }
-
-        public bool Enabled { get; set; }
-
-        public uint Id { get; set; }
-
-        public bool Issue()
-        {
-            if (this.queueEmpty)
-            {
-                return false;
-            }
-
-            if (this.sleeper.Sleeping)
-            {
-                return false;
-            }
-
-            if (!this.processedOrder.CanExecute())
-            {
-                if (!this.GetNextOrder(true))
-                {
-                    return false;
-                }
-            }
-
-            //Console.WriteLine("processing order " + this.processedOrder.OrderType);
-            var delay = this.processedOrder.Execute();
-
-            this.sleeper.Sleep(delay + Game.Ping);
-
-            if (this.processedOrder.ExecuteOnce)
-            {
-                this.GetNextOrder(true);
-            }
-
-            return true;
-        }
-
-        public bool IssueNow(IUnitOrder order)
-        {
-            if (this.sleeper.Sleeping)
-            {
-                return true;
-            }
-
-            if (!order.CanExecute())
-            {
-                return false;
-            }
-
-            //Console.WriteLine("processing order " + order.OrderType);
-            var delay = order.Execute();
-
-            this.sleeper.Sleep(delay + Game.Ping);
-
-            if (order.ExecuteOnce)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool PreciseIssue()
-        {
-            return false;
         }
 
         public void EnqueueOrder(IUnitOrder order)
@@ -176,28 +113,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                     this.OrdersDictionary.Add(this.lastId, order);
                 }
             }
-        }
-
-        private IUnitOrder GetHighestPriorityOrder()
-        {
-            var priority = -1u;
-            IUnitOrder order = null;
-
-            foreach (var unitOrder in this.OrdersDictionary)
-            {
-                if (unitOrder.Value.Priority > priority)
-                {
-                    order = unitOrder.Value;
-                    priority = unitOrder.Value.Priority;
-                }
-            }
-
-            //if (order != null)
-            //{
-            //    this.OrdersDictionary.Remove(order.Id);
-            //}
-
-            return order;
         }
 
         public bool GetNextOrder(bool removeProcessed)
@@ -234,9 +149,103 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
         {
         }
 
-        public DataProvider<IUnitOrder> StartedExecution { get; } = new DataProvider<IUnitOrder>();
+        public bool Issue()
+        {
+            if (this.queueEmpty)
+            {
+                return false;
+            }
 
-        public bool IsWorking { get; set; }
+            if (this.sleeper.Sleeping)
+            {
+                return false;
+            }
+
+            if (!this.processedOrder.CanExecute())
+            {
+                if (!this.GetNextOrder(true))
+                {
+                    return false;
+                }
+            }
+
+            // Console.WriteLine("processing order " + this.processedOrder.OrderType);
+            var delay = this.processedOrder.Execute();
+
+            if (delay > 0)
+            {
+                this.sleeper.Sleep(delay + Game.Ping);
+            }
+
+            if (this.processedOrder.ExecuteOnce)
+            {
+                this.GetNextOrder(true);
+            }
+
+            return true;
+        }
+
+        public bool IssueNow(IUnitOrder order)
+        {
+            if (this.sleeper.Sleeping)
+            {
+                return true;
+            }
+
+            if (!order.CanExecute())
+            {
+                return false;
+            }
+
+            // Console.WriteLine("processing order " + order.OrderType);
+            var delay = order.Execute();
+
+            if (delay > 0)
+            {
+                this.sleeper.Sleep(delay + Game.Ping);
+            }
+
+            if (order.ExecuteOnce)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool PreciseIssue()
+        {
+            return false;
+        }
+
+        public void Update()
+        {
+        }
+
+        #endregion
+
+        #region Methods
+
+        private IUnitOrder GetHighestPriorityOrder()
+        {
+            var priority = -1u;
+            IUnitOrder order = null;
+
+            foreach (var unitOrder in this.OrdersDictionary)
+            {
+                if (unitOrder.Value.Priority > priority)
+                {
+                    order = unitOrder.Value;
+                    priority = unitOrder.Value.Priority;
+                }
+            }
+
+            // if (order != null)
+            // {
+            // this.OrdersDictionary.Remove(order.Id);
+            // }
+            return order;
+        }
 
         #endregion
     }

@@ -13,18 +13,13 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Weaver
 {
-    using System.ComponentModel.Composition;
-
-    using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker.Types;
 
-    using Ensage;
-
     /// <summary>The weaver unit composer.</summary>
-    //[Export(typeof(IAbilityUnitComposer))]
-    //[AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_Weaver)]
+    // [Export(typeof(IAbilityUnitComposer))]
+    // [AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_Weaver)]
     internal class WeaverUnitComposer : AbilityUnitComposer
     {
         #region Constructors and Destructors

@@ -13,19 +13,14 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Rubick
 {
-    using System.ComponentModel.Composition;
-
     using Ability.Core.AbilityFactory.AbilitySkill;
-    using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Rubick.SkillBook;
 
-    using Ensage;
-
     /// <summary>The rubick unit composer.</summary>
-    //[Export(typeof(IAbilityUnitComposer))]
-    //[AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_Rubick)]
+    // [Export(typeof(IAbilityUnitComposer))]
+    // [AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_Rubick)]
     internal class RubickUnitComposer : AbilityUnitComposer
     {
         #region Constructors and Destructors

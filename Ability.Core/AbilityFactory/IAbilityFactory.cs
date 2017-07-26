@@ -19,7 +19,6 @@ namespace Ability.Core.AbilityFactory
     using Ability.Core.AbilityFactory.AbilityTalent;
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
     using Ability.Core.AbilityService;
 
     using Ensage;
@@ -45,6 +44,12 @@ namespace Ability.Core.AbilityFactory
         /// </returns>
         IControllableSkill CreateNewControllableSkill(Ability skill, IAbilityUnit owner);
 
+        /// <summary>The create new modifier.</summary>
+        /// <param name="modifier">The modifier.</param>
+        /// <param name="affectedUnit">The affectedUnit.</param>
+        /// <returns>The <see cref="IAbilityModifier" />.</returns>
+        IAbilityModifier CreateNewModifier(Modifier modifier, IAbilityUnit affectedUnit);
+
         /// <summary>
         ///     The create new skill.
         /// </summary>
@@ -59,6 +64,12 @@ namespace Ability.Core.AbilityFactory
         /// </returns>
         IUncontrollableSkill CreateNewSkill(Ability skill, IAbilityUnit owner);
 
+        /// <summary>The create new talent.</summary>
+        /// <param name="ability">The ability.</param>
+        /// <param name="owner">The owner.</param>
+        /// <returns>The <see cref="IAbilityTalent" />.</returns>
+        IAbilityTalent CreateNewTalent(Ability ability, IAbilityUnit owner);
+
         /// <summary>
         ///     The create new unit.
         /// </summary>
@@ -72,18 +83,6 @@ namespace Ability.Core.AbilityFactory
         ///     The <see cref="IAbilityUnit" />.
         /// </returns>
         IAbilityUnit CreateNewUnit(Unit unit, IAbilityTeam team);
-
-        /// <summary>The create new modifier.</summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <param name="affectedUnit">The affectedUnit.</param>
-        /// <returns>The <see cref="IAbilityModifier"/>.</returns>
-        IAbilityModifier CreateNewModifier(Modifier modifier, IAbilityUnit affectedUnit);
-
-        /// <summary>The create new talent.</summary>
-        /// <param name="ability">The ability.</param>
-        /// <param name="owner">The owner.</param>
-        /// <returns>The <see cref="IAbilityTalent"/>.</returns>
-        IAbilityTalent CreateNewTalent(Ability ability, IAbilityUnit owner);
 
         #endregion
     }

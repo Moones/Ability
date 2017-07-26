@@ -38,7 +38,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Metadata
             this.Owner = true;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="AbilitySkillMetadataAttribute"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="AbilitySkillMetadataAttribute" /> class.</summary>
         /// <param name="abilityIds">The ability ids.</param>
         public AbilitySkillMetadataAttribute(params uint[] abilityIds)
         {

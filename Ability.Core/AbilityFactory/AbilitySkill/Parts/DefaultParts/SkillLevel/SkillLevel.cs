@@ -35,6 +35,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel
         /// </summary>
         private uint current;
 
+        private ActionExecutor levelUpdater;
+
+        private Sleeper updateSleeper = new Sleeper();
+
         #endregion
 
         #region Constructors and Destructors
@@ -77,8 +81,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel
 
         #endregion
 
-        private ActionExecutor levelUpdater;
-
         #region Public Methods and Operators
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
@@ -86,8 +88,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel
         {
             this.levelUpdater.Dispose();
         }
-
-        private Sleeper updateSleeper = new Sleeper();
 
         /// <summary>The initialize.</summary>
         public virtual void Initialize()

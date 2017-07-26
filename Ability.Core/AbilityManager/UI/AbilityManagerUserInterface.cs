@@ -18,7 +18,6 @@ namespace Ability.Core.AbilityManager.UI
 
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityManager.UI.Elements.Body;
-    using Ability.Core.AbilityManager.UI.Elements.Body.Bodies.DamageManipulation;
     using Ability.Core.AbilityManager.UI.Elements.Window;
     using Ability.Core.MenuManager;
     using Ability.Core.MenuManager.MenuItems;
@@ -47,42 +46,47 @@ namespace Ability.Core.AbilityManager.UI
         internal AbilityManagerUserInterface(Vector2 position, Vector2 size, IAbilityManager abilityManager)
         {
             AbilityBootstrapper.ComposeParts(this);
-            //this.units = new Units(size, position, abilityManager);
-            //this.units = new DamageManipulation(size, position, abilityManager);
+
+            // this.units = new Units(size, position, abilityManager);
+            // this.units = new DamageManipulation(size, position, abilityManager);
             this.window = new Window(size, position, "Ability# Manager", this.units);
 
             var menu = new Menu("AbilityManagerUI", this.MainMenuManager.Value.MainMenu.Name + "abilityManagerUi");
             var enable = new ObservableMenuItem<bool>(menu.Name + "enable", "Enable");
             menu.AddItem(enable.SetValue(false));
             var subbed = false;
-            enable.Provider.Subscribe(new DataObserver<bool>(
-                b =>
-                    {
-                        this.window.Visible = b;
-                        if (!b)
+            enable.Provider.Subscribe(
+                new DataObserver<bool>(
+                    b =>
                         {
-                            if (!subbed)
+                            this.window.Visible = b;
+                            if (!b)
                             {
-                                return;
+                                if (!subbed)
+                                {
+                                    return;
+                                }
+
+                                subbed = false;
+                                Game.OnWndProc -= this.Game_OnWndProc;
+                                Drawing.OnDraw -= this.Drawing_OnDraw;
                             }
-                            subbed = false;
-                            Game.OnWndProc -= this.Game_OnWndProc;
-                            Drawing.OnDraw -= this.Drawing_OnDraw;
-                        }
-                        else
-                        {
-                            if (subbed)
+                            else
                             {
-                                return;
+                                if (subbed)
+                                {
+                                    return;
+                                }
+
+                                subbed = true;
+                                Game.OnWndProc += this.Game_OnWndProc;
+                                Drawing.OnDraw += this.Drawing_OnDraw;
                             }
-                            subbed = true;
-                            Game.OnWndProc += this.Game_OnWndProc;
-                            Drawing.OnDraw += this.Drawing_OnDraw;
-                        }
-                    }));
+                        }));
             this.MainMenuManager.Value.MainMenu.SettingsMenu.AddSubMenu(menu);
-            //Game.OnWndProc += this.Game_OnWndProc;
-            //Drawing.OnDraw += this.Drawing_OnDraw;
+
+            // Game.OnWndProc += this.Game_OnWndProc;
+            // Drawing.OnDraw += this.Drawing_OnDraw;
         }
 
         #endregion

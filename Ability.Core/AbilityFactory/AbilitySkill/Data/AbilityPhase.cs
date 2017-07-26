@@ -26,6 +26,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
     {
         #region Fields
 
+        private DataProvider<AbilityPhase> abilityPhaseProvider = new DataProvider<AbilityPhase>();
+
         #endregion
 
         #region Constructors and Destructors
@@ -84,8 +86,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
             // this.AbilitySkill.AreaOfEffect.AbilityPhase(false);
             this.abilityPhaseProvider.Next(this);
         }
-
-        private DataProvider<AbilityPhase> abilityPhaseProvider = new DataProvider<AbilityPhase>();
 
         /// <summary>Notifies the provider that an observer is to receive notifications.</summary>
         /// <returns>

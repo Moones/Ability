@@ -13,8 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.IconDrawer
 {
-    using System.ComponentModel.Composition;
-
     using Ability.Core.MenuManager.Menus.Submenus.UnitMenu;
 
     using Ensage.Common;
@@ -23,7 +21,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.IconDrawer
     using SharpDX;
 
     /// <summary>The unit icon drawer menu.</summary>
-    //[Export(typeof(IUnitMenu))]
+    // [Export(typeof(IUnitMenu))]
     internal class UnitIconDrawerMenu : IUnitMenu
     {
         #region Fields

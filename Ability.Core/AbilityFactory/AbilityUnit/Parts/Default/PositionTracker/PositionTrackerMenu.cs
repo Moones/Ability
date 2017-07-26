@@ -13,9 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker
 {
-    using System.ComponentModel.Composition;
-
-    using Ability.Core.MenuManager.GetValue;
     using Ability.Core.MenuManager.Menus.Submenus.UnitMenu;
 
     using Ensage.Common.Menu;
@@ -25,7 +22,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker
     /// <summary>
     ///     The position tracker menu.
     /// </summary>
-    //[Export(typeof(IUnitMenu))]
+    // [Export(typeof(IUnitMenu))]
     internal class PositionTrackerMenu : IUnitMenu
     {
         #region Fields
@@ -88,9 +85,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker
         /// </param>
         public void ConnectToUnit(IAbilityUnit unit)
         {
-            //unit.PositionTracker.Menu = this.Menu;
-            //unit.PositionTracker.DrawOnMap = new GetValue<bool, bool>(this.drawonmap, b => b);
-            //unit.PositionTracker.DrawOnMinimap = new GetValue<bool, bool>(this.drawonminimap, b => b);
+            // unit.PositionTracker.Menu = this.Menu;
+            // unit.PositionTracker.DrawOnMap = new GetValue<bool, bool>(this.drawonmap, b => b);
+            // unit.PositionTracker.DrawOnMinimap = new GetValue<bool, bool>(this.drawonminimap, b => b);
         }
 
         #endregion

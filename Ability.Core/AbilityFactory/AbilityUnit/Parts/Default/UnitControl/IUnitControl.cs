@@ -17,7 +17,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitControl
     using System.Collections.Generic;
 
     using Ability.Core.AbilityFactory.AbilitySkill;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
 
     using Ensage;
 

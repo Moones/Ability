@@ -47,10 +47,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
         /// <summary>Gets the modifier added checks.</summary>
         public FunctionManager<IAbilityModifier> ModifierAddedChecks { get; } = new FunctionManager<IAbilityModifier>();
 
-        public FunctionManager<IAbilityModifier> ModifierRemovedChecks { get; } = new FunctionManager<IAbilityModifier>();
+        public FunctionManager<IAbilityModifier> ModifierRemovedChecks { get; } =
+            new FunctionManager<IAbilityModifier>();
 
         /// <summary>Gets the self modifier generators.</summary>
-        public Dictionary<double, IModifierGenerator> SelfModifierGenerators { get; } = new Dictionary<double, IModifierGenerator>();
+        public Dictionary<double, IModifierGenerator> SelfModifierGenerators { get; } =
+            new Dictionary<double, IModifierGenerator>();
 
         /// <summary>
         ///     Gets or sets the unit.
@@ -201,14 +203,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
 
             if (info.SenderIsHero && !sender.IsVisible && sender.Handle.Equals(this.Unit.UnitHandle))
             {
-                //this.Unit.PositionTracker.SenderIsHero(sender, args, info);
+                // this.Unit.PositionTracker.SenderIsHero(sender, args, info);
                 return;
             }
 
             if (info.IsHeroParticle
                 && info.StringContainingHeroName.Contains(this.Unit.Name.Substring("npc_dota_hero_".Length)))
             {
-                //this.Unit.PositionTracker.ParticleIsFromHero(sender, args, info);
+                // this.Unit.PositionTracker.ParticleIsFromHero(sender, args, info);
             }
         }
 
@@ -217,17 +219,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
         /// </summary>
         public void Game_OnUpdate()
         {
-            //foreach (var keyValuePair in this.Unit.SkillBook.AllSkills)
-            //{
-            //    // if (!keyValuePair.Value.SourceAbility.IsValid)
-            //    // {
-            //    // this.Unit.SkillBook.RemoveSkill(keyValuePair.Value);
-            //    // keyValuePair.Value.Dispose();
-            //    // return;
-            //    // }
-            //    keyValuePair.Value.DataReceiver.Game_OnUpdate();
-            //}
-            
+            // foreach (var keyValuePair in this.Unit.SkillBook.AllSkills)
+            // {
+            // // if (!keyValuePair.Value.SourceAbility.IsValid)
+            // // {
+            // // this.Unit.SkillBook.RemoveSkill(keyValuePair.Value);
+            // // keyValuePair.Value.Dispose();
+            // // return;
+            // // }
+            // keyValuePair.Value.DataReceiver.Game_OnUpdate();
+            // }
             this.Updates.InvokeActions();
 
             this.Unit.Mana.Current = this.Unit.SourceUnit.Mana;
@@ -239,12 +240,22 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
 
         public void HealthChange(float value)
         {
-            //Console.WriteLine(value);
+            // Console.WriteLine(value);
             this.Unit.Health.Current = value;
         }
 
         public virtual void Initialize()
         {
+        }
+
+        public bool ModifierAdded(IAbilityModifier modifier)
+        {
+            return this.ModifierAddedChecks.AnyFunctionPasses(modifier);
+        }
+
+        public bool ModifierRemoved(IAbilityModifier modifier)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -298,16 +309,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
                     this.Unit.Modifiers.RemoveModifier(args.Modifier);
                 }
             }
-        }
-
-        public bool ModifierAdded(IAbilityModifier modifier)
-        {
-            return this.ModifierAddedChecks.AnyFunctionPasses(modifier);
-        }
-
-        public bool ModifierRemoved(IAbilityModifier modifier)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

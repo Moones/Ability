@@ -36,7 +36,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ScreenInfo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector;
@@ -44,6 +43,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitControl;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     using Ensage;
 
@@ -54,20 +54,27 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     {
         #region Public Properties
 
+        IAttackAnimation AttackAnimation { get; set; }
+
+        IAttackAnimationTracker AttackAnimationTracker { get; set; }
+
+        IUnitAttackRange AttackRange { get; set; }
+
+        IControllableUnits ControllableUnits { get; set; }
+
+        IDamageManipulation DamageManipulation { get; set; }
+
         /// <summary>
         ///     Gets the data receiver.
         /// </summary>
         IUnitDataReceiver DataReceiver { get; set; }
 
-        /// <summary>Gets the pathfinder.</summary>
-        NavMeshPathfinding Pathfinder { get; }
-
-        IUnitAttackRange AttackRange { get; set; }
-
         /// <summary>
         ///     Gets or sets a value indicating whether debug draw.
         /// </summary>
         bool DebugDraw { get; set; }
+
+        IDisableManager DisableManager { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
@@ -79,8 +86,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         IHealth Health { get; set; }
 
-        IDamageManipulation DamageManipulation { get; set; }
-
         /// <summary>
         ///     Gets the drawer.
         /// </summary>
@@ -91,26 +96,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         IUnitInteraction Interaction { get; set; }
 
+        /// <summary>Gets a value indicating whether is creep.</summary>
+        bool IsCreep { get; }
+
         /// <summary>
         ///     Gets a value indicating whether is enemy.
         /// </summary>
         bool IsEnemy { get; }
 
+        bool IsHero { get; }
+
         /// <summary>Gets a value indicating whether is local hero.</summary>
         bool IsLocalHero { get; set; }
 
-        /// <summary>Gets a value indicating whether is creep.</summary>
-        bool IsCreep { get; }
-
-        bool IsHero { get; }
-
-        Hero SourceHero { get; }
-
         IItemManager ItemManager { get; set; }
-
-        IDisableManager DisableManager { get; set; }
-
-        IMovementTracker MovementTracker { get; set; }
 
         /// <summary>
         ///     Gets the level.
@@ -127,63 +126,49 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         IModifiers Modifiers { get; set; }
 
+        IMovementTracker MovementTracker { get; set; }
+
         /// <summary>
         ///     Gets or sets the name.
         /// </summary>
         string Name { get; set; }
 
+        /// <summary>Gets the order issuers.</summary>
+        IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers { get; }
+
         /// <summary>
         ///     Gets the overlay.
         /// </summary>
-        //IUnitOverlay Overlay { get; set; }
-
+        // IUnitOverlay Overlay { get; set; }
         /// <summary>Gets or sets the order queue.</summary>
         IUnitOrderQueue OrderQueue { get; set; }
 
         /// <summary>
         ///     Gets the overlay entry provider.
         /// </summary>
-        //IOverlayEntryProvider OverlayEntryProvider { get; set; }
-
+        // IOverlayEntryProvider OverlayEntryProvider { get; set; }
         /// <summary>Gets the parts.</summary>
         IReadOnlyDictionary<Type, IAbilityUnitPart> Parts { get; }
 
-        /// <summary>Gets the order issuers.</summary>
-        IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers { get; }
+        /// <summary>Gets the pathfinder.</summary>
+        NavMeshPathfinding Pathfinder { get; }
 
-        /// <summary>The add order issuer.</summary>
-        /// <param name="orderIssuer">The order issuer.</param>
-        void AddOrderIssuer(IOrderIssuer orderIssuer);
-
-        /// <summary>The remove order issuer.</summary>
-        /// <param name="orderIssuer">The order issuer.</param>
-        void RemoveOrderIssuer(IOrderIssuer orderIssuer);
-
-            /// <summary>
+        /// <summary>
         ///     Gets the position.
         /// </summary>
         IPosition Position { get; set; }
-
-        /// <summary>
-        ///     Gets the particle tracker.
-        /// </summary>
-        IUnitTargetSelector TargetSelector { get; set; }
-
-        IUnitTurnRate TurnRate { get; set; }
 
         /// <summary>
         ///     Gets the screen position.
         /// </summary>
         IScreenInfo ScreenInfo { get; set; }
 
-        IAttackAnimation AttackAnimation { get; set; }
-
-        IAttackAnimationTracker AttackAnimationTracker { get; set; }
-
         /// <summary>
         ///     Gets the skill book.
         /// </summary>
         ISkillBook<IAbilitySkill> SkillBook { get; set; }
+
+        Hero SourceHero { get; }
 
         /// <summary>
         ///     Gets or sets the source unit.
@@ -191,9 +176,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         Unit SourceUnit { get; set; }
 
         /// <summary>
+        ///     Gets the particle tracker.
+        /// </summary>
+        IUnitTargetSelector TargetSelector { get; set; }
+
+        /// <summary>
         ///     Gets or sets the team.
         /// </summary>
         IAbilityTeam Team { get; set; }
+
+        IUnitTurnRate TurnRate { get; set; }
 
         /// <summary>Gets or sets the unit composer.</summary>
         IAbilityUnitHeroComposer UnitComposer { get; set; }
@@ -222,6 +214,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         #region Public Methods and Operators
 
+        /// <summary>The add order issuer.</summary>
+        /// <param name="orderIssuer">The order issuer.</param>
+        void AddOrderIssuer(IOrderIssuer orderIssuer);
+
         /// <summary>The add part.</summary>
         /// <typeparam name="T">The type of part</typeparam>
         /// <param name="partFactory">The part Factory.</param>
@@ -232,17 +228,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <returns>The <see cref="T" />.</returns>
         T GetPart<T>() where T : IAbilityUnitPart;
 
+        /// <summary>The initialize.</summary>
+        void Initialize();
+
         /// <summary>
         ///     The on draw.
         /// </summary>
         void OnDraw();
 
+        /// <summary>The remove order issuer.</summary>
+        /// <param name="orderIssuer">The order issuer.</param>
+        void RemoveOrderIssuer(IOrderIssuer orderIssuer);
+
         /// <summary>The remove part.</summary>
         /// <typeparam name="T">The type of part</typeparam>
         void RemovePart<T>() where T : IAbilityUnitPart;
-
-        /// <summary>The initialize.</summary>
-        void Initialize();
 
         #endregion
     }

@@ -14,7 +14,6 @@
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillControl
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
 
     using SharpDX;
 

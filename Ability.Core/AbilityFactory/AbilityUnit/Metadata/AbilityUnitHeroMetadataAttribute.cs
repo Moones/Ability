@@ -1,4 +1,4 @@
-﻿// <copyright file="AbilityUnitMetadataAttribute.cs" company="EnsageSharp">
+﻿// <copyright file="AbilityUnitHeroMetadataAttribute.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -14,12 +14,7 @@
 namespace Ability.Core.AbilityFactory.AbilityUnit.Metadata
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.Composition;
-
-    using Ensage;
-
-    using Attribute = System.Attribute;
 
     /// <summary>
     ///     The skills attribute.

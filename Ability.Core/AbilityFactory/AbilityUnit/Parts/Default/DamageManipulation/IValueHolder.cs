@@ -1,19 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="IValueHolder.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation
 {
+    using System;
+
     public interface IValueHolder<T>
     {
-        bool WillExpire { get; }
+        #region Public Properties
 
         Func<float> ExpireTime { get; }
 
         Func<IAbilityUnit, float, T> GetSpecialValue { get; set; }
 
         T Value { get; set; }
+
+        bool WillExpire { get; }
+
+        #endregion
     }
 }

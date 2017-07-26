@@ -25,8 +25,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         /// </summary>
         double CastPoint { get; }
 
-        bool Queued { get; set; }
-
         /// <summary>
         ///     Gets or sets the cooldown.
         /// </summary>
@@ -41,6 +39,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         ///     Gets or sets a value indicating whether is on cooldown.
         /// </summary>
         bool IsOnCooldown { get; set; }
+
+        bool Queued { get; set; }
 
         /// <summary>
         ///     Gets the speed.

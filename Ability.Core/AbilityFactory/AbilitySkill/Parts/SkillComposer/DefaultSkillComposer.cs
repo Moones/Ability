@@ -88,31 +88,24 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
                         {
                             if (!skill.Owner.IsEnemy)
                             {
-                                if (skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.NoTarget))
-                                {
-                                    return new NoTarget(skill);
-                                }
-                                else if (skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.UnitTarget))
-                                {
-                                    return new DefaultParts.CastFunction.Generic.UnitTarget(skill);
-                                }
+                                return new DefaultCastingFunction(skill);
                             }
                         }
 
                         return null;
                     });
-            //this.AssignPart<ISkillOverlayProvider>(skill => new SkillOverlayProvider(skill));
-            //this.AssignPart<ISkillDamageCalculator>(
-            //    skill =>
-            //        {
-            //            if (!skill.Json.DealsDamageToTarget)
-            //            {
-            //                return null;
-            //            }
 
-            //            return new SkillDamageCalculator(skill);
-            //        });
+            // this.AssignPart<ISkillOverlayProvider>(skill => new SkillOverlayProvider(skill));
+            // this.AssignPart<ISkillDamageCalculator>(
+            // skill =>
+            // {
+            // if (!skill.Json.DealsDamageToTarget)
+            // {
+            // return null;
+            // }
 
+            // return new SkillDamageCalculator(skill);
+            // });
         }
 
         #endregion

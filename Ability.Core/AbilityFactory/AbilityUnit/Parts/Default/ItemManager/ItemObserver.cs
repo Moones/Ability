@@ -1,11 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="ItemObserver.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.Utilities;
 
@@ -13,16 +24,38 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
     public class ItemObserver
     {
-        public AbilityId ItemId { get; }
+        #region Fields
+
+        private float count;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public ItemObserver(AbilityId itemId)
         {
             this.ItemId = itemId;
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public bool Equipped { get; set; }
+
+        public IAbilitySkill Item { get; set; }
+
         public Notifier ItemEquipped { get; } = new Notifier();
 
-        private float count;
+        public AbilityId ItemId { get; }
+
+        public Dictionary<uint, IAbilitySkill> Items { get; set; }
+
+        public bool Multiple { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public void ItemAdded(IAbilitySkill item)
         {
@@ -65,7 +98,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                     this.Multiple = false;
                 }
 
-
                 return;
             }
 
@@ -73,12 +105,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
             this.Item = null;
         }
 
-        public IAbilitySkill Item { get; set; }
-
-        public bool Equipped { get; set; }
-
-        public bool Multiple { get; set; }
-
-        public Dictionary<uint, IAbilitySkill> Items { get; set; }
+        #endregion
     }
 }

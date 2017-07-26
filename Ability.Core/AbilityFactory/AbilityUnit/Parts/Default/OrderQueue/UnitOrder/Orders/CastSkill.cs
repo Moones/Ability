@@ -1,36 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="CastSkill.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
+    using Ability.Core.Utilities;
 
     public class CastSkill : UnitOrderBase
     {
-        public CastSkill(OrderType orderType, IAbilitySkill skill, Func<float> execute)
+        #region Constructors and Destructors
+
+        public CastSkill(OrderType orderType, IAbilitySkill skill, Func<bool> executeFunction)
             : base(orderType, skill.Owner)
         {
-            this.ExecuteAction = execute;
             this.Skill = skill;
+            this.ExecutionInterval = this.Skill.IsItem ? 250 : (float)(this.Skill.CastData.CastPoint * 250);
+            this.ExecuteAction = executeFunction;
         }
 
-        public Func<float> ExecuteAction { get; }
+        #endregion
+
+        #region Public Properties
+
+        public Func<bool> ExecuteAction { get; }
+
+        public float ExecutionInterval { get; set; } = 100;
 
         public IAbilitySkill Skill { get; }
 
+        public Sleeper Sleeper { get; set; } = new Sleeper();
+
+        #endregion
+
+        #region Public Methods and Operators
+
         public override bool CanExecute()
         {
-            return !this.Skill.SourceAbility.IsInAbilityPhase && !this.Skill.CastData.IsOnCooldown
-                   && this.Skill.CastData.EnoughMana;
+            return this.Skill.CastFunction.CanCast();
         }
 
-        public override float Execute()
+        public override void Dequeue()
         {
-            return this.ExecuteAction();
+            this.Skill.CastData.Queued = false;
         }
 
         public override void Enqueue()
@@ -38,9 +62,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             this.Skill.CastData.Queued = true;
         }
 
-        public override void Dequeue()
+        public override float Execute()
         {
-            this.Skill.CastData.Queued = false;
+            if (this.Sleeper.Sleeping)
+            {
+                return 0;
+            }
+
+            if (this.ExecuteAction())
+            {
+                if (this.Skill.AbilityInfo.IsDisable)
+                {
+                    this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(this.Skill.HitDelay.Get());
+                }
+
+                this.Sleeper.Sleep(this.ExecutionInterval);
+            }
+
+            return 0f;
         }
+
+        #endregion
     }
 }

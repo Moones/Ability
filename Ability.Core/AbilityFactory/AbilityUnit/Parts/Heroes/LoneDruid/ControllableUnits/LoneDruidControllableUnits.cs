@@ -1,4 +1,4 @@
-﻿// <copyright file="IAbilityUtilityModule.cs" company="EnsageSharp">
+﻿// <copyright file="LoneDruidControllableUnits.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -11,9 +11,27 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Core.AbilityModule.ModuleBase
+namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits
 {
-    public interface IAbilityUtilityModule : IAbilityModule
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
+
+    public class LoneDruidControllableUnits : ControllableUnits
     {
+        #region Constructors and Destructors
+
+        public LoneDruidControllableUnits(IAbilityUnit unit)
+            : base(unit)
+        {
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public override void Initialize()
+        {
+        }
+
+        #endregion
     }
 }

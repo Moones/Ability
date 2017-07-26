@@ -28,13 +28,13 @@ namespace Ability.Core.AbilityFactory.Utilities
     {
         #region Fields
 
-        private bool onSubscribe;
-
-        private Action<IObserver<T>> onSubscribeAction;
+        private int count;
 
         private Dictionary<int, IObserver<T>> observers = new Dictionary<int, IObserver<T>>();
 
-        private int count;
+        private bool onSubscribe;
+
+        private Action<IObserver<T>> onSubscribeAction;
 
         #endregion
 
@@ -60,6 +60,11 @@ namespace Ability.Core.AbilityFactory.Utilities
 
         #region Public Methods and Operators
 
+        public void Dispose()
+        {
+            this.observers.Clear();
+        }
+
         public void Next(T value)
         {
             foreach (var observer in this.Observers)
@@ -77,7 +82,8 @@ namespace Ability.Core.AbilityFactory.Utilities
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             this.count++;
-            //var newObservers = new Collection<IObserver<T>>(this.Observers) { observer };
+
+            // var newObservers = new Collection<IObserver<T>>(this.Observers) { observer };
             this.observers.Add(this.count, observer);
             if (this.onSubscribe)
             {
@@ -85,11 +91,6 @@ namespace Ability.Core.AbilityFactory.Utilities
             }
 
             return new Unsubscriber<T>(this.observers, this.count);
-        }
-
-        public void Dispose()
-        {
-            this.observers.Clear();
         }
 
         #endregion

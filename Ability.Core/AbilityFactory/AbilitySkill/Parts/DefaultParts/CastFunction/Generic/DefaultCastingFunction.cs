@@ -1,4 +1,4 @@
-﻿// <copyright file="IEffectApplier.cs" company="EnsageSharp">
+﻿// <copyright file="DefaultCastingFunction.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -11,25 +11,34 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectApplier
+namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction.Generic
 {
-    using System.Collections.Generic;
+    using System;
 
-    using Ability.Core.AbilityFactory.AbilityModifier.Parts.Default.ModifierEffectApplier;
+    using Ability.Core.AbilityFactory.AbilityUnit;
 
-    public interface IEffectApplier : IAbilitySkillPart
+    public class DefaultCastingFunction : CastFunctionBase
     {
-        #region Public Properties
+        #region Constructors and Destructors
 
-        ICollection<IEffectApplierWorker> Workers { get; set; }
+        public DefaultCastingFunction(IAbilitySkill skill)
+            : base(skill)
+        {
+        }
 
         #endregion
 
         #region Public Methods and Operators
 
-        void ApplyEffect();
+        public override bool Cast(IAbilityUnit target)
+        {
+            throw new NotImplementedException();
+        }
 
-        void UpdateEffect();
+        public override bool Cast(IAbilityUnit[] targets)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

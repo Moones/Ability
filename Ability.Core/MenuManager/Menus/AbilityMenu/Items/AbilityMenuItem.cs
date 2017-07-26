@@ -24,11 +24,11 @@ namespace Ability.Core.MenuManager.Menus.AbilityMenu.Items
     {
         #region Fields
 
+        private string description;
+
         private AbilityMenu parentMenu;
 
         private T value;
-
-        private string description;
 
         #endregion
 
@@ -109,16 +109,16 @@ namespace Ability.Core.MenuManager.Menus.AbilityMenu.Items
             menu.Menu.AddItem(this.MenuItem);
         }
 
+        public void Dispose()
+        {
+            this.NewValueProvider.Dispose();
+        }
+
         /// <summary>The value getter.</summary>
         /// <returns>The <see cref="GetValue" />.</returns>
         public GetValue<T, T> ValueGetter()
         {
             return new GetValue<T, T>(this.MenuItem, arg => arg);
-        }
-
-        public void Dispose()
-        {
-            this.NewValueProvider.Dispose();
         }
 
         #endregion

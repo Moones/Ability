@@ -150,6 +150,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         public AbilityCast AbilityCast { get; set; }
 
+        public AbilityInfo AbilityInfo { get; set; }
+
         /// <summary>Gets or sets the ability particle.</summary>
         public AbilityParticle AbilityParticle { get; set; }
 
@@ -157,8 +159,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the cast start.
         /// </summary>
         public AbilityPhase AbilityPhase { get; set; }
-
-        public AbilityInfo AbilityInfo { get; set; }
 
         /// <summary>
         ///     Gets or sets the ability projectile.
@@ -174,6 +174,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the cast data.
         /// </summary>
         public ISkillCastData CastData { get; set; }
+
+        public ICastFunction CastFunction { get; set; }
+
+        public ICastRange CastRange { get; set; }
 
         /// <summary>
         ///     Gets or sets the charges.
@@ -229,6 +233,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         public ISkillDrawer Drawer { get; set; }
 
+        public IEffectApplier EffectApplier { get; set; }
+
         /// <summary>
         ///     Gets or sets a value indicating whether has charges.
         /// </summary>
@@ -238,6 +244,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets a value indicating whether has cooldown.
         /// </summary>
         public bool HasCooldown { get; set; }
+
+        public IHitDelay HitDelay { get; set; }
 
         /// <summary>
         ///     Gets or sets the interaction.
@@ -269,6 +277,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         public ISkillLevel Level { get; set; }
 
+        public IModifierGenerator ModifierGenerator { get; set; }
+
         /// <summary>
         ///     Gets or sets the name.
         /// </summary>
@@ -277,12 +287,14 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// <summary>
         ///     Gets or sets the overlay provider.
         /// </summary>
-        //public ISkillOverlayProvider OverlayProvider { get; set; }
-
+        // public ISkillOverlayProvider OverlayProvider { get; set; }
         /// <summary>
         ///     Gets or sets the owner.
         /// </summary>
         public IAbilityUnit Owner { get; set; }
+
+        /// <summary>Gets the part added.</summary>
+        public DataProvider<IAbilitySkillPart> PartAdded { get; } = new DataProvider<IAbilitySkillPart>();
 
         /// <summary>The parts.</summary>
         public IReadOnlyDictionary<Type, IAbilitySkillPart> Parts => this.parts;
@@ -350,9 +362,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>Gets the part added.</summary>
-        public DataProvider<IAbilitySkillPart> PartAdded { get; } = new DataProvider<IAbilitySkillPart>();
 
         /// <summary>The add part.</summary>
         /// <param name="partFactory">The part factory.</param>
@@ -442,8 +451,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         public bool CanCast()
         {
             return this.Level.Current > 0 && this.CastData.EnoughMana && !this.CastData.IsOnCooldown
-                   && !this.CastData.Queued && (!this.HasCharges || this.Charges.Primary > 0)
-                   && !this.SourceAbility.IsInAbilityPhase
+                   && (!this.HasCharges || this.Charges.Primary > 0) && !this.SourceAbility.IsInAbilityPhase
                    && (this.IsItem ? this.Source.CanUseItems() : this.Source.CanCast()) && !this.SourceAbility.IsHidden;
         }
 
@@ -571,16 +579,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
 
             // this.CastData.HitDelayDictionary[hero.Handle] = hitDelay;
         }
-
-        public IModifierGenerator ModifierGenerator { get; set; }
-
-        public IEffectApplier EffectApplier { get; set; }
-
-        public ICastFunction CastFunction { get; set; }
-
-        public ICastRange CastRange { get; set; }
-
-        public IHitDelay HitDelay { get; set; }
 
         #endregion
     }

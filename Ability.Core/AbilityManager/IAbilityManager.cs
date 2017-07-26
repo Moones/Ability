@@ -18,7 +18,6 @@ namespace Ability.Core.AbilityManager
 
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
     using Ability.Core.AbilityService;
 
     using Ensage;
@@ -69,6 +68,9 @@ namespace Ability.Core.AbilityManager
         /// </summary>
         IReadOnlyDictionary<double, IAbilityUnit> Enemies { get; set; }
 
+        /// <summary>Gets or sets the local hero.</summary>
+        IAbilityUnit LocalHero { get; set; }
+
         /// <summary>
         ///     Gets or sets the local team.
         /// </summary>
@@ -83,9 +85,6 @@ namespace Ability.Core.AbilityManager
         ///     Gets or sets the units.
         /// </summary>
         IReadOnlyDictionary<double, IAbilityUnit> Units { get; set; }
-
-        /// <summary>Gets or sets the local hero.</summary>
-        IAbilityUnit LocalHero { get; set; }
 
         #endregion
 

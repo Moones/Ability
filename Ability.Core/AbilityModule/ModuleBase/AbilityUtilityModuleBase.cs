@@ -18,9 +18,18 @@ namespace Ability.Core.AbilityModule.ModuleBase
     [InheritedExport(typeof(IAbilityUtilityModule))]
     public abstract class AbilityUtilityModuleBase : AbilityModuleBase, IAbilityUtilityModule
     {
-        protected AbilityUtilityModuleBase(string name, string shortDescription, bool generateMenu, bool enabledByDefault, bool loadOnGameStart)
+        #region Constructors and Destructors
+
+        protected AbilityUtilityModuleBase(
+            string name,
+            string shortDescription,
+            bool generateMenu,
+            bool enabledByDefault,
+            bool loadOnGameStart)
             : base(name, shortDescription, generateMenu, enabledByDefault, loadOnGameStart)
         {
         }
+
+        #endregion
     }
 }

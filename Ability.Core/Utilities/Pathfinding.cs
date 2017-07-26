@@ -30,6 +30,32 @@ namespace Ability.Core.Utilities
     {
         #region Public Methods and Operators
 
+        public static Vector3 ExtendUntilWall(
+            Vector3 start,
+            Vector3 direction,
+            float distance,
+            NavMeshPathfinding pathFinder)
+        {
+            var step = pathFinder.CellSize / 2f;
+            var testPoint = start;
+            var sign = distance > 0f ? 1f : -1f;
+
+            distance = Math.Abs(distance);
+
+            while (pathFinder.GetCellFlags(testPoint).HasFlag(NavMeshCellFlags.Walkable) && distance > 0f)
+            {
+                if (step > distance)
+                {
+                    step = distance;
+                }
+
+                testPoint = testPoint + sign * direction * step;
+                distance -= step;
+            }
+
+            return testPoint;
+        }
+
         /// <summary>
         ///     The get positions with distance and angle.
         /// </summary>
@@ -153,28 +179,6 @@ namespace Ability.Core.Utilities
         {
             return !flags.HasFlag(NavMeshCellFlags.GridFlagObstacle) && flags.HasFlag(NavMeshCellFlags.Walkable)
                    && !flags.HasFlag(NavMeshCellFlags.Tree);
-        }
-
-        public static Vector3 ExtendUntilWall(Vector3 start, Vector3 direction, float distance, NavMeshPathfinding pathFinder)
-        {
-            var step = pathFinder.CellSize / 2f;
-            var testPoint = start;
-            var sign = distance > 0f ? 1f : -1f;
-
-            distance = Math.Abs(distance);
-
-            while (pathFinder.GetCellFlags(testPoint).HasFlag(NavMeshCellFlags.Walkable) && distance > 0f)
-            {
-                if (step > distance)
-                {
-                    step = distance;
-                }
-
-                testPoint = testPoint + (sign * direction * step);
-                distance -= step;
-            }
-
-            return testPoint;
         }
 
         #endregion

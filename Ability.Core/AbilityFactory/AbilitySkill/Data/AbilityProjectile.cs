@@ -26,6 +26,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
     {
         #region Fields
 
+        private DataProvider<AbilityProjectile> abilityProjectileProvider = new DataProvider<AbilityProjectile>();
+
         #endregion
 
         #region Constructors and Destructors
@@ -65,8 +67,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
             this.AbilitySkill.AreaOfEffect.AbilityProjectile(projectile);
             this.abilityProjectileProvider.Next(this);
         }
-
-        private DataProvider<AbilityProjectile> abilityProjectileProvider = new DataProvider<AbilityProjectile>();
 
         /// <summary>Notifies the provider that an observer is to receive notifications.</summary>
         /// <returns>

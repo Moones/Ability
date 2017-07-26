@@ -20,7 +20,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityTeam;
-    using Ability.Core.AbilityFactory.AbilityUnit.Data;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
@@ -47,6 +46,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitControl;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     using Ensage;
     using Ensage.Common.Objects;
@@ -60,6 +60,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         /// <summary>The parts.</summary>
         private readonly Dictionary<Type, IAbilityUnitPart> parts = new Dictionary<Type, IAbilityUnitPart>();
+
+        private bool disposed;
+
+        private uint orderIssuerCount;
+
+        /// <summary>The order issuers.</summary>
+        private Dictionary<uint, IOrderIssuer> orderIssuers = new Dictionary<uint, IOrderIssuer>();
 
         #endregion
 
@@ -85,6 +92,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             {
                 this.SourceHero = hero;
             }
+
             // foreach (var hero in Heroes.GetByTeam(GlobalVariables.EnemyTeam))
             // {
             // this.DamageDealtDictionary.Add(hero.Handle, 0);
@@ -95,19 +103,27 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         #region Public Properties
 
+        public IAttackAnimation AttackAnimation { get; set; }
+
+        public IAttackAnimationTracker AttackAnimationTracker { get; set; }
+
+        public IUnitAttackRange AttackRange { get; set; }
+
+        public IControllableUnits ControllableUnits { get; set; }
+
+        public IDamageManipulation DamageManipulation { get; set; }
+
         /// <summary>
         ///     Gets or sets the data receiver.
         /// </summary>
         public IUnitDataReceiver DataReceiver { get; set; }
 
-        public NavMeshPathfinding Pathfinder { get; }
-
-        public IUnitAttackRange AttackRange { get; set; }
-
         /// <summary>
         ///     Gets or sets a value indicating whether debug draw.
         /// </summary>
         public bool DebugDraw { get; set; }
+
+        public IDisableManager DisableManager { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
@@ -119,8 +135,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public IHealth Health { get; set; }
 
-        public IDamageManipulation DamageManipulation { get; set; }
-
         /// <summary>
         ///     Gets or sets the drawer.
         /// </summary>
@@ -131,19 +145,23 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public IUnitInteraction Interaction { get; set; }
 
+        public bool IsChasing { get; set; }
+
+        public bool IsCreep { get; set; }
+
         /// <summary>
         ///     Gets or sets a value indicating whether is enemy.
         /// </summary>
         public bool IsEnemy { get; set; }
 
+        public bool IsHero { get; }
+
         /// <summary>Gets a value indicating whether is local hero.</summary>
         public bool IsLocalHero { get; set; }
 
-        public bool IsCreep { get; set; }
+        public bool IsRetreating { get; set; }
 
-        public IDisableManager DisableManager { get; set; }
-
-        public IMovementTracker MovementTracker { get; set; }
+        public IItemManager ItemManager { get; set; }
 
         /// <summary>
         ///     Gets or sets the level.
@@ -160,62 +178,35 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public IModifiers Modifiers { get; set; }
 
+        public IMovementTracker MovementTracker { get; set; }
+
         /// <summary>
         ///     Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>Gets the order issuers.</summary>
+        public IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers => this.orderIssuers;
+
         /// <summary>
         ///     Gets or sets the overlay.
         /// </summary>
-        //public IUnitOverlay Overlay { get; set; }
-
+        // public IUnitOverlay Overlay { get; set; }
         public IUnitOrderQueue OrderQueue { get; set; }
 
         /// <summary>
         ///     Gets or sets the overlay entry provider.
         /// </summary>
-        //public IOverlayEntryProvider OverlayEntryProvider { get; set; }
-
+        // public IOverlayEntryProvider OverlayEntryProvider { get; set; }
         /// <summary>Gets the parts.</summary>
         public IReadOnlyDictionary<Type, IAbilityUnitPart> Parts => this.parts;
 
-        /// <summary>The order issuers.</summary>
-        private Dictionary<uint, IOrderIssuer> orderIssuers = new Dictionary<uint, IOrderIssuer>();
-
-        /// <summary>Gets the order issuers.</summary>
-        public IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers => this.orderIssuers;
-
-        private uint orderIssuerCount;
-
-        /// <summary>The add order issuer.</summary>
-        /// <param name="orderIssuer">The order issuer.</param>
-        public void AddOrderIssuer(IOrderIssuer orderIssuer)
-        {
-            this.orderIssuerCount++;
-            var newList = new Dictionary<uint, IOrderIssuer>(this.orderIssuers)
-                              { { this.orderIssuerCount, orderIssuer } };
-            this.orderIssuers = newList;
-        }
-
-        /// <summary>The remove order issuer.</summary>
-        /// <param name="orderIssuer">The order issuer.</param>
-        public void RemoveOrderIssuer(IOrderIssuer orderIssuer)
-        {
-            //this.orderIssuerCount--;
-            var newList = new Dictionary<uint, IOrderIssuer>(this.orderIssuers);
-            newList.Remove(orderIssuer.Id);
-            this.orderIssuers = newList;
-        }
+        public NavMeshPathfinding Pathfinder { get; }
 
         /// <summary>
         ///     Gets or sets the position.
         /// </summary>
         public IPosition Position { get; set; }
-
-        public IUnitTargetSelector TargetSelector { get; set; }
-
-        public IUnitTurnRate TurnRate { get; set; }
 
         /// <summary>
         ///     Gets or sets the fog of war exploit.
@@ -232,15 +223,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public ISkillBook<IAbilitySkill> SkillBook { get; set; }
 
+        public Hero SourceHero { get; }
+
         /// <summary>
         ///     Gets or sets the source unit.
         /// </summary>
         public Unit SourceUnit { get; set; }
 
+        public IUnitTargetSelector TargetSelector { get; set; }
+
         /// <summary>
         ///     Gets or sets the team.
         /// </summary>
         public IAbilityTeam Team { get; set; }
+
+        public IUnitTurnRate TurnRate { get; set; }
 
         /// <summary>Gets or sets the unit composer.</summary>
         public IAbilityUnitHeroComposer UnitComposer { get; set; }
@@ -269,6 +266,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         #region Public Methods and Operators
 
+        /// <summary>The add order issuer.</summary>
+        /// <param name="orderIssuer">The order issuer.</param>
+        public void AddOrderIssuer(IOrderIssuer orderIssuer)
+        {
+            this.orderIssuerCount++;
+            var newList = new Dictionary<uint, IOrderIssuer>(this.orderIssuers)
+                              {
+                                 { this.orderIssuerCount, orderIssuer } 
+                              };
+            this.orderIssuers = newList;
+        }
+
         /// <summary>The add part.</summary>
         /// <typeparam name="T">The type of part</typeparam>
         /// <param name="partFactory">The part Factory.</param>
@@ -289,8 +298,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             this.GetType().GetProperties().FirstOrDefault(x => x.PropertyType == type)?.SetValue(this, part);
             this.parts.Add(type, part);
         }
-
-        private bool disposed;
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
@@ -321,6 +328,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             return (T)part;
         }
 
+        public virtual void Initialize()
+        {
+        }
+
         /// <summary>
         ///     The on draw.
         /// </summary>
@@ -333,15 +344,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             // this.Overlay.OnDraw();
         }
 
+        /// <summary>The remove order issuer.</summary>
+        /// <param name="orderIssuer">The order issuer.</param>
+        public void RemoveOrderIssuer(IOrderIssuer orderIssuer)
+        {
+            // this.orderIssuerCount--;
+            var newList = new Dictionary<uint, IOrderIssuer>(this.orderIssuers);
+            newList.Remove(orderIssuer.Id);
+            this.orderIssuers = newList;
+        }
+
         /// <summary>The remove part.</summary>
         /// <typeparam name="T">The type of part</typeparam>
         public void RemovePart<T>() where T : IAbilityUnitPart
         {
             this.parts.Remove(typeof(T));
-        }
-
-        public virtual void Initialize()
-        {
         }
 
         #endregion
@@ -399,20 +416,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             // }
             // }
         }
-
-        public bool IsHero { get; }
-
-        public Hero SourceHero { get; }
-
-        public IItemManager ItemManager { get; set; }
-
-        public IAttackAnimation AttackAnimation { get; set; }
-
-        public IAttackAnimationTracker AttackAnimationTracker { get; set; }
-
-        public bool IsChasing { get; set; }
-
-        public bool IsRetreating { get; set; }
 
         #endregion
     }

@@ -35,7 +35,7 @@ namespace Ability.Core
         /// <summary>
         ///     The assembly name.
         /// </summary>
-        public static readonly string AssemblyName = "Ability#";
+        public static readonly string AssemblyName = "Ability";
 
         /// <summary>
         ///     The log directory.

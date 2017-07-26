@@ -50,16 +50,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
         /// <summary>Initializes a new instance of the <see cref="AbilityUnitComposer" /> class.</summary>
         internal AbilityUnitComposer()
         {
-            //this.AssignPart<IOverlayEntryProvider>(abilityUnit => new OverlayEntryProvider(abilityUnit));
+            // this.AssignPart<IOverlayEntryProvider>(abilityUnit => new OverlayEntryProvider(abilityUnit));
             this.AssignPart<IScreenInfo>(abilityUnit => new ScreenInfo(abilityUnit));
             this.AssignPart<IHealth>(abilityUnit => new Health(abilityUnit));
             this.AssignPart<IMana>(abilityUnit => new Mana(abilityUnit));
             this.AssignPart<IPosition>(abilityUnit => new Position(abilityUnit));
-            //this.AssignPart<IUnitIconDrawer>(abilityUnit => new UnitIconDrawer(abilityUnit));
-            //this.AssignPart<IPositionTracker>(abilityUnit => new PositionTracker(abilityUnit));
+
+            // this.AssignPart<IUnitIconDrawer>(abilityUnit => new UnitIconDrawer(abilityUnit));
+            // this.AssignPart<IPositionTracker>(abilityUnit => new PositionTracker(abilityUnit));
             this.AssignPart<IModifiers>(abilityUnit => new Modifiers(abilityUnit));
             this.AssignPart<IUnitLevel>(abilityUnit => new UnitLevel(abilityUnit));
-            //this.AssignPart<IUnitOverlay>(abilityUnit => new UnitOverlay(abilityUnit));
+
+            // this.AssignPart<IUnitOverlay>(abilityUnit => new UnitOverlay(abilityUnit));
             this.AssignPart<IVisibility>(abilityUnit => new Visibility(abilityUnit));
             this.AssignPart<IUnitDataReceiver>(abilityUnit => new UnitDataReceiver(abilityUnit));
             this.AssignPart<IItemManager>(abilityUnit => new ItemManager(abilityUnit));
@@ -76,15 +78,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
                     });
             this.AssignPart<IMovementTracker>(
                 unit =>
-                {
-                    if (unit.IsEnemy)
                     {
-                        return new MovementTracker(unit);
-                    }
+                        if (unit.IsEnemy)
+                        {
+                            return new MovementTracker(unit);
+                        }
 
-                    return null;
-                });
-            //this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
+                        return null;
+                    });
+
+            // this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
             this.AssignPart<IUnitOrderQueue>(
                 unit =>
                     {

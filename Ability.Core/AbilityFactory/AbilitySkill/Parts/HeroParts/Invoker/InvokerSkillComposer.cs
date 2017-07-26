@@ -22,7 +22,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Invoker
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage;
-    using Ensage.Common.Extensions;
 
     /// <summary>
     ///     The invoker skill composer.
@@ -94,7 +93,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Invoker
                         var orbs = this.orbCountDictionary[skill.SourceAbility.Id];
                         return new InvokerSkillCastData(skill, orbs[0], orbs[1], orbs[2]);
                     });
-            //this.AssignPart<ISkillOverlayProvider>(skill => new InvokerSkillOverlayProvider(skill));
+
+            // this.AssignPart<ISkillOverlayProvider>(skill => new InvokerSkillOverlayProvider(skill));
         }
 
         #endregion

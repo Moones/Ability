@@ -26,7 +26,11 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
     /// </summary>
     public interface ISkillDamageCalculator : IAbilitySkillPart
     {
-        #region Public Methods and Operators
+        #region Public Properties
+
+        DamageType DamageType { get; set; }
+
+        Func<IAbilityUnit, ISkillManipulatedDamageCalculatorWorker> DamageWorkerAssign { get; set; }
 
         /// <summary>
         ///     The dealt damage.
@@ -49,28 +53,27 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
         /// <returns>
         ///     The <see cref="float" />.
         /// </returns>
-        //float DealtDamage(
-        //    Unit unit,
-        //    float minusMagicResistancePerc = 0,
-        //    float minusArmor = 0,
-        //    float minusHealth = 0,
-        //    float minusDamageResistancePerc = 0);
-
+        // float DealtDamage(
+        // Unit unit,
+        // float minusMagicResistancePerc = 0,
+        // float minusArmor = 0,
+        // float minusHealth = 0,
+        // float minusDamageResistancePerc = 0);
         IReadOnlyDictionary<double, ISkillRawDamageCalculatorWorker> DamageWorkers { get; }
-
-        DamageType DamageType { get; set; }
-
-        Func<IAbilityUnit, ISkillManipulatedDamageCalculatorWorker> DamageWorkerAssign { get; set; }
 
         Func<IAbilityUnit, ISkillRawDamageCalculatorWorker> RawDamageWorkerAssign { get; set; }
 
         DataObserver<IAbilityUnit> UnitObserver { get; set; }
 
-        float GetRawDamage(IAbilityUnit target);
+        #endregion
+
+        #region Public Methods and Operators
 
         float GetDamage(IAbilityUnit target);
 
         ISkillRawDamageCalculatorWorker GetDamageWorker(IAbilityUnit target);
+
+        float GetRawDamage(IAbilityUnit target);
 
         #endregion
     }

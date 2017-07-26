@@ -1,4 +1,17 @@
-﻿namespace Ability.Core.AbilityFactory.AbilityModifier.Parts.Default.ModifierEffectApplier
+﻿// <copyright file="EffectApplierWorker.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
+namespace Ability.Core.AbilityFactory.AbilityModifier.Parts.Default.ModifierEffectApplier
 {
     using System;
 
@@ -7,23 +20,34 @@
     /// <summary>The modifier effect applier worker.</summary>
     internal class EffectApplierWorker : IEffectApplierWorker
     {
-        private Action<IAbilityUnit> removeEffectAction;
-
-        private Action<IAbilityUnit> applyEffectAction;
-
-        private Action<IAbilityUnit> applyEffectActionUpdate;
-
-        private Action<IAbilityUnit> updateEffectAction;
-
-        private bool useCustomUpdate;
+        #region Fields
 
         private IAbilityUnit abilityUnit;
 
+        private Action<IAbilityUnit> applyEffectAction;
+
         private Func<Action<IAbilityUnit>> applyEffectActionGetter;
+
+        private Action<IAbilityUnit> applyEffectActionUpdate;
+
+        private Action<IAbilityUnit> removeEffectAction;
 
         private Func<Action<IAbilityUnit>> removeEffectActionGetter;
 
+        private Action<IAbilityUnit> updateEffectAction;
+
         private Func<Action<IAbilityUnit>> updateEffectActionGetter;
+
+        private bool useCustomUpdate;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        public EffectApplierWorker(bool updateWithLevel)
+        {
+            this.UpdateWithLevel = updateWithLevel;
+        }
 
         internal EffectApplierWorker(
             bool updateWithLevel,
@@ -40,12 +64,9 @@
             this.useCustomUpdate = applyEffectActionGetter != null;
         }
 
-        public EffectApplierWorker(bool updateWithLevel)
-        {
-            this.UpdateWithLevel = updateWithLevel;
-        }
+        #endregion
 
-        public bool UpdateWithLevel { get; }
+        #region Public Properties
 
         public Func<Action<IAbilityUnit>> ApplyEffectActionGetter
         {
@@ -60,6 +81,10 @@
                 this.applyEffectAction = this.applyEffectActionGetter.Invoke();
             }
         }
+
+        public Func<Action<IAbilityUnit>> ApplyEffectActionUpdateGetter { get; }
+
+        public bool EffectWasApplied { get; private set; }
 
         public Func<Action<IAbilityUnit>> RemoveEffectActionGetter
         {
@@ -89,9 +114,11 @@
             }
         }
 
-        public Func<Action<IAbilityUnit>> ApplyEffectActionUpdateGetter { get; }
+        public bool UpdateWithLevel { get; }
 
-        public bool EffectWasApplied { get; private set; }
+        #endregion
+
+        #region Public Methods and Operators
 
         public void ApplyEffect(IAbilityUnit affectedUnit)
         {
@@ -100,15 +127,17 @@
             this.EffectWasApplied = true;
         }
 
-        public void UpdateEffect()
-        {
-            this.updateEffectAction.Invoke(this.abilityUnit);
-        }
-
         public void RemoveEffect()
         {
             this.removeEffectAction.Invoke(this.abilityUnit);
             this.EffectWasApplied = false;
         }
+
+        public void UpdateEffect()
+        {
+            this.updateEffectAction.Invoke(this.abilityUnit);
+        }
+
+        #endregion
     }
 }

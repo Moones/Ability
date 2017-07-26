@@ -19,7 +19,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator.Workers;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator.Workers.Abstract;
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.Utilities;
 
     using Ensage;
@@ -32,9 +31,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
         private readonly Dictionary<double, ISkillRawDamageCalculatorWorker> workers =
             new Dictionary<double, ISkillRawDamageCalculatorWorker>();
 
-        private Func<IAbilityUnit, ISkillManipulatedDamageCalculatorWorker> workerAssign;
-
         private Func<IAbilityUnit, ISkillRawDamageCalculatorWorker> rawDamageWorkerAssign;
+
+        private Func<IAbilityUnit, ISkillManipulatedDamageCalculatorWorker> workerAssign;
 
         #endregion
 
@@ -56,10 +55,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
 
         public DamageType DamageType { get; set; }
 
-        public IAbilitySkill Skill { get; set; }
-
-        public DataObserver<IAbilityUnit> UnitObserver { get; set; }
-
         public Func<IAbilityUnit, ISkillManipulatedDamageCalculatorWorker> DamageWorkerAssign
         {
             get
@@ -74,9 +69,28 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
             }
         }
 
-
-
         public IReadOnlyDictionary<double, ISkillRawDamageCalculatorWorker> DamageWorkers => this.workers;
+
+        public Func<IAbilityUnit, ISkillRawDamageCalculatorWorker> RawDamageWorkerAssign
+        {
+            get
+            {
+                return this.rawDamageWorkerAssign;
+            }
+
+            set
+            {
+                this.rawDamageWorkerAssign = value;
+                if (this.workerAssign != null)
+                {
+                    this.ReAssignWorkers(false, true);
+                }
+            }
+        }
+
+        public IAbilitySkill Skill { get; set; }
+
+        public DataObserver<IAbilityUnit> UnitObserver { get; set; }
 
         #endregion
 
@@ -129,8 +143,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
                         var observer = new DataObserver<IAbilitySkill>();
                         observer.OnNextAction = remove =>
                             {
-                                if (remove.IsItem
-                                    && remove.SourceItem.Id == AbilityId.item_ultimate_scepter)
+                                if (remove.IsItem && remove.SourceItem.Id == AbilityId.item_ultimate_scepter)
                                 {
                                     this.RawDamageWorkerAssign =
                                         unit =>
@@ -164,8 +177,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
             }
             else if (this.DamageType == DamageType.Physical)
             {
-                this.DamageWorkerAssign =
-                    unit => new PhysicalSkillDamageCalculatorWorker(this.Skill, unit);
+                this.DamageWorkerAssign = unit => new PhysicalSkillDamageCalculatorWorker(this.Skill, unit);
             }
             else if (this.DamageType == DamageType.Pure)
             {
@@ -177,22 +189,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
             }
         }
 
-        public Func<IAbilityUnit, ISkillRawDamageCalculatorWorker> RawDamageWorkerAssign
-        {
-            get
-            {
-                return this.rawDamageWorkerAssign;
-            }
+        #endregion
 
-            set
-            {
-                this.rawDamageWorkerAssign = value;
-                if (this.workerAssign != null)
-                {
-                    this.ReAssignWorkers(false, true);
-                }
-            }
-        }
+        #region Methods
 
         private void ReAssignWorkers(bool manipulatedChanged = false, bool rawChanged = false)
         {

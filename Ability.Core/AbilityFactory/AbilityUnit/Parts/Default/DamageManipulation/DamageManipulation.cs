@@ -17,7 +17,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
     using System.Collections.Generic;
     using System.Linq;
 
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
     using Ability.Core.AbilityFactory.Utilities;
 
     using Ensage;
@@ -273,8 +272,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
             this.modifierAddObserver = new DataObserver<Modifier>(modifier => this.ModifierAdded(modifier));
             this.modifierAddObserver.Subscribe(this.Unit.Modifiers.ModifierAdded);
 
-            this.modifierRemoveObserver =
-                new DataObserver<Modifier>(modifier => this.ModifierRemoved(modifier));
+            this.modifierRemoveObserver = new DataObserver<Modifier>(modifier => this.ModifierRemoved(modifier));
             this.modifierRemoveObserver.Subscribe(this.Unit.Modifiers.ModifierRemoved);
 
             foreach (var sourceUnitModifier in this.Unit.SourceUnit.Modifiers)

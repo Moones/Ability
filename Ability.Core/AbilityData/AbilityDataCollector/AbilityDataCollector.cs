@@ -1,4 +1,4 @@
-﻿// <copyright file="AbilityDataProvider.cs" company="EnsageSharp">
+﻿// <copyright file="AbilityDataCollector.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -24,13 +24,11 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityManager;
-    using Ability.Core.AbilityModule.Combo;
     using Ability.Core.MenuManager.GetValue;
     using Ability.Core.Utilities;
 
     using Ensage;
     using Ensage.Common;
-    using Ensage.Common.Extensions;
     using Ensage.Common.Menu;
 
     using SharpDX;
@@ -52,6 +50,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
         private Vector3 lastBlinkPosition;
 
         private Vector3 lastCameraPosition;
+
+        private Sleeper orderSleeper = new Sleeper();
 
         /// <summary>
         ///     The particle skills.
@@ -88,12 +88,18 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
         #region Public Properties
 
-        /// <summary>Gets a value indicating whether generate menu.</summary>                                            
+        /// <summary>Gets a value indicating whether generate menu.</summary>
         public bool GenerateMenu { get; } = true;
 
         #endregion
 
         #region Properties
+
+        internal List<IUnitOrbwalker> Orbwalkers { get; set; } = new List<IUnitOrbwalker>();
+
+        /// <summary>Gets or sets the ability map data provider.</summary>
+        [Import(typeof(IAbilityMapDataProvider))]
+        protected Lazy<IAbilityMapDataProvider> AbilityMapDataProvider { get; set; }
 
         /// <summary>
         ///     Gets or sets the ability unit manager.
@@ -101,13 +107,14 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
         [Import(typeof(IAbilityManager))]
         protected Lazy<IAbilityManager> AbilityUnitManager { get; set; }
 
-        /// <summary>Gets or sets the ability map data provider.</summary>
-        [Import(typeof(IAbilityMapDataProvider))]
-        protected Lazy<IAbilityMapDataProvider> AbilityMapDataProvider { get; set; }
-
         #endregion
 
         #region Public Methods and Operators
+
+        public void AddOrbwalker(IUnitOrbwalker orbwalker)
+        {
+            this.Orbwalkers.Add(orbwalker);
+        }
 
         /// <summary>The menu.</summary>
         /// <returns>The <see cref="GetMenu" />.</returns>
@@ -179,7 +186,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
                         // Entity.OnFloatPropertyChange += this.Entity_OnFloatPropertyChange;
                         Entity.OnBoolPropertyChange += this.Entity_OnBoolPropertyChange;
-                        //Entity.OnParticleEffectAdded += this.Entity_OnParticleEffectAdded;
+
+                        // Entity.OnParticleEffectAdded += this.Entity_OnParticleEffectAdded;
                         Entity.OnInt32PropertyChange += this.Entity_OnInt32PropertyChange;
 
                         // ObjectManager.OnAddTrackingProjectile += this.ObjectManager_OnAddTrackingProjectile;
@@ -195,24 +203,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                         ObjectManager.OnAddEntity += this.ObjectManager_OnAddEntity;
                         ObjectManager.OnRemoveEntity += this.ObjectManager_OnRemoveEntity;
 
-                        Unit.OnAnimationChanged += this.Unit_OnAnimationChanged;
+                        Entity.OnAnimationChanged += this.Unit_OnAnimationChanged;
                     });
-        }
-
-        private void Unit_OnAnimationChanged(Entity sender, EventArgs args)
-        {
-            //if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
-            //{
-            //    var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
-            //    Console.WriteLine(
-            //        animation.Name + " " + animation.SequenceStartTime + " "
-            //        + this.AbilityUnitManager.Value.LocalHero.SourceUnit.NetworkActivity + " rawgametime: " + Game.RawGameTime);
-            //}
-        }
-
-        private void ObjectManager_OnRemoveEntity(EntityEventArgs args)
-        {
-            this.AbilityMapDataProvider.Value.EntityRemoved(args.Entity);
         }
 
         #endregion
@@ -276,9 +268,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             }
 
             GlobalVariables.Time = Game.RawGameTime;
-            
-            //this.AbilityMapDataProvider.Value.OnDraw();
 
+            // this.AbilityMapDataProvider.Value.OnDraw();
             foreach (var keyValuePair in this.AbilityUnitManager.Value.Units)
             {
                 if (!keyValuePair.Value.SourceUnit.IsAlive)
@@ -288,11 +279,11 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
                 keyValuePair.Value.Visibility.Visible = keyValuePair.Value.SourceUnit.IsVisible;
                 keyValuePair.Value.Position.Update();
-                //keyValuePair.Value.ScreenInfo.Update();
+
+                // keyValuePair.Value.ScreenInfo.Update();
                 keyValuePair.Value.DataReceiver.Drawing_OnDraw();
 
-                if (!keyValuePair.Value.IsEnemy
-                    && keyValuePair.Value.SourceUnit.IsControllable)
+                if (!keyValuePair.Value.IsEnemy && keyValuePair.Value.SourceUnit.IsControllable)
                 {
                     foreach (var valueOrderIssuer in keyValuePair.Value.OrderIssuers)
                     {
@@ -424,8 +415,6 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                     return;
             }
         }
-        
-        internal List<IUnitOrbwalker> Orbwalkers { get; set; } = new List<IUnitOrbwalker>();
 
         private void Entity_OnInt32PropertyChange(Entity sender, Int32PropertyChangeEventArgs args)
         {
@@ -441,7 +430,6 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             {
                 return;
             }
-
 
             if (args.PropertyName.Equals(GlobalVariables.PropertyHealth, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -459,13 +447,13 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                     case NetworkActivity.Attack2:
                     case NetworkActivity.AttackEvent:
 
-                        //if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
-                        //{
-                        //    //var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
-                        //    Console.WriteLine("netw changed: " + Game.RawGameTime);
-                        //}
+                        // if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
+                        // {
+                        // //var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
+                        // Console.WriteLine("netw changed: " + Game.RawGameTime);
+                        // }
 
-                        //Console.WriteLine(args.PropertyName + " " + args.NewValue);
+                        // Console.WriteLine(args.PropertyName + " " + args.NewValue);
                         foreach (var unit in this.AbilityUnitManager.Value.ControllableUnits)
                         {
                             if (unit.Value.SourceUnit.IsAlive)
@@ -549,7 +537,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                             var unit =
                                 this.AbilityUnitManager.Value.Enemies.FirstOrDefault(
                                     x => x.Key.Equals(args.ParticleEffect.Owner.Handle));
-                            //unit.Value?.PositionTracker.PositionUpdated(this.lastBlinkPosition);
+
+                            // unit.Value?.PositionTracker.PositionUpdated(this.lastBlinkPosition);
                             return;
                         }
 
@@ -561,14 +550,12 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                             }
                         }
 
-                        //foreach (var particleSkill in this.particleSkills)
-                        //{
-                        //    particleSkill.Value.DataReceiver.Entity_OnParticleEffectAdded(sender, args);
-                        //}
+                        // foreach (var particleSkill in this.particleSkills)
+                        // {
+                        // particleSkill.Value.DataReceiver.Entity_OnParticleEffectAdded(sender, args);
+                        // }
                     });
         }
-
-        private Sleeper orderSleeper = new Sleeper();
 
         /// <summary>
         ///     The game_ on update.
@@ -590,14 +577,13 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
             this.updateSleeper.Sleep(this.updateInterval.Value);
 
-            //this.AbilityMapDataProvider.Value.OnUpdate();
-
+            // this.AbilityMapDataProvider.Value.OnUpdate();
             var orderSleeping = this.orderSleeper.Sleeping;
             var orderCount = 0;
 
             foreach (var keyValuePair in this.AbilityUnitManager.Value.ControllableUnits)
             {
-                //Console.WriteLine("unit " + keyValuePair.Value.Name);
+                // Console.WriteLine("unit " + keyValuePair.Value.Name);
                 keyValuePair.Value.DataReceiver.Game_OnUpdate();
 
                 if (!orderSleeping && keyValuePair.Value.SourceUnit.IsAlive)
@@ -615,8 +601,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
             if (!orderSleeping && orderCount > 0)
             {
-                //Console.WriteLine(orderCount);
-                //this.orderSleeper.Sleep(orderCount * 50 + Game.Ping);
+                // Console.WriteLine(orderCount);
+                // this.orderSleeper.Sleep(orderCount * 50 + Game.Ping);
             }
         }
 
@@ -672,12 +658,12 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                         // }
                         if (args.Entity.Owner is Hero)
                         {
-                            //if (
-                            //    this.AbilityUnitManager.Value.Enemies.Any(
-                            //        keyValuePair => keyValuePair.Value.PositionTracker.Entity(args.Entity)))
-                            //{
-                            //    return;
-                            //}
+                            // if (
+                            // this.AbilityUnitManager.Value.Enemies.Any(
+                            // keyValuePair => keyValuePair.Value.PositionTracker.Entity(args.Entity)))
+                            // {
+                            // return;
+                            // }
                         }
 
                         if (args.Entity.Name == "npc_dota_base")
@@ -688,13 +674,12 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                                 return;
                             }
 
-                            //if (
-                            //    this.AbilityUnitManager.Value.Enemies.Any(
-                            //        keyValuePair => keyValuePair.Value.PositionTracker.DotaBase(unit)))
-                            //{
-                            //    return;
-                            //}
-
+                            // if (
+                            // this.AbilityUnitManager.Value.Enemies.Any(
+                            // keyValuePair => keyValuePair.Value.PositionTracker.DotaBase(unit)))
+                            // {
+                            // return;
+                            // }
                             return;
                         }
 
@@ -711,7 +696,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                             var unit =
                                 this.AbilityUnitManager.Value.Enemies.FirstOrDefault(
                                     x => x.Key.Equals(args.Entity.Owner.Handle));
-                            //unit.Value?.PositionTracker.PositionUpdated(args.Entity.NetworkPosition);
+
+                            // unit.Value?.PositionTracker.PositionUpdated(args.Entity.NetworkPosition);
                             return;
                         }
                     });
@@ -734,6 +720,11 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                             projectileSkill.Value.DataReceiver.ObjectManager_OnAddTrackingProjectile(args);
                         }
                     });
+        }
+
+        private void ObjectManager_OnRemoveEntity(EntityEventArgs args)
+        {
+            this.AbilityMapDataProvider.Value.EntityRemoved(args.Entity);
         }
 
         /// <summary>The start up.</summary>
@@ -760,6 +751,17 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                 var.RemoveFlags(ConVarFlags.Unlogged);
                 var.SetValue(data.Value);
             }
+        }
+
+        private void Unit_OnAnimationChanged(Entity sender, EventArgs args)
+        {
+            // if (sender.Handle.Equals(this.AbilityUnitManager.Value.LocalHero.UnitHandle))
+            // {
+            // var animation = this.AbilityUnitManager.Value.LocalHero.SourceUnit.Animation;
+            // Console.WriteLine(
+            // animation.Name + " " + animation.SequenceStartTime + " "
+            // + this.AbilityUnitManager.Value.LocalHero.SourceUnit.NetworkActivity + " rawgametime: " + Game.RawGameTime);
+            // }
         }
 
         /// <summary>
@@ -915,11 +917,6 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                 this.projectileSkills.Remove(args.AbilitySkill.SkillHandle);
                 ObjectManager.OnAddTrackingProjectile += this.ObjectManager_OnAddTrackingProjectile;
             }
-        }
-
-        public void AddOrbwalker(IUnitOrbwalker orbwalker)
-        {
-            this.Orbwalkers.Add(orbwalker);
         }
 
         #endregion

@@ -49,13 +49,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </summary>
         IReadOnlyDictionary<double, T> DamageAmps { get; set; }
 
-        /// <summary>Gets or sets the talents.</summary>
-        IReadOnlyDictionary<double, IAbilityTalent> Talents { get; set; }
-
-            /// <summary>
+        /// <summary>
         ///     Gets or sets the damage amps ordered for cast.
         /// </summary>
         IOrderedEnumerable<T> DamageAmpsOrderedForCast { get; set; }
+
+        bool HasAghanim { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether has blink.
@@ -73,10 +72,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// <summary>Gets the skill removed.</summary>
         DataProvider<T> SkillRemoved { get; }
 
-            /// <summary>Gets the talent added.</summary>
-        DataProvider<IAbilityTalent> TalentAdded { get; }
-
-            /// <summary>
+        /// <summary>
         ///     Gets or sets the skills.
         /// </summary>
         IReadOnlyDictionary<double, T> Skills { get; set; }
@@ -95,7 +91,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         ///     Gets or sets the spells.
         /// </summary>
         IReadOnlyDictionary<double, T> Spells { get; set; }
-        bool HasAghanim { get; set; }
+
+        /// <summary>Gets the talent added.</summary>
+        DataProvider<IAbilityTalent> TalentAdded { get; }
+
+        /// <summary>Gets or sets the talents.</summary>
+        IReadOnlyDictionary<double, IAbilityTalent> Talents { get; set; }
 
         #endregion
 
@@ -109,6 +110,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </param>
         void AddSkill(T skill);
 
+        /// <summary>The add talent.</summary>
+        /// <param name="talent">The talent.</param>
+        void AddTalent(IAbilityTalent talent);
+
+        /// <summary>The delete item.</summary>
+        /// <param name="item">The item.</param>
+        void DeleteItem(T item);
+
         /// <summary>The is valid.</summary>
         /// <param name="ability">The ability.</param>
         /// <returns>The <see cref="bool" />.</returns>
@@ -121,14 +130,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         ///     The skill.
         /// </param>
         void RemoveSkill(T skill);
-
-        /// <summary>The delete item.</summary>
-        /// <param name="item">The item.</param>
-        void DeleteItem(T item);
-
-        /// <summary>The add talent.</summary>
-        /// <param name="talent">The talent.</param>
-        void AddTalent(IAbilityTalent talent);
 
         #endregion
     }

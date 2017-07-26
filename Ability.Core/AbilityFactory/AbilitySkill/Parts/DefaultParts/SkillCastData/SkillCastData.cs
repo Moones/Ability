@@ -57,8 +57,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         public double CastPoint
             => this.castPointUpdate?.Value ?? Math.Max(this.Skill.SourceAbility.FindCastPoint(), 0.1);
 
-        public bool Queued { get; set; }
-
         /// <summary>
         ///     Gets or sets the cooldown.
         /// </summary>
@@ -73,6 +71,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
         ///     Gets or sets a value indicating whether is on cooldown.
         /// </summary>
         public bool IsOnCooldown { get; set; }
+
+        public bool Queued { get; set; }
 
         /// <summary>
         ///     Gets or sets the skill.

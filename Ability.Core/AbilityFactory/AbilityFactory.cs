@@ -35,7 +35,6 @@ namespace Ability.Core.AbilityFactory
     using Ability.Core.Utilities;
 
     using Ensage;
-    using Ensage.Common.Extensions;
     using Ensage.Common.Menu;
     using Ensage.Common.Objects;
     using Ensage.Heroes;
@@ -59,9 +58,14 @@ namespace Ability.Core.AbilityFactory
         internal AbilityFactory()
         {
             // AbilityBootstrapper.ComposeParts(this);
-
             Logging.Write()(LogLevel.Info, "AbilityFactory Initialized");
         }
+
+        #endregion
+
+        #region Public Properties
+
+        public bool GenerateMenu { get; }
 
         #endregion
 
@@ -78,14 +82,15 @@ namespace Ability.Core.AbilityFactory
 
         /// <summary>Gets or sets the skill item composers.</summary>
         [ImportMany]
-        protected IEnumerable<Lazy<IAbilitySkillItemComposer, IAbilitySkillItemMetadata>> SkillItemComposers { get; set; }
+        protected IEnumerable<Lazy<IAbilitySkillItemComposer, IAbilitySkillItemMetadata>> SkillItemComposers { get; set;
+        }
+
+        [ImportMany]
+        protected IEnumerable<Lazy<IAbilityUnitComposer, IAbilityUnitMetadata>> UnitComposers { get; set; }
 
         /// <summary>Gets or sets the unit composers.</summary>
         [ImportMany]
         protected IEnumerable<Lazy<IAbilityUnitHeroComposer, IAbilityUnitHeroMetadata>> UnitHeroComposers { get; set; }
-
-        [ImportMany]
-        protected IEnumerable<Lazy<IAbilityUnitComposer, IAbilityUnitMetadata>> UnitComposers { get; set; }
 
         #endregion
 
@@ -152,6 +157,16 @@ namespace Ability.Core.AbilityFactory
             return abilitySkill;
         }
 
+        /// <summary>The create new modifier.</summary>
+        /// <param name="modifier">The modifier.</param>
+        /// <param name="affectedUnit">The affectedUnit.</param>
+        /// <returns>The <see cref="IAbilityModifier" />.</returns>
+        public IAbilityModifier CreateNewModifier(Modifier modifier, IAbilityUnit affectedUnit)
+        {
+            var abilityModifier = new AbilityModifier.AbilityModifier(modifier) { AffectedUnit = affectedUnit };
+            return abilityModifier;
+        }
+
         /// <summary>
         ///     The compose new skill.
         /// </summary>
@@ -177,7 +192,6 @@ namespace Ability.Core.AbilityFactory
             // abilitySkill.Json.GlobalCastPriority = this.AbilityDatabase.Value.GetCastPriority(skill.StoredName());
             // abilitySkill.Json.DamageDealtPriority = this.AbilityDatabase.Value.GetDamageDealtPriority(
             // skill.StoredName());
-
             if (abilitySkill.IsItem)
             {
                 var itemComposer =
@@ -214,6 +228,16 @@ namespace Ability.Core.AbilityFactory
             return abilitySkill;
         }
 
+        /// <summary>The create new talent.</summary>
+        /// <param name="ability">The ability.</param>
+        /// <param name="owner">The owner.</param>
+        /// <returns>The <see cref="IAbilityTalent" />.</returns>
+        public IAbilityTalent CreateNewTalent(Ability ability, IAbilityUnit owner)
+        {
+            var abilityTalent = new AbilityTalent.AbilityTalent(ability, owner);
+            return abilityTalent;
+        }
+
         /// <summary>
         ///     The create new unit.
         /// </summary>
@@ -247,10 +271,12 @@ namespace Ability.Core.AbilityFactory
             }
 
             team.UnitManager.AddUnit(abilityUnit);
-            
+
             if (abilityUnit.IsHero)
             {
-                var composer = this.UnitHeroComposers.FirstOrDefault(x => x.Metadata.HeroIds.Contains((uint)(abilityUnit.SourceUnit as Hero).HeroId));
+                var composer =
+                    this.UnitHeroComposers.FirstOrDefault(
+                        x => x.Metadata.HeroIds.Contains((uint)(abilityUnit.SourceUnit as Hero).HeroId));
 
                 if (composer != null)
                 {
@@ -277,28 +303,6 @@ namespace Ability.Core.AbilityFactory
 
             return abilityUnit;
         }
-
-        /// <summary>The create new modifier.</summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <param name="affectedUnit">The affectedUnit.</param>
-        /// <returns>The <see cref="IAbilityModifier"/>.</returns>
-        public IAbilityModifier CreateNewModifier(Modifier modifier, IAbilityUnit affectedUnit)
-        {
-            var abilityModifier = new AbilityModifier.AbilityModifier(modifier) { AffectedUnit = affectedUnit };
-            return abilityModifier;
-        }
-
-        /// <summary>The create new talent.</summary>
-        /// <param name="ability">The ability.</param>
-        /// <param name="owner">The owner.</param>
-        /// <returns>The <see cref="IAbilityTalent"/>.</returns>
-        public IAbilityTalent CreateNewTalent(Ability ability, IAbilityUnit owner)
-        {
-            var abilityTalent = new AbilityTalent.AbilityTalent(ability, owner);
-            return abilityTalent;
-        }
-
-        public bool GenerateMenu { get; }
 
         public Menu GetMenu()
         {

@@ -23,7 +23,6 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
 
     using Ensage;
     using Ensage.Common.Menu;
-    using Ensage.Items;
 
     [Export(typeof(IAbilityMapDataProvider))]
     internal class AbilityMapDataProvider : IAbilityMapDataProvider

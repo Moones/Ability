@@ -26,14 +26,12 @@ namespace Ability.Core.AbilityManager
     using Ability.Core.AbilityFactory.AbilitySkill.Types;
     using Ability.Core.AbilityFactory.AbilityTeam;
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityManager.UI;
 
     using Ensage;
     using Ensage.Common;
     using Ensage.Common.Menu;
-    using Ensage.Common.Objects;
 
     using SharpDX;
 
@@ -45,6 +43,10 @@ namespace Ability.Core.AbilityManager
     {
         #region Fields
 
+        private DataObserver<IAbilitySkillPart> abilitySkillPartObserver;
+
+        private DataProvider<IAbilityUnit> abilityUnitProvider = new DataProvider<IAbilityUnit>();
+
         private Dictionary<double, IAbilityUnit> allies = new Dictionary<double, IAbilityUnit>();
 
         /// <summary>
@@ -53,6 +55,10 @@ namespace Ability.Core.AbilityManager
         private Dictionary<double, IAbilityUnit> controllableUnits = new Dictionary<double, IAbilityUnit>();
 
         private Dictionary<double, IAbilityUnit> enemies = new Dictionary<double, IAbilityUnit>();
+
+        private Dictionary<double, IModifierGenerator> modifierGenerators = new Dictionary<double, IModifierGenerator>();
+
+        private Dictionary<double, IAbilityModifier> modifiers = new Dictionary<double, IAbilityModifier>();
 
         private Dictionary<double, IAbilitySkill> skills = new Dictionary<double, IAbilitySkill>();
 
@@ -69,7 +75,6 @@ namespace Ability.Core.AbilityManager
         internal AbilityManager()
         {
             // AbilityBootstrapper.ComposeParts(this);
-
             this.abilitySkillPartObserver = new DataObserver<IAbilitySkillPart>(this.AbilitySkillPartAdded);
         }
 
@@ -140,6 +145,8 @@ namespace Ability.Core.AbilityManager
         /// <summary>Gets a value indicating whether generate menu.</summary>
         public bool GenerateMenu { get; } = false;
 
+        public IAbilityUnit LocalHero { get; set; }
+
         /// <summary>
         ///     Gets or sets the local team.
         /// </summary>
@@ -167,8 +174,6 @@ namespace Ability.Core.AbilityManager
                 this.units = value.ToDictionary(x => x.Key, x => x.Value);
             }
         }
-
-        public IAbilityUnit LocalHero { get; set; }
 
         #endregion
 
@@ -356,12 +361,12 @@ namespace Ability.Core.AbilityManager
                         && (skill is Item || owner.ClassId == ClassId.CDOTA_Unit_Hero_Rubick
                             || owner.ClassId == ClassId.CDOTA_Unit_Hero_DoomBringer) && enemy.SkillBook.IsValid(skill))
                     {
-
                         var abilitySkill = this.AbilityFactory.Value.CreateNewSkill(skill, enemy);
                         if (abilitySkill == null)
                         {
                             return;
                         }
+
                         enemy.SkillBook.AddSkill(abilitySkill);
                         this.OnSkillAdded(new SkillEventArgs { AbilitySkill = abilitySkill });
                     }
@@ -371,7 +376,8 @@ namespace Ability.Core.AbilityManager
             }
 
             IAbilityUnit ally;
-            if (this.allies.TryGetValue(owner.Handle, out ally) || this.controllableUnits.TryGetValue(owner.Handle, out ally))
+            if (this.allies.TryGetValue(owner.Handle, out ally)
+                || this.controllableUnits.TryGetValue(owner.Handle, out ally))
             {
                 if (!(skill is Item) && skill.Name.Contains("special_bonus"))
                 {
@@ -389,22 +395,23 @@ namespace Ability.Core.AbilityManager
                     && (skill is Item || owner.ClassId == ClassId.CDOTA_Unit_Hero_Rubick
                         || owner.ClassId == ClassId.CDOTA_Unit_Hero_DoomBringer) && ally.SkillBook.IsValid(skill))
                 {
-
                     var abilitySkill = this.AbilityFactory.Value.CreateNewControllableSkill(skill, ally);
                     if (abilitySkill == null)
                     {
                         return;
                     }
+
                     ally.SkillBook.AddSkill(abilitySkill);
                     this.OnSkillAdded(new SkillEventArgs { AbilitySkill = abilitySkill });
                 }
             }
-            //DelayAction.Add(
-            //    100,
-            //    () =>
-            //        {
-                        
-            //        });
+
+            // DelayAction.Add(
+            // 100,
+            // () =>
+            // {
+
+            // });
         }
 
         /// <summary>
@@ -412,9 +419,8 @@ namespace Ability.Core.AbilityManager
         /// </summary>
         public void OnClose()
         {
-            //this.ui.Dispose();
-            //this.ui = null;
-
+            // this.ui.Dispose();
+            // this.ui = null;
             ObjectManager.OnAddEntity -= this.OnAddEntity;
             ObjectManager.OnRemoveEntity -= this.OnRemoveEntity;
 
@@ -460,8 +466,11 @@ namespace Ability.Core.AbilityManager
             // {
 
             // });
-
-            var heroes = ObjectManager.GetEntities<Player>().Where(x => x.Hero != null && x.Hero.IsValid).Select(x => x.Hero).ToList();
+            var heroes =
+                ObjectManager.GetEntities<Player>()
+                    .Where(x => x.Hero != null && x.Hero.IsValid)
+                    .Select(x => x.Hero)
+                    .ToList();
             foreach (var hero in
                 ObjectManager.GetEntities<Hero>()
                     .Where(hero => !hero.IsIllusion && heroes.All(x => x.Handle != hero.Handle)))
@@ -482,34 +491,34 @@ namespace Ability.Core.AbilityManager
                 }
             }
 
-            //foreach (var hero in heroes)
-            //{
-            //    foreach (var heroModifier in hero.Modifiers)
-            //    {
-            //        this.Unit_OnModifierAdded(hero, new ModifierChangedEventArgs(heroModifier));
-            //    }
-            //}
-
+            // foreach (var hero in heroes)
+            // {
+            // foreach (var heroModifier in hero.Modifiers)
+            // {
+            // this.Unit_OnModifierAdded(hero, new ModifierChangedEventArgs(heroModifier));
+            // }
+            // }
             foreach (var entity in ObjectManager.GetEntities<Unit>())
             {
-                if (entity.IsValid && !(entity is Hero) && !(entity is Courier) && entity.Team == this.LocalTeam.Name && entity.IsControllable)
+                if (entity.IsValid && !(entity is Hero) && !(entity is Courier) && entity.Team == this.LocalTeam.Name
+                    && entity.IsControllable)
                 {
-                    //if (entity.Name == "npc_dota_lone_druid_bear1")
-                    //{
-                    //    Console.WriteLine(entity.GetType());
-                    //}
-                    //Console.WriteLine(entity.Name);
+                    // if (entity.Name == "npc_dota_lone_druid_bear1")
+                    // {
+                    // Console.WriteLine(entity.GetType());
+                    // }
+                    // Console.WriteLine(entity.Name);
                     this.AddUnit(entity);
                 }
             }
 
             var size = new Vector2((float)(HUDInfo.ScreenSizeX() / 2.3), HUDInfo.ScreenSizeY() / 2);
-            //this.ui =
-            //    new AbilityManagerUserInterface(
-            //        new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
-            //        size,
-            //        this);
 
+            // this.ui =
+            // new AbilityManagerUserInterface(
+            // new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
+            // size,
+            // this);
             this.TeamAdd.Next(this.LocalTeam);
             this.TeamAdd.Next(enemyTeam);
             ObjectManager.OnAddEntity += this.OnAddEntity;
@@ -520,56 +529,6 @@ namespace Ability.Core.AbilityManager
 
             // Game.OnUpdate += this.Game_OnUpdate;
             // Drawing.OnDraw += this.Drawing_OnDraw;
-        }
-
-        private Dictionary<double, IAbilityModifier> modifiers = new Dictionary<double, IAbilityModifier>();
-
-        private void Unit_OnModifierRemoved(Unit sender, ModifierChangedEventArgs args)
-        {
-            return;
-            var hero = sender as Hero;
-            if (hero == null)
-            {
-                return;
-            }
-
-            IAbilityModifier abilityModifier;
-            if (!this.modifiers.TryGetValue(args.Modifier.Handle + sender.Handle, out abilityModifier))
-            {
-                return;
-            }
-
-            abilityModifier.Dispose();
-            this.modifiers.Remove(args.Modifier.Handle);
-        }
-
-        private void Unit_OnModifierAdded(Unit sender, ModifierChangedEventArgs args)
-        {
-            return;
-            var hero = sender as Hero;
-            if (hero == null)
-            {
-                return;
-            }
-
-            Console.WriteLine(
-                "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
-                + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
-                + args.Modifier.Owner?.Name + " ");
-
-            var affectedUnit = this.Units[hero.Handle];
-            var abilityModifier = this.AbilityFactory.Value.CreateNewModifier(args.Modifier, affectedUnit);
-
-            if (!affectedUnit.DataReceiver.SelfModifierGenerators.Any(x => x.Value.TryGenerateModifier(abilityModifier))
-                && !this.modifierGenerators.Any(
-                    modifierGenerator => modifierGenerator.Value.TryGenerateModifier(abilityModifier)))
-            {
-                return;
-            }
-
-            this.modifiers.Add(abilityModifier.ModifierHandle + sender.Handle, abilityModifier);
-
-
         }
 
         // private void Game_OnUpdate(EventArgs args)
@@ -698,10 +657,6 @@ namespace Ability.Core.AbilityManager
                 return;
             }
         }
-        
-        private Dictionary<double, IModifierGenerator> modifierGenerators = new Dictionary<double, IModifierGenerator>();
-
-        private DataObserver<IAbilitySkillPart> abilitySkillPartObserver;
 
         public virtual void OnSkillAdded(SkillEventArgs args)
         {
@@ -727,16 +682,6 @@ namespace Ability.Core.AbilityManager
             args.AbilitySkill.PartAdded.Subscribe(this.abilitySkillPartObserver);
 
             DelayAction.Add(50, () => this.SkillAdded?.Invoke(args));
-        }
-
-        private void AbilitySkillPartAdded(IAbilitySkillPart part)
-        {
-            var modifierGenerator = part as IModifierGenerator;
-            if (modifierGenerator != null && modifierGenerator.Workers.Any(
-                    x => x.AffectsAllies || x.AffectsEnemies || x.AffectsEveryone))
-            {
-                this.modifierGenerators.Add(part.Skill.SkillHandle, modifierGenerator);
-            }
         }
 
         /// <summary>
@@ -827,8 +772,6 @@ namespace Ability.Core.AbilityManager
             }
         }
 
-        private DataProvider<IAbilityUnit> abilityUnitProvider = new DataProvider<IAbilityUnit>();
-
         /// <summary>Notifies the provider that an observer is to receive notifications.</summary>
         /// <returns>
         ///     A reference to an interface that allows observers to stop receiving notifications before the provider has
@@ -875,6 +818,16 @@ namespace Ability.Core.AbilityManager
         {
             args.AbilityUnit.Dispose();
             this.UnitRemoved?.Invoke(args);
+        }
+
+        private void AbilitySkillPartAdded(IAbilitySkillPart part)
+        {
+            var modifierGenerator = part as IModifierGenerator;
+            if (modifierGenerator != null
+                && modifierGenerator.Workers.Any(x => x.AffectsAllies || x.AffectsEnemies || x.AffectsEveryone))
+            {
+                this.modifierGenerators.Add(part.Skill.SkillHandle, modifierGenerator);
+            }
         }
 
         private void AddControllableUnit(Unit unit)
@@ -930,7 +883,6 @@ namespace Ability.Core.AbilityManager
                     if (skill.AbilityType != AbilityType.Attribute
                         && !abilityUnit.SkillBook.AllSkills.ContainsKey(skill.Handle))
                     {
-
                         var abilitySkill = this.AbilityFactory.Value.CreateNewSkill(skill, abilityUnit);
                         if (abilitySkill == null)
                         {
@@ -1059,6 +1011,52 @@ namespace Ability.Core.AbilityManager
             {
                 keyValuePair.Value.OnDraw();
             }
+        }
+
+        private void Unit_OnModifierAdded(Unit sender, ModifierChangedEventArgs args)
+        {
+            return;
+            var hero = sender as Hero;
+            if (hero == null)
+            {
+                return;
+            }
+
+            Console.WriteLine(
+                "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
+                + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
+                + args.Modifier.Owner?.Name + " ");
+
+            var affectedUnit = this.Units[hero.Handle];
+            var abilityModifier = this.AbilityFactory.Value.CreateNewModifier(args.Modifier, affectedUnit);
+
+            if (!affectedUnit.DataReceiver.SelfModifierGenerators.Any(x => x.Value.TryGenerateModifier(abilityModifier))
+                && !this.modifierGenerators.Any(
+                    modifierGenerator => modifierGenerator.Value.TryGenerateModifier(abilityModifier)))
+            {
+                return;
+            }
+
+            this.modifiers.Add(abilityModifier.ModifierHandle + sender.Handle, abilityModifier);
+        }
+
+        private void Unit_OnModifierRemoved(Unit sender, ModifierChangedEventArgs args)
+        {
+            return;
+            var hero = sender as Hero;
+            if (hero == null)
+            {
+                return;
+            }
+
+            IAbilityModifier abilityModifier;
+            if (!this.modifiers.TryGetValue(args.Modifier.Handle + sender.Handle, out abilityModifier))
+            {
+                return;
+            }
+
+            abilityModifier.Dispose();
+            this.modifiers.Remove(args.Modifier.Handle);
         }
 
         #endregion

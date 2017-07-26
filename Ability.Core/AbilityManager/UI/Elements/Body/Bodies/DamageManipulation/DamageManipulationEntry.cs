@@ -1,4 +1,17 @@
-﻿namespace Ability.Core.AbilityManager.UI.Elements.Body.Bodies.DamageManipulation
+﻿// <copyright file="DamageManipulationEntry.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
+namespace Ability.Core.AbilityManager.UI.Elements.Body.Bodies.DamageManipulation
 {
     using System;
     using System.Collections.Generic;
@@ -12,20 +25,27 @@
 
     internal class DamageManipulationEntry : DrawObject
     {
-        private IAbilityUnit unit;
-
-        private ICollection<DamageManipulationValueEntry> values = new List<DamageManipulationValueEntry>();
-
-        private Vector2 size;
+        #region Fields
 
         private Vector2 position;
 
+        private Vector2 size;
+
+        private IAbilityUnit unit;
+
         private DrawText unitNameText;
+
+        private ICollection<DamageManipulationValueEntry> values = new List<DamageManipulationValueEntry>();
+
+        #endregion
+
+        #region Constructors and Destructors
 
         internal DamageManipulationEntry(IAbilityUnit unit)
         {
             this.unit = unit;
-            //if (this.unit == null)
+
+            // if (this.unit == null)
             this.values.Add(
                 new DamageManipulationValueEntry(
                     "DamageAmpli",
@@ -39,9 +59,7 @@
                     "DamageNegate",
                     () => unit.DamageManipulation.DamageNegation.GetValue(unit, unit.Health.Current).ToString()));
             this.values.Add(
-                new DamageManipulationValueEntry(
-                    "DamageBlock",
-                    () => unit.DamageManipulation.DamageBlock.ToString()));
+                new DamageManipulationValueEntry("DamageBlock", () => unit.DamageManipulation.DamageBlock.ToString()));
             this.values.Add(
                 new DamageManipulationValueEntry(
                     "MagDmgAbsorb",
@@ -53,7 +71,9 @@
             this.values.Add(
                 new DamageManipulationValueEntry(
                     "IceBlast",
-                    () => unit.DamageManipulation.Aa?.GetSpecialValue(unit, unit.Health.Current).ToString() ?? 0.ToString()));
+                    () =>
+                        unit.DamageManipulation.Aa?.GetSpecialValue(unit, unit.Health.Current).ToString()
+                        ?? 0.ToString()));
             this.values.Add(
                 new DamageManipulationValueEntry(
                     "MagicDmgShield",
@@ -67,7 +87,35 @@
                     "PhysicalDamageShield",
                     () => unit.DamageManipulation.PhysicalDamageShield.ToString()));
 
-            this.unitNameText = new DrawText { Color = Color.GreenYellow, Shadow = true, Text = Game.Localize(unit.Name) };
+            this.unitNameText = new DrawText
+                                    {
+                                       Color = Color.GreenYellow, Shadow = true, Text = Game.Localize(unit.Name) 
+                                    };
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public override Vector2 Position
+        {
+            get
+            {
+                return this.position;
+            }
+
+            set
+            {
+                this.position = value;
+                var basePos = this.position;
+                this.unitNameText.Position = basePos;
+                basePos += new Vector2(0, this.unitNameText.Size.Y);
+                foreach (var damageManipulationValueEntry in this.values)
+                {
+                    damageManipulationValueEntry.Position = basePos;
+                    basePos += new Vector2(0, damageManipulationValueEntry.Size.Y);
+                }
+            }
         }
 
         public override Vector2 Size
@@ -95,26 +143,9 @@
             }
         }
 
-        public override Vector2 Position
-        {
-            get
-            {
-                return this.position;
-            }
+        #endregion
 
-            set
-            {
-                this.position = value;
-                var basePos = this.position;
-                this.unitNameText.Position = basePos;
-                basePos += new Vector2(0, this.unitNameText.Size.Y);
-                foreach (var damageManipulationValueEntry in this.values)
-                {
-                    damageManipulationValueEntry.Position = basePos;
-                    basePos += new Vector2(0, damageManipulationValueEntry.Size.Y);
-                }
-            }
-        }
+        #region Public Methods and Operators
 
         public override void Draw()
         {
@@ -124,5 +155,7 @@
                 damageManipulationValueEntry.Draw();
             }
         }
+
+        #endregion
     }
 }

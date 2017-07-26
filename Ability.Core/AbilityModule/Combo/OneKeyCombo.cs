@@ -1,21 +1,33 @@
-﻿namespace Ability.Core.AbilityModule.Combo
+﻿// <copyright file="OneKeyCombo.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
+namespace Ability.Core.AbilityModule.Combo
 {
     using System;
     using System.Collections.Generic;
 
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Items;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
 
-    using Ensage.Common.Extensions;
     using Ensage.Common.Menu;
 
     public class OneKeyCombo : IDisposable
     {
+        #region Constructors and Destructors
+
         public OneKeyCombo(
             List<IOrderIssuer> orderIssuers,
             AbilitySubMenu subMenu,
@@ -72,9 +84,23 @@
             this.Key.AddToMenu(subMenu);
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public AbilityMenuItem<KeyBind> Key { get; }
+
         public float MaxTargetDistance { get; set; } = 2000;
 
+        public IReadOnlyCollection<IOrderIssuer> OrderIssuers { get; set; }
+
+        public AbilitySubMenu SubMenu { get; }
+
         public IAbilityUnit Target { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public void AddOrderIssuer(IOrderIssuer orderIssuer)
         {
@@ -83,15 +109,11 @@
             this.OrderIssuers = newList;
         }
 
-        public AbilityMenuItem<KeyBind> Key { get; }
-
-        public IReadOnlyCollection<IOrderIssuer> OrderIssuers { get; set; }
-
-        public AbilitySubMenu SubMenu { get; }
-
         public void Dispose()
         {
             this.Key.Dispose();
         }
+
+        #endregion
     }
 }

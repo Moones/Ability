@@ -1,4 +1,4 @@
-﻿// <copyright file="ControllableHero.cs" company="EnsageSharp">
+﻿// <copyright file="AbilityHero.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -13,17 +13,13 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Types
 {
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitControl;
-
     using Ensage;
-    using Ensage.Common.Extensions;
 
     /// <summary>
     ///     The unit hero.
     /// </summary>
     internal class AbilityHero : AbilityUnit
     {
-
         #region Constructors and Destructors
 
         internal AbilityHero(Unit unit)

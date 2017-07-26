@@ -13,18 +13,13 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.PhantomAssassin
 {
-    using System.ComponentModel.Composition;
-
-    using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker.Types;
 
-    using Ensage;
-
     /// <summary>The shadow demon unit composer.</summary>
-    //[Export(typeof(IAbilityUnitComposer))]
-    //[AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_PhantomAssassin)]
+    // [Export(typeof(IAbilityUnitComposer))]
+    // [AbilityUnitMetadata(ClassId.CDOTA_Unit_Hero_PhantomAssassin)]
     internal class PhantomAssassinUnitComposer : AbilityUnitComposer
     {
         #region Constructors and Destructors

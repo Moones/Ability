@@ -24,40 +24,33 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
     {
         #region Public Properties
 
-        DataProvider<Modifier> ModifierAdded { get; }
+        bool AttackImmune { get; set; }
 
-        DataProvider<Modifier> ModifierRemoved { get; }
         bool ConsumedAghanim { get; set; }
+
+        bool Disarmed { get; set; }
+
+        bool Immobile { get; }
 
         float ImmobileDuration { get; }
 
         bool Invul { get; set; }
 
-        bool Stunned { get; set; }
+        bool MagicImmune { get; set; }
+
+        DataProvider<Modifier> ModifierAdded { get; }
+
+        DataProvider<Modifier> ModifierRemoved { get; }
 
         bool Rooted { get; set; }
 
-        bool MagicImmune { get; set; }
-
-        bool AttackImmune { get; set; }
-
-        bool Immobile { get; }
-
         bool Silenced { get; set; }
 
-        bool Disarmed { get; set; }
+        bool Stunned { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        ///     The modifier removed.
-        /// </summary>
-        /// <param name="modifier">
-        ///     The modifier.
-        /// </param>
-        void RemoveModifier(Modifier modifier);
 
         /// <summary>
         ///     The new modifier received.
@@ -66,6 +59,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
         ///     The modifier.
         /// </param>
         void AddModifier(Modifier modifier);
+
+        /// <summary>
+        ///     The modifier removed.
+        /// </summary>
+        /// <param name="modifier">
+        ///     The modifier.
+        /// </param>
+        void RemoveModifier(Modifier modifier);
 
         #endregion
     }

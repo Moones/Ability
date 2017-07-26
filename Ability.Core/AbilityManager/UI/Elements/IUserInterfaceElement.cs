@@ -14,7 +14,6 @@
 namespace Ability.Core.AbilityManager.UI.Elements
 {
     using SharpDX;
-    using SharpDX.Mathematics.Interop;
 
     /// <summary>
     ///     The UserInterfaceElement interface.

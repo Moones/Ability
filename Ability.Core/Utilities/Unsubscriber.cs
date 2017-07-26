@@ -25,7 +25,7 @@ namespace Ability.Core.Utilities
     public class Unsubscriber<TD> : IDisposable
     {
         #region Fields
-        
+
         private readonly int id;
 
         /// <summary>
@@ -37,8 +37,10 @@ namespace Ability.Core.Utilities
 
         #region Constructors and Destructors
 
-        /// <summary>Initializes a new instance of the <see cref="Unsubscriber{TD}"/> class.
-        ///     The unsubscriber.</summary>
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Unsubscriber{TD}" /> class.
+        ///     The unsubscriber.
+        /// </summary>
         /// <param name="observers">The observers.</param>
         /// <param name="id">The id.</param>
         public Unsubscriber(Dictionary<int, IObserver<TD>> observers, int id)

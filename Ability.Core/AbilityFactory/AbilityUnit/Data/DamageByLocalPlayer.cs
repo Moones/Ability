@@ -13,8 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Data
 {
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
-
     /// <summary>
     ///     The damage by local player.
     /// </summary>

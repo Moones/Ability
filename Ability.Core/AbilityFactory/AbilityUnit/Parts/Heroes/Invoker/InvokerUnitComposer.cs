@@ -13,10 +13,7 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker
 {
-    using System.ComponentModel.Composition;
-
     using Ability.Core.AbilityFactory.AbilitySkill;
-    using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
@@ -25,13 +22,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker.SkillBook;
 
-    using Ensage;
-
     /// <summary>
     ///     The invoker unit composer.
     /// </summary>
-    //[Export(typeof(IAbilityUnitComposer))]
-    //[AbilityUnitMetadata((uint)HeroId.npc_dota_hero_invoker)]
+    // [Export(typeof(IAbilityUnitComposer))]
+    // [AbilityUnitMetadata((uint)HeroId.npc_dota_hero_invoker)]
     internal class InvokerUnitComposer : AbilityUnitComposer
     {
         #region Constructors and Destructors
@@ -39,7 +34,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker
         /// <summary>Initializes a new instance of the <see cref="InvokerUnitComposer" /> class.</summary>
         internal InvokerUnitComposer()
         {
-            //this.AssignPart<IUnitOverlay>(unit => new InvokerUnitOverlay(unit));
+            // this.AssignPart<IUnitOverlay>(unit => new InvokerUnitOverlay(unit));
             this.AssignPart<ISkillBook<IAbilitySkill>>(unit => new InvokerSkillBook(unit));
             this.AssignPart<IModifiers>(unit => new InvokerModifiers(unit));
             this.AssignPart<IPositionTracker>(unit => new InvokerPositionTracker(unit));

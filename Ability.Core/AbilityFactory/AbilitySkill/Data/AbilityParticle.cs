@@ -26,6 +26,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
     {
         #region Fields
 
+        private DataProvider<AbilityParticle> abilityParticleProvider = new DataProvider<AbilityParticle>();
+
         #endregion
 
         #region Constructors and Destructors
@@ -70,8 +72,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
             this.AbilitySkill.AreaOfEffect.AbilityParticleEffect(particleEffect);
             this.abilityParticleProvider.Next(this);
         }
-
-        private DataProvider<AbilityParticle> abilityParticleProvider = new DataProvider<AbilityParticle>();
 
         /// <summary>Notifies the provider that an observer is to receive notifications.</summary>
         /// <returns>

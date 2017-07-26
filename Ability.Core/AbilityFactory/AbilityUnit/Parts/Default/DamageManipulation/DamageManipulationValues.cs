@@ -180,20 +180,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
             this.ValueChanged.Notify();
         }
 
-        public void UpdateSpecialModifierValue(IAbilityModifier modifier, Func<IAbilityUnit, float, double> newGetValue)
-        {
-            var valueHolder = this.specialModifierValues[modifier.ModifierHandle];
-            valueHolder.GetSpecialValue = newGetValue;
-            this.ValueChanged.Notify();
-        }
-
-        public void UpdateSpecialSkillValue(IAbilitySkill skill, Func<IAbilityUnit, float, double> newGetValue)
-        {
-            var valueHolder = this.specialSkillValues[skill.SkillHandle];
-            valueHolder.GetSpecialValue = newGetValue;
-            this.ValueChanged.Notify();
-        }
-
         public void UpdateModifierValue(IAbilityModifier modifier, double newValue)
         {
             var valueHolder = this.modifierValues[modifier.ModifierHandle];
@@ -209,6 +195,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
             this.value -= valueHolder.Value;
             valueHolder.Value = newValue;
             this.value += newValue;
+            this.ValueChanged.Notify();
+        }
+
+        public void UpdateSpecialModifierValue(IAbilityModifier modifier, Func<IAbilityUnit, float, double> newGetValue)
+        {
+            var valueHolder = this.specialModifierValues[modifier.ModifierHandle];
+            valueHolder.GetSpecialValue = newGetValue;
+            this.ValueChanged.Notify();
+        }
+
+        public void UpdateSpecialSkillValue(IAbilitySkill skill, Func<IAbilityUnit, float, double> newGetValue)
+        {
+            var valueHolder = this.specialSkillValues[skill.SkillHandle];
+            valueHolder.GetSpecialValue = newGetValue;
             this.ValueChanged.Notify();
         }
 

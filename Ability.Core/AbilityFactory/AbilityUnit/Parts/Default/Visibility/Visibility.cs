@@ -15,8 +15,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility
 {
     using Ability.Core.AbilityFactory.Utilities;
 
-    using Ensage;
-
     /// <summary>
     ///     The visibility.
     /// </summary>

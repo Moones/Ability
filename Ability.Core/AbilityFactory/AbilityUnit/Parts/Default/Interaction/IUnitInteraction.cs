@@ -13,10 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Interaction
 {
-    using System;
-
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
-
     /// <summary>
     ///     The UnitInteraction interface.
     /// </summary>

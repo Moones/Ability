@@ -25,7 +25,7 @@ namespace Ability.Core.MenuManager.Menus
         internal MainMenu()
             : base(Constants.AssemblyName, Constants.AssemblyName, true)
         {
-            //this.AddSubMenu(this.ModulesMenu);
+            // this.AddSubMenu(this.ModulesMenu);
             this.AddSubMenu(this.SettingsMenu);
         }
 
@@ -33,13 +33,13 @@ namespace Ability.Core.MenuManager.Menus
 
         #region Public Properties
 
+        /// <summary>Gets the modules menu.</summary>
+        public ModulesMenu ModulesMenu { get; } = new ModulesMenu();
+
         /// <summary>
         ///     The settings menu.
         /// </summary>
         public SettingsMenu SettingsMenu { get; } = new SettingsMenu();
-
-        /// <summary>Gets the modules menu.</summary>
-        public ModulesMenu ModulesMenu { get; } = new ModulesMenu();
 
         #endregion
     }

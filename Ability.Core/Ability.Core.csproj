@@ -133,8 +133,7 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastRange\CastRange.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastRange\ICastRange.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\CastFunction.cs" />
-    <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\Generic\NoTarget.cs" />
-    <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\Generic\UnitTarget.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\Generic\DefaultCastingFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\ICastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ComboEntry\ComboEntryBase.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ComboEntry\ComboEntryType.cs" />
@@ -262,6 +261,7 @@
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Invoker\InvokerUnitMenu.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Invoker\PositionTracker\InvokerPositionTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\AttackRange\LoneDruidAttackRange.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\ControllableUnits\LoneDruidControllableUnits.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\LoneDruidComposer.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\SkillBook\LoneDruidSkillBook.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Meepo\MeepoUnitMenu.cs" />

@@ -19,7 +19,6 @@ namespace Ability.Core.AbilityManager.UI.Elements.Button
     using Ensage.Common.Objects.DrawObjects;
 
     using SharpDX;
-    using SharpDX.Mathematics.Interop;
 
     /// <summary>
     ///     The button.

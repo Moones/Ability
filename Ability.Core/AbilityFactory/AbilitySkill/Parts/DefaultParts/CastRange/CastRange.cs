@@ -1,54 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="CastRange.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
     using Ability.Core.AbilityFactory.Utilities;
 
-    using Ensage.Common.Extensions;
-
     public class CastRange : ICastRange
     {
+        #region Fields
+
         private float baseValue;
 
         private float bonusValue;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public CastRange(IAbilitySkill skill)
         {
             this.Skill = skill;
         }
 
-        public void Dispose()
-        {
-        }
+        #endregion
 
-        public IAbilitySkill Skill { get; set; }
-
-        public virtual void Initialize()
-        {
-            this.UpdateValue();
-            this.Skill.Level.Subscribe(
-                new DataObserver<ISkillLevel>(
-                    level =>
-                    {
-                        this.UpdateValue();
-                    }));
-            
-            this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
-                () =>
-                    {
-                        this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
-                    });
-        }
-
-        public virtual void UpdateValue()
-        {
-            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange, 300) + this.Skill.Owner.SourceUnit.HullRadius;
-        }
+        #region Public Properties
 
         public float BaseValue
         {
@@ -80,6 +69,32 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         public bool IsTargetInRange { get; set; }
 
+        public IAbilitySkill Skill { get; set; }
+
         public float Value { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Dispose()
+        {
+        }
+
+        public virtual void Initialize()
+        {
+            this.UpdateValue();
+            this.Skill.Level.Subscribe(new DataObserver<ISkillLevel>(level => { this.UpdateValue(); }));
+
+            this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
+                () => { this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value; });
+        }
+
+        public virtual void UpdateValue()
+        {
+            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange, 300) + this.Skill.Owner.SourceUnit.HullRadius;
+        }
+
+        #endregion
     }
 }

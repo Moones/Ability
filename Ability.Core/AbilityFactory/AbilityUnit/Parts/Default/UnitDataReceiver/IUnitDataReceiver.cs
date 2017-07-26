@@ -30,14 +30,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
         #region Public Properties
 
         /// <summary>Gets the drawings.</summary>
-        //ICollection<Action> Drawings { get; }
-
-        /// <summary>Gets the updates.</summary>
-        //ICollection<Action> Updates { get; }
-
-        ActionManager Updates { get; }
-
-        /// <summary>Gets the drawings.</summary>
         ActionManager Drawings { get; }
 
         /// <summary>Gets the modifier origins checks.</summary>
@@ -48,6 +40,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
 
         /// <summary>Gets the self modifier generators.</summary>
         Dictionary<double, IModifierGenerator> SelfModifierGenerators { get; }
+
+        /// <summary>Gets the drawings.</summary>
+        // ICollection<Action> Drawings { get; }
+        /// <summary>Gets the updates.</summary>
+        // ICollection<Action> Updates { get; }
+        ActionManager Updates { get; }
 
         #endregion
 
@@ -116,6 +114,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
         /// </param>
         void HealthChange(float value);
 
+        /// <summary>The modifier added.</summary>
+        /// <param name="modifier">The modifier.</param>
+        /// <returns>The <see cref="bool" />.</returns>
+        bool ModifierAdded(IAbilityModifier modifier);
+
+        /// <summary>The modifier removed.</summary>
+        /// <param name="modifier">The modifier.</param>
+        /// <returns>The <see cref="bool" />.</returns>
+        bool ModifierRemoved(IAbilityModifier modifier);
+
         /// <summary>
         ///     The position x change.
         /// </summary>
@@ -145,16 +153,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver
         ///     The added.
         /// </param>
         void Unit_OnModifierChanged(Unit sender, ModifierChangedEventArgs args, bool added = true);
-
-        /// <summary>The modifier added.</summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <returns>The <see cref="bool"/>.</returns>
-        bool ModifierAdded(IAbilityModifier modifier);
-
-        /// <summary>The modifier removed.</summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <returns>The <see cref="bool"/>.</returns>
-        bool ModifierRemoved(IAbilityModifier modifier);
 
         #endregion
     }

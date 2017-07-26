@@ -37,12 +37,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
         /// <summary>Gets the maximum health change.</summary>
         Notifier MaximumHealthChange { get; }
 
-        Notifier ZeroHealth { get; }
-
         /// <summary>
         ///     Gets or sets the percentage.
         /// </summary>
         float Percentage { get; set; }
+
+        Notifier ZeroHealth { get; }
 
         #endregion
 

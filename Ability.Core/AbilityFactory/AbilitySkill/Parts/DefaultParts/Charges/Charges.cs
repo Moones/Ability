@@ -19,6 +19,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Charges
     {
         #region Fields
 
+        /// <summary>The charges update.</summary>
+        private ActionExecutor chargesUpdate;
+
         private uint primary;
 
         private uint secondary;
@@ -105,9 +108,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Charges
 
         #endregion
 
-        /// <summary>The charges update.</summary>
-        private ActionExecutor chargesUpdate;
-
         #region Public Methods and Operators
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
@@ -121,6 +121,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Charges
             this.chargesUpdate = new ActionExecutor(this.Update);
             this.chargesUpdate.Subscribe(this.Skill.Owner.DataReceiver.Updates);
         }
+
+        #endregion
+
+        #region Methods
 
         private void Update()
         {

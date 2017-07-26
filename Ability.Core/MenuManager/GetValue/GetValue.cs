@@ -30,6 +30,12 @@ namespace Ability.Core.MenuManager.GetValue
     /// </typeparam>
     public class GetValue<T, TD> : IObservable<Tuple<T, TD>>
     {
+        #region Fields
+
+        private DataProvider<Tuple<T, TD>> dataProvider = new DataProvider<Tuple<T, TD>>();
+
+        #endregion
+
         #region Constructors and Destructors
 
         public GetValue(MenuItem menuItem, Func<T, TD> getValueFunction)
@@ -65,8 +71,6 @@ namespace Ability.Core.MenuManager.GetValue
         public T ValueType { get; set; }
 
         #endregion
-
-        private DataProvider<Tuple<T, TD>> dataProvider = new DataProvider<Tuple<T, TD>>();
 
         #region Public Methods and Operators
 

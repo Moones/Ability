@@ -30,6 +30,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown
         /// <summary>The cooldown sleeper.</summary>
         private readonly Sleeper cooldownSleeper = new Sleeper();
 
+        /// <summary>The cooldown updater.</summary>
+        private ActionExecutor cooldownUpdater;
+
         /// <summary>
         ///     The current.
         /// </summary>
@@ -132,9 +135,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown
         public IAbilitySkill Skill { get; set; }
 
         #endregion
-
-        /// <summary>The cooldown updater.</summary>
-        private ActionExecutor cooldownUpdater;
 
         #region Public Methods and Operators
 

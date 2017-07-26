@@ -55,20 +55,18 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         AbilityCast AbilityCast { get; set; }
 
+        /// <summary>Gets or sets the ability info.</summary>
+        AbilityInfo AbilityInfo { get; set; }
+
         /// <summary>
         ///     Gets or sets the ability particle.
         /// </summary>
         AbilityParticle AbilityParticle { get; set; }
 
-        IHitDelay HitDelay { get; set; }
-
         /// <summary>
         ///     Gets or sets the cast start.
         /// </summary>
         AbilityPhase AbilityPhase { get; set; }
-
-        /// <summary>Gets or sets the ability info.</summary>
-        AbilityInfo AbilityInfo { get; set; }
 
         /// <summary>
         ///     Gets or sets the ability projectile.
@@ -84,6 +82,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the cast data.
         /// </summary>
         ISkillCastData CastData { get; set; }
+
+        ICastFunction CastFunction { get; set; }
+
+        ICastRange CastRange { get; set; }
 
         /// <summary>
         ///     Gets or sets the charges.
@@ -115,6 +117,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         ISkillDrawer Drawer { get; set; }
 
+        /// <summary>Gets or sets the effect applier.</summary>
+        IEffectApplier EffectApplier { get; set; }
+
         /// <summary>
         ///     Gets or sets a value indicating whether has charges.
         /// </summary>
@@ -124,6 +129,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets a value indicating whether has cooldown.
         /// </summary>
         bool HasCooldown { get; set; }
+
+        IHitDelay HitDelay { get; set; }
 
         /// <summary>
         ///     Gets or sets the interaction.
@@ -155,6 +162,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         ISkillLevel Level { get; set; }
 
+        /// <summary>Gets or sets the modifier generator.</summary>
+        IModifierGenerator ModifierGenerator { get; set; }
+
         /// <summary>
         ///     Gets or sets the name.
         /// </summary>
@@ -163,12 +173,14 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// <summary>
         ///     Gets or sets the overlay provider.
         /// </summary>
-        //ISkillOverlayProvider OverlayProvider { get; set; }
-
+        // ISkillOverlayProvider OverlayProvider { get; set; }
         /// <summary>
         ///     Gets or sets the owner.
         /// </summary>
         IAbilityUnit Owner { get; set; }
+
+        /// <summary>Gets the part added.</summary>
+        DataProvider<IAbilitySkillPart> PartAdded { get; }
 
         /// <summary>Gets the parts.</summary>
         IReadOnlyDictionary<Type, IAbilitySkillPart> Parts { get; }
@@ -228,23 +240,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         /// </summary>
         ISkillUpdater Updater { get; set; }
 
-        /// <summary>Gets or sets the modifier generator.</summary>
-        IModifierGenerator ModifierGenerator { get; set; }
-
-        /// <summary>Gets or sets the effect applier.</summary>
-        IEffectApplier EffectApplier { get; set; }
-
         /// <summary>
         ///     Gets or sets the variables.
         /// </summary>
         SkillDynamic Variables { get; set; }
-
-        /// <summary>Gets the part added.</summary>
-        DataProvider<IAbilitySkillPart> PartAdded { get; }
-
-        ICastFunction CastFunction { get; set; }
-
-        ICastRange CastRange { get; set; }
 
         #endregion
 

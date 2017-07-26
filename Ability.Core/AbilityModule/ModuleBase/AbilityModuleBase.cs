@@ -1,4 +1,17 @@
-﻿namespace Ability.Core.AbilityModule.ModuleBase
+﻿// <copyright file="AbilityModuleBase.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
+namespace Ability.Core.AbilityModule.ModuleBase
 {
     using System;
     using System.ComponentModel.Composition;
@@ -14,11 +27,15 @@
 
     public abstract class AbilityModuleBase : IAbilityModule
     {
+        #region Fields
+
+        private Lazy<IAbilityDataCollector> abilityDataCollectorLazy;
+
         private Lazy<IAbilityMapData> abilityMapDataLazy;
 
         private Lazy<IExternalPartManager> externalPartManagerLazy;
 
-        private Lazy<IAbilityDataCollector> abilityDataCollectorLazy;
+        #endregion
 
         #region Constructors and Destructors
 
@@ -45,8 +62,9 @@
             {
                 this.Menu = new AbilityMenu(name, textureName);
                 this.Menu.AddDescription(shortDescription);
-                //this.EnableSwitchMenuItem = new AbilityMenuItem<bool>("Enabled", enabledByDefault);
-                //this.EnableSwitchMenuItem.AddToMenu(this.Menu);
+
+                // this.EnableSwitchMenuItem = new AbilityMenuItem<bool>("Enabled", enabledByDefault);
+                // this.EnableSwitchMenuItem.AddToMenu(this.Menu);
             }
         }
 
@@ -54,10 +72,14 @@
 
         #region Public Properties
 
+        public IAbilityDataCollector AbilityDataCollector { get; set; }
+
         /// <summary>Gets the description.</summary>
         public string Description { get; }
 
         public AbilityMenuItem<bool> EnableSwitchMenuItem { get; }
+
+        public IExternalPartManager ExternalPartManager { get; set; }
 
         /// <summary>Gets a value indicating whether generate menu.</summary>
         public bool GenerateMenu { get; }
@@ -74,10 +96,6 @@
         public AbilityMenu Menu { get; }
 
         public string ModuleName { get; }
-
-        public IExternalPartManager ExternalPartManager { get; set; }
-
-        public IAbilityDataCollector AbilityDataCollector { get; set; }
 
         #endregion
 

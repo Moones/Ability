@@ -24,7 +24,6 @@ namespace Ability.Core.AbilityManager.UI.Elements.Window
     using Ensage.Common;
 
     using SharpDX;
-    using SharpDX.Mathematics.Interop;
 
     /// <summary>
     ///     The window.

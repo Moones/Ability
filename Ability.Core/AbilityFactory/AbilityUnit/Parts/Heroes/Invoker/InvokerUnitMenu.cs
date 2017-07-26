@@ -41,13 +41,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Invoker
         /// <param name="unit">The unit.</param>
         public override void ConnectUnit(IAbilityUnit unit)
         {
-            //var overlay = unit.Overlay as InvokerUnitOverlay;
-            //if (this.skillPanelSubMenu == null)
-            //{
-            //    this.skillPanelSubMenu = ((IUnitOverlayElement)overlay.InvokerSkillPanel).GenerateMenu(this);
-            //}
+            // var overlay = unit.Overlay as InvokerUnitOverlay;
+            // if (this.skillPanelSubMenu == null)
+            // {
+            // this.skillPanelSubMenu = ((IUnitOverlayElement)overlay.InvokerSkillPanel).GenerateMenu(this);
+            // }
 
-            //overlay.InvokerSkillPanel.ConnectToMenu(this, this.skillPanelSubMenu);
+            // overlay.InvokerSkillPanel.ConnectToMenu(this, this.skillPanelSubMenu);
         }
 
         #endregion

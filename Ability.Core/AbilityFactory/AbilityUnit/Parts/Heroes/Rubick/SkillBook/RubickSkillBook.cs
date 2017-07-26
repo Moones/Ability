@@ -15,7 +15,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Rubick.SkillBook
 {
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
-    
+
     using Ensage;
 
     /// <summary>The rubick skill book.</summary>

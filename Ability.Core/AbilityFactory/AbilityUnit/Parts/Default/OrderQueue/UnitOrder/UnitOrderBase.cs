@@ -14,7 +14,6 @@
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder
 {
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
-    using Ability.Core.AbilityFactory.Utilities;
 
     public abstract class UnitOrderBase : IUnitOrder
     {
@@ -33,25 +32,29 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public bool ExecuteOnce { get; }
 
-        public IAbilityUnit Unit { get; }
-
         public uint Id { get; set; }
 
         public OrderType OrderType { get; }
 
         public uint Priority { get; }
 
+        public IAbilityUnit Unit { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
         public abstract bool CanExecute();
 
-        public abstract float Execute();
+        public virtual void Dequeue()
+        {
+        }
 
         public virtual void Enqueue()
         {
         }
 
-        public virtual void Dequeue()
-        {
-        }
+        public abstract float Execute();
 
         #endregion
     }

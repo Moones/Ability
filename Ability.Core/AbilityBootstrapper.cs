@@ -17,18 +17,12 @@ namespace Ability.Core
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
-    using System.Linq;
     using System.Security.Permissions;
 
     using Ability.Core.AbilityData.AbilityDataCollector;
-    using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData;
     using Ability.Core.AbilityFactory;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
     using Ability.Core.AbilityManager;
     using Ability.Core.AbilityModule;
-    using Ability.Core.AbilityModule.Metadata;
-    using Ability.Core.AbilityModule.ModuleBase;
     using Ability.Core.AbilityService;
     using Ability.Core.MenuManager;
 
@@ -78,6 +72,16 @@ namespace Ability.Core
 
         #region Properties
 
+        /// <summary>Gets or sets the ability data collector.</summary>
+        [Import(typeof(IAbilityDataCollector))]
+        internal Lazy<IAbilityDataCollector> AbilityDataCollector { get; set; }
+
+        [Import(typeof(IAbilityFactory))]
+        internal Lazy<IAbilityFactory> AbilityFactory { get; set; }
+
+        [Import(typeof(IAbilityModuleManager))]
+        internal Lazy<IAbilityModuleManager> AbilityModuleManager { get; set; }
+
         /// <summary>
         ///     Gets or sets the ability services.
         /// </summary>
@@ -90,21 +94,11 @@ namespace Ability.Core
         [Import(typeof(IAbilityManager))]
         internal Lazy<IAbilityManager> AbilityUnitManager { get; set; }
 
-        /// <summary>Gets or sets the ability data collector.</summary>
-        [Import(typeof(IAbilityDataCollector))]
-        internal Lazy<IAbilityDataCollector> AbilityDataCollector { get; set; }
-
-        [Import(typeof(IAbilityFactory))]
-        internal Lazy<IAbilityFactory> AbilityFactory { get; set; }
-
         /// <summary>
         ///     Gets or sets the main menu manager.
         /// </summary>
         [Import(typeof(IMainMenuManager))]
         internal Lazy<IMainMenuManager> MainMenuManager { get; set; }
-
-        [Import(typeof(IAbilityModuleManager))]
-        internal Lazy<IAbilityModuleManager> AbilityModuleManager { get; set; }
 
         #endregion
 
@@ -116,7 +110,7 @@ namespace Ability.Core
         /// <param name="composeObject">
         ///     The compose object.
         /// </param>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        //[PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public static void ComposeParts(object composeObject)
         {
             // Fill the imports of this object
@@ -142,6 +136,10 @@ namespace Ability.Core
             new AbilityBootstrapper().Initialize();
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         ///     The initialize.
         /// </summary>
@@ -150,10 +148,6 @@ namespace Ability.Core
             Events.OnLoad += this.Events_OnLoad;
             Events.OnClose += this.Events_OnClose;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///     The events_ on close.
@@ -174,7 +168,6 @@ namespace Ability.Core
             this.initialized = false;
             this.MainMenuManager.Value?.OnClose();
             this.AbilityUnitManager.Value?.OnClose();
-
 
             this.AbilityFactory.Value?.OnClose();
 
@@ -221,11 +214,12 @@ namespace Ability.Core
 
             foreach (var cacheAssembly in AssemblyResolver.AssemblyCache)
             {
-                if (cacheAssembly.IsLibrary || !cacheAssembly.IsLoaded || !cacheAssembly.Exists)
+                if (cacheAssembly.IsLibrary || !cacheAssembly.IsLoaded || !cacheAssembly.Exists || !cacheAssembly.Name.StartsWith("Ability."))
                 {
                     continue;
                 }
 
+                //Console.WriteLine(cacheAssembly.AssemblyName + " " + cacheAssembly.Name);
                 catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly.Assembly));
             }
 
@@ -233,30 +227,29 @@ namespace Ability.Core
             // catalog.Catalogs.Add(new AssemblyCatalog());
             container = new CompositionContainer(catalog);
 
-            //foreach (var c in catalog)
-            //{
-            //    Console.WriteLine(c);
-            //    //foreach (var cExportDefinition in c.ExportDefinitions)
-            //    //{
-            //    //    Console.WriteLine(cExportDefinition.ToString());
-            //    //    foreach (var o in cExportDefinition.Metadata)
-            //    //    {
-            //    //        Console.WriteLine(o.ToString());
-            //    //    }
-            //    //}
-            //}
-
+            // foreach (var c in catalog)
+            // {
+            // Console.WriteLine(c);
+            // //foreach (var cExportDefinition in c.ExportDefinitions)
+            // //{
+            // //    Console.WriteLine(cExportDefinition.ToString());
+            // //    foreach (var o in cExportDefinition.Metadata)
+            // //    {
+            // //        Console.WriteLine(o.ToString());
+            // //    }
+            // //}
+            // }
             var delay = Game.GameTime < 0 ? 3000 : 500;
             DelayAction.Add(
                 delay,
                 () =>
-                {
-                    ComposeParts(this);
-                    if (!Game.IsInGame)
+                    {
+                        ComposeParts(this);
+                        if (!Game.IsInGame)
                         {
                             return;
                         }
-                        
+
                         this.AbilityFactory.Value.OnLoad();
 
                         this.AbilityUnitManager.Value.OnLoad();
@@ -272,7 +265,7 @@ namespace Ability.Core
                         this.AbilityModuleManager.Value.OnLoad();
 
                         this.AbilityDataCollector.Value.OnLoad();
-                });
+                    });
 
             // DelayAction.Add(
             // 500,

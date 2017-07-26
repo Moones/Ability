@@ -16,20 +16,17 @@ namespace Ability.Core.MenuManager
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
-    using System.Linq;
 
     using Ability.Core.AbilityData.AbilityDataCollector;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityManager;
     using Ability.Core.AbilityModule;
-    using Ability.Core.AbilityModule.Metadata;
     using Ability.Core.AbilityModule.ModuleBase;
     using Ability.Core.AbilityService;
     using Ability.Core.MenuManager.Menus;
     using Ability.Core.MenuManager.Menus.Submenus.UnitMenu;
     using Ability.Core.Utilities;
 
-    using Ensage;
     using Ensage.Common.Menu;
 
     /// <summary>
@@ -64,6 +61,12 @@ namespace Ability.Core.MenuManager
 
         #region Properties
 
+        [Import(typeof(IAbilityDataCollector))]
+        internal Lazy<IAbilityDataCollector> AbilityDataCollector { get; set; }
+
+        [Import(typeof(IAbilityModuleManager))]
+        internal Lazy<IAbilityModuleManager> AbilityModuleManager { get; set; }
+
         /// <summary>Gets or sets the ability services.</summary>
         [ImportMany]
         internal IEnumerable<Lazy<IAbilityService>> AbilityServices { get; set; }
@@ -83,13 +86,6 @@ namespace Ability.Core.MenuManager
         /// </summary>
         [ImportMany]
         internal IEnumerable<Lazy<IUnitMenu>> UnitMenus { get; set; }
-
-        [Import(typeof(IAbilityDataCollector))]
-        internal Lazy<IAbilityDataCollector> AbilityDataCollector { get; set; }
-
-
-        [Import(typeof(IAbilityModuleManager))]
-        internal Lazy<IAbilityModuleManager> AbilityModuleManager { get; set; }
 
         #endregion
 

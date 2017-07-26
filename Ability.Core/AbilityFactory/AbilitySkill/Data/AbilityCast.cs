@@ -17,14 +17,14 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
 
     using Ability.Core.AbilityFactory.Utilities;
 
-    using Ensage;
-
     /// <summary>
     ///     The ability cast.
     /// </summary>
     public class AbilityCast : IObservable<AbilityCast>
     {
         #region Fields
+
+        private DataProvider<AbilityCast> abilityCastProvider = new DataProvider<AbilityCast>();
 
         #endregion
 
@@ -61,8 +61,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Data
             this.CastTime = GlobalVariables.Time;
             this.abilityCastProvider.Next(this);
         }
-
-        private DataProvider<AbilityCast> abilityCastProvider = new DataProvider<AbilityCast>();
 
         /// <summary>Notifies the provider that an observer is to receive notifications.</summary>
         /// <returns>

@@ -14,7 +14,6 @@
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillUpdater
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Types;
 
     /// <summary>
     ///     The AbilityDataUpdater interface.

@@ -21,7 +21,6 @@ namespace Ability.Core.AbilityManager.UI.Elements.TopPanel
     using Ensage.Common.Objects.DrawObjects;
 
     using SharpDX;
-    using SharpDX.Mathematics.Interop;
 
     /// <summary>
     ///     The top panel.

@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="UnitTargetSelector.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
     using Ability.Core.AbilityFactory.Utilities;
 
@@ -14,43 +23,30 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
     public class UnitTargetSelector : IUnitTargetSelector
     {
+        #region Fields
+
+        private int lastZeroHealthId;
+
+        private IDisposable positionUnsubscriber;
+
         private IAbilityUnit target;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public UnitTargetSelector(IAbilityUnit unit)
         {
             this.Unit = unit;
         }
 
-        public void Dispose()
-        {
-        }
+        #endregion
 
-        public IAbilityUnit Unit { get; set; }
-
-        public Notifier TargetDistanceChanged { get; } = new Notifier();
+        #region Public Properties
 
         public float LastDistanceToTarget { get; set; }
 
         public float MaxTargetDistance { get; set; }
-
-        public void Initialize()
-        {
-            this.Unit.Position.Subscribe(
-                new DataObserver<IPosition>(
-                    position =>
-                        {
-                            if (this.TargetIsSet)
-                            {
-                                this.UpdateDistance();
-                            }
-                        }));
-        }
-
-        private int lastZeroHealthId;
-
-        private IDisposable positionUnsubscriber;
-
-        public bool TargetIsSet { get; set; }
 
         public IAbilityUnit Target
         {
@@ -68,12 +64,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 {
                     this.TargetIsSet = true;
                     this.lastZeroHealthId = this.target.Health.ZeroHealth.Subscribe(this.TargetDied);
-                    this.positionUnsubscriber = this.Target.Position.Subscribe(
-                        new DataObserver<IPosition>(
-                            position =>
-                                {
-                                    this.UpdateDistance();
-                                }));
+                    this.positionUnsubscriber =
+                        this.Target.Position.Subscribe(
+                            new DataObserver<IPosition>(position => { this.UpdateDistance(); }));
                 }
                 else
                 {
@@ -84,13 +77,25 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             }
         }
 
-        public void ResetTarget()
-        {
-            this.target?.Health.ZeroHealth.Unsubscribe(this.lastZeroHealthId);
-            this.positionUnsubscriber?.Dispose();
-        }
-
         public Notifier TargetChanged { get; } = new Notifier();
+
+        public Notifier TargetDistanceChanged { get; } = new Notifier();
+
+        public bool TargetIsSet { get; set; }
+
+        public Notifier TargetStartAttacking { get; } = new Notifier();
+
+        public Notifier TargetStartMoving { get; } = new Notifier();
+
+        public IAbilityUnit Unit { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Dispose()
+        {
+        }
 
         public virtual IAbilityUnit GetTarget()
         {
@@ -116,11 +121,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 }
             }
 
-            //if (result != null)
-            //{
-            //    Console.WriteLine("setting target " + result.Name);
-            //}
-
+            // if (result != null)
+            // {
+            // Console.WriteLine("setting target " + result.Name);
+            // }
             this.Target = result;
             return result;
         }
@@ -129,6 +133,29 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         {
             return new IAbilityUnit[0];
         }
+
+        public void Initialize()
+        {
+            this.Unit.Position.Subscribe(
+                new DataObserver<IPosition>(
+                    position =>
+                        {
+                            if (this.TargetIsSet)
+                            {
+                                this.UpdateDistance();
+                            }
+                        }));
+        }
+
+        public void ResetTarget()
+        {
+            this.target?.Health.ZeroHealth.Unsubscribe(this.lastZeroHealthId);
+            this.positionUnsubscriber?.Dispose();
+        }
+
+        #endregion
+
+        #region Methods
 
         private void TargetDied()
         {
@@ -147,8 +174,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             this.TargetDistanceChanged.Notify();
         }
 
-        public Notifier TargetStartMoving { get; } = new Notifier();
-
-        public Notifier TargetStartAttacking { get; } = new Notifier();
+        #endregion
     }
 }

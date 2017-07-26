@@ -1,4 +1,17 @@
-﻿namespace LoneDruid
+﻿// <copyright file="LoneDruidModule.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
+namespace LoneDruid
 {
     using System;
     using System.Collections.Generic;
@@ -23,10 +36,16 @@
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_lone_druid)]
     internal class LoneDruidModule : AbilityHeroModuleBase, IAbilityUnitModule
     {
+        #region Constructors and Destructors
+
         public LoneDruidModule()
             : base("LoneDruid", "Module utilizing hero LoneDruid", true, true, true, "npc_dota_hero_lone_druid")
         {
         }
+
+        #endregion
+
+        #region Public Properties
 
         public IAbilityUnit Bear { get; set; }
 
@@ -36,13 +55,22 @@
 
         public BearRetreatOrbwalker BearRetreatOrbwalker { get; set; }
 
-        public LoneDruidOrbwalker LoneDruidOrbwalker { get; set; }
-
         public OneKeyCombo BodyBlockCombo { get; set; }
 
         public OneKeyCombo ChaseCombo { get; set; }
 
+        public LoneDruidOrbwalker LoneDruidOrbwalker { get; set; }
+
         public OneKeyCombo RetreatCombo { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public bool IsBear(IAbilityUnit unit)
+        {
+            return unit.SkillBook is SpiritBearSkillBook;
+        }
 
         public override void OnLoad()
         {
@@ -52,16 +80,9 @@
             var orbwalkers = new List<IUnitOrbwalker> { this.LoneDruidOrbwalker };
             var orderIssuers = new List<IOrderIssuer>();
 
-            var targetReset = new Action(
-                () =>
-                    {
-                        this.LocalHero.TargetSelector.ResetTarget();
-                    });
+            var targetReset = new Action(() => { this.LocalHero.TargetSelector.ResetTarget(); });
 
-            var targetAssign = new Action(() =>
-                {
-                    this.LocalHero.TargetSelector.GetTarget();
-                });
+            var targetAssign = new Action(() => { this.LocalHero.TargetSelector.GetTarget(); });
 
             this.LocalHero.TargetSelector.TargetChanged.Subscribe(
                 () =>
@@ -154,6 +175,8 @@
                         this.Bear.AddOrderIssuer(this.BearRetreatOrbwalker);
                     }
                 }
+
+                this.LoneDruidOrbwalker.Bear = this.Bear;
             }
         }
 
@@ -161,9 +184,6 @@
         {
         }
 
-        public bool IsBear(IAbilityUnit unit)
-        {
-            return unit.SkillBook is SpiritBearSkillBook;
-        }
+        #endregion
     }
 }

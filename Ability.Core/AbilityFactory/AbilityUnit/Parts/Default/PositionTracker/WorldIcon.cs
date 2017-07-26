@@ -27,6 +27,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker
     {
         #region Fields
 
+        private ActionExecutor drawWorldIcon;
+
         private DataObserver<IScreenInfo> screenInfoObserver;
 
         #endregion
@@ -75,8 +77,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker
             // Drawing.DrawLine();
             Drawing.DrawRect(pos, this.Unit.IconDrawer.WorldIconSize, this.Unit.IconDrawer.Icon);
         }
-
-        private ActionExecutor drawWorldIcon;
 
         public void EndDrawing()
         {

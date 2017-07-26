@@ -15,18 +15,21 @@ namespace Ability.Core.AbilityFactory.Utilities
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     ///     The notifier.
     /// </summary>
     public class Notifier : IDisposable
     {
+        #region Fields
+
         private int count;
+
+        #endregion
 
         #region Public Properties
 
-        public Dictionary<int, Action> Reacters { get; set; }= new Dictionary<int, Action>();
+        public Dictionary<int, Action> Reacters { get; set; } = new Dictionary<int, Action>();
 
         #endregion
 

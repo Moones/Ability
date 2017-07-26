@@ -23,8 +23,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillDataR
         #region Public Properties
 
         /// <summary>Gets the updates.</summary>
-        //Collection<Action> Updates { get; }
-
+        // Collection<Action> Updates { get; }
         #endregion
 
         #region Public Methods and Operators

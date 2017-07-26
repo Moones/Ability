@@ -33,6 +33,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
 
         private float maximum;
 
+        private ActionExecutor maximumHealthUpdater;
+
         #endregion
 
         #region Constructors and Destructors
@@ -105,8 +107,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
         /// <summary>Gets the maximum health change.</summary>
         public Notifier MaximumHealthChange { get; } = new Notifier();
 
-        public Notifier ZeroHealth { get; } = new Notifier();
-
         /// <summary>
         ///     Gets or sets the percentage.
         /// </summary>
@@ -116,6 +116,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
         ///     Gets or sets the unit.
         /// </summary>
         public IAbilityUnit Unit { get; set; }
+
+        public Notifier ZeroHealth { get; } = new Notifier();
 
         #endregion
 
@@ -136,8 +138,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
             this.incomingDamages.Add(incomingDamage);
             DelayAction.Add(delay, () => { this.incomingDamages.Remove(incomingDamage); });
         }
-
-        private ActionExecutor maximumHealthUpdater;
 
         public virtual void Dispose()
         {

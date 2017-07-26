@@ -40,6 +40,12 @@ namespace Ability.Core.Utilities
         #region Static Fields
 
         /// <summary>
+        ///     Gets the device.
+        /// </summary>
+        /// <value>The device.</value>
+        public static Device Device; // => Drawing.Direct3DDevice9;
+
+        /// <summary>
         ///     The render objects
         /// </summary>
         private static readonly List<RenderObject> RenderObjects = new List<RenderObject>();
@@ -75,16 +81,6 @@ namespace Ability.Core.Utilities
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
         }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the device.
-        /// </summary>
-        /// <value>The device.</value>
-        public static Device Device;// => Drawing.Direct3DDevice9;
 
         #endregion
 
@@ -139,11 +135,10 @@ namespace Ability.Core.Utilities
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         private static void Drawing_OnDraw(EventArgs args)
         {
-            //if (Device == null || Device.IsDisposed)
-            //{
-            //    return;
-            //}
-
+            // if (Device == null || Device.IsDisposed)
+            // {
+            // return;
+            // }
             foreach (var renderObject in _renderVisibleObjects)
             {
                 renderObject.OnDraw();
@@ -156,10 +151,10 @@ namespace Ability.Core.Utilities
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            //if (Device == null || Device.IsDisposed)
-            //{
-            //    return;
-            //}
+            // if (Device == null || Device.IsDisposed)
+            // {
+            // return;
+            // }
 
             // Device.SetRenderState(RenderState.AlphaBlendEnable, true);
             foreach (var renderObject in _renderVisibleObjects)
@@ -401,19 +396,18 @@ namespace Ability.Core.Utilities
                     VertexFormat.None,
                     Pool.Managed);
 
-                //_vertices.Lock(0, 0, LockFlags.None).WriteRange(
-                //    new[]
-                //        {
-                //            // T1
-                //            new Vector4(-x, 0f, -x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
-                //            new Vector4(x, 0f, -x, 1.0f), new Vector4(),
+                // _vertices.Lock(0, 0, LockFlags.None).WriteRange(
+                // new[]
+                // {
+                // // T1
+                // new Vector4(-x, 0f, -x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
+                // new Vector4(x, 0f, -x, 1.0f), new Vector4(),
 
-                //            // T2
-                //            new Vector4(-x, 0f, x, 1.0f), new Vector4(), new Vector4(x, 0f, x, 1.0f), new Vector4(),
-                //            new Vector4(x, 0f, -x, 1.0f), new Vector4()
-                //        });
-                //_vertices.Unlock();
-
+                // // T2
+                // new Vector4(-x, 0f, x, 1.0f), new Vector4(), new Vector4(x, 0f, x, 1.0f), new Vector4(),
+                // new Vector4(x, 0f, -x, 1.0f), new Vector4()
+                // });
+                // _vertices.Unlock();
                 _vertexElements = new[]
                                       {
                                           new VertexElement(
@@ -705,7 +699,8 @@ namespace Ability.Core.Utilities
                                                  0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                  0xF0, 0xF0, 0xF0, 0xF0, 0x0F, 0x0F, 0x0F, 0x0F, 0xFF, 0xFF, 0x00, 0x00
                                              };
-                    //_effect = Effect.FromMemory(Device, compiledEffect, ShaderFlags.None);
+
+                    // _effect = Effect.FromMemory(Device, compiledEffect, ShaderFlags.None);
                 }
                 catch (Exception e)
                 {
@@ -713,8 +708,7 @@ namespace Ability.Core.Utilities
                     return;
                 }
 
-                //_technique = _effect.GetTechnique(0);
-
+                // _technique = _effect.GetTechnique(0);
                 if (!_initialized)
                 {
                     _initialized = true;
@@ -741,47 +735,47 @@ namespace Ability.Core.Utilities
             {
                 try
                 {
-                    //if (Device == null || Device.IsDisposed)
-                    //{
-                    //    return;
-                    //}
+                    // if (Device == null || Device.IsDisposed)
+                    // {
+                    // return;
+                    // }
 
-                    //if (_vertices == null)
-                    //{
-                    //    CreateVertexes();
-                    //}
+                    // if (_vertices == null)
+                    // {
+                    // CreateVertexes();
+                    // }
 
-                    //if (_vertices == null || _vertices.IsDisposed || _vertexDeclaration.IsDisposed || _effect.IsDisposed
-                    //    || _technique.IsDisposed)
-                    //{
-                    //    return;
-                    //}
+                    // if (_vertices == null || _vertices.IsDisposed || _vertexDeclaration.IsDisposed || _effect.IsDisposed
+                    // || _technique.IsDisposed)
+                    // {
+                    // return;
+                    // }
 
-                    //var olddec = Device.VertexDeclaration;
+                    // var olddec = Device.VertexDeclaration;
 
-                    //_effect.Technique = _technique;
+                    // _effect.Technique = _technique;
 
-                    //_effect.Begin();
-                    //_effect.BeginPass(0);
-                    //_effect.SetValue(
-                    //    "ProjectionMatrix",
-                    //    Matrix.Translation(position.SwitchYZ()) * Drawing.View * Drawing.Projection);
-                    //_effect.SetValue(
-                    //    "CircleColor",
-                    //    new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
-                    //_effect.SetValue("Radius", radius);
-                    //_effect.SetValue("Border", 2f + width);
-                    //_effect.SetValue("zEnabled", zDeep);
+                    // _effect.Begin();
+                    // _effect.BeginPass(0);
+                    // _effect.SetValue(
+                    // "ProjectionMatrix",
+                    // Matrix.Translation(position.SwitchYZ()) * Drawing.View * Drawing.Projection);
+                    // _effect.SetValue(
+                    // "CircleColor",
+                    // new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
+                    // _effect.SetValue("Radius", radius);
+                    // _effect.SetValue("Border", 2f + width);
+                    // _effect.SetValue("zEnabled", zDeep);
 
-                    //Device.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
-                    //Device.VertexDeclaration = _vertexDeclaration;
+                    // Device.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
+                    // Device.VertexDeclaration = _vertexDeclaration;
 
-                    //Device.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
+                    // Device.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
 
-                    //_effect.EndPass();
-                    //_effect.End();
+                    // _effect.EndPass();
+                    // _effect.End();
 
-                    //Device.VertexDeclaration = olddec;
+                    // Device.VertexDeclaration = olddec;
                 }
                 catch (Exception e)
                 {
@@ -825,20 +819,20 @@ namespace Ability.Core.Utilities
             {
                 OnPreReset(EventArgs.Empty);
 
-                //if (_effect != null && !_effect.IsDisposed)
-                //{
-                //    _effect.Dispose();
-                //}
+                // if (_effect != null && !_effect.IsDisposed)
+                // {
+                // _effect.Dispose();
+                // }
 
-                //if (_vertices != null && !_vertices.IsDisposed)
-                //{
-                //    _vertices.Dispose();
-                //}
+                // if (_vertices != null && !_vertices.IsDisposed)
+                // {
+                // _vertices.Dispose();
+                // }
 
-                //if (_vertexDeclaration != null && !_vertexDeclaration.IsDisposed)
-                //{
-                //    _vertexDeclaration.Dispose();
-                //}
+                // if (_vertexDeclaration != null && !_vertexDeclaration.IsDisposed)
+                // {
+                // _vertexDeclaration.Dispose();
+                // }
             }
 
             /// <summary>
@@ -847,10 +841,10 @@ namespace Ability.Core.Utilities
             /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
             private static void OnPostReset(EventArgs args)
             {
-                //if (_effect != null && !_effect.IsDisposed)
-                //{
-                //    _effect.OnResetDevice();
-                //}
+                // if (_effect != null && !_effect.IsDisposed)
+                // {
+                // _effect.OnResetDevice();
+                // }
             }
 
             /// <summary>
@@ -859,10 +853,10 @@ namespace Ability.Core.Utilities
             /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
             private static void OnPreReset(EventArgs args)
             {
-                //if (_effect != null && !_effect.IsDisposed)
-                //{
-                //    _effect.OnLostDevice();
-                //}
+                // if (_effect != null && !_effect.IsDisposed)
+                // {
+                // _effect.OnLostDevice();
+                // }
             }
 
             #endregion
@@ -903,7 +897,7 @@ namespace Ability.Core.Utilities
             /// <param name="color">The color.</param>
             public Line(Vector2 start, Vector2 end, int width, ColorBGRA color)
             {
-                //this._line = new SharpDX.Direct3D9.Line(Device);
+                // this._line = new SharpDX.Direct3D9.Line(Device);
                 this.Width = width;
                 this.Color = color;
                 this.Start = start;
@@ -963,7 +957,7 @@ namespace Ability.Core.Utilities
 
                 set
                 {
-                    //this._line.Width = value;
+                    // this._line.Width = value;
                     this._width = value;
                 }
             }
@@ -978,11 +972,11 @@ namespace Ability.Core.Utilities
             public override void Dispose()
             {
                 this.OnPreReset();
-                //if (!this._line.IsDisposed)
-                //{
-                //    this._line.Dispose();
-                //}
 
+                // if (!this._line.IsDisposed)
+                // {
+                // this._line.Dispose();
+                // }
                 Game.OnUpdate -= this.GameOnOnUpdate;
             }
 
@@ -993,14 +987,14 @@ namespace Ability.Core.Utilities
             {
                 try
                 {
-                //    if (this._line.IsDisposed)
-                //    {
-                //        return;
-                //    }
+                    // if (this._line.IsDisposed)
+                    // {
+                    // return;
+                    // }
 
-                //    this._line.Begin();
-                //    this._line.Draw(new[] { this.Start, this.End }, this.Color);
-                //    this._line.End();
+                    // this._line.Begin();
+                    // this._line.Draw(new[] { this.Start, this.End }, this.Color);
+                    // this._line.End();
                 }
                 catch (Exception e)
                 {
@@ -1013,7 +1007,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPostReset()
             {
-                //this._line.OnResetDevice();
+                // this._line.OnResetDevice();
             }
 
             /// <summary>
@@ -1021,7 +1015,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPreReset()
             {
-                //this._line.OnLostDevice();
+                // this._line.OnLostDevice();
             }
 
             #endregion
@@ -1084,7 +1078,8 @@ namespace Ability.Core.Utilities
                 this.Width = width;
                 this.Height = height;
                 this.Color = color;
-                //this._line = new SharpDX.Direct3D9.Line(Device) { Width = height };
+
+                // this._line = new SharpDX.Direct3D9.Line(Device) { Width = height };
                 Game.OnUpdate += this.Game_OnUpdate;
                 this.SubscribeToResetEvents();
             }
@@ -1143,11 +1138,11 @@ namespace Ability.Core.Utilities
             public override void Dispose()
             {
                 this.OnPreReset();
-                //if (!this._line.IsDisposed)
-                //{
-                //    this._line.Dispose();
-                //}
 
+                // if (!this._line.IsDisposed)
+                // {
+                // this._line.Dispose();
+                // }
                 Game.OnUpdate -= this.Game_OnUpdate;
             }
 
@@ -1158,20 +1153,20 @@ namespace Ability.Core.Utilities
             {
                 try
                 {
-                    //if (this._line.IsDisposed)
-                    //{
-                    //    return;
-                    //}
+                    // if (this._line.IsDisposed)
+                    // {
+                    // return;
+                    // }
 
-                    //this._line.Begin();
-                    //this._line.Draw(
-                    //    new[]
-                    //        {
-                    //            new Vector2(this.X, this.Y + this.Height / 2),
-                    //            new Vector2(this.X + this.Width, this.Y + this.Height / 2)
-                    //        },
-                    //    this.Color);
-                    //this._line.End();
+                    // this._line.Begin();
+                    // this._line.Draw(
+                    // new[]
+                    // {
+                    // new Vector2(this.X, this.Y + this.Height / 2),
+                    // new Vector2(this.X + this.Width, this.Y + this.Height / 2)
+                    // },
+                    // this.Color);
+                    // this._line.End();
                 }
                 catch (Exception e)
                 {
@@ -1184,7 +1179,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPostReset()
             {
-                //this._line.OnResetDevice();
+                // this._line.OnResetDevice();
             }
 
             /// <summary>
@@ -1192,7 +1187,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPreReset()
             {
-                //this._line.OnLostDevice();
+                // this._line.OnLostDevice();
             }
 
             #endregion
@@ -1343,7 +1338,7 @@ namespace Ability.Core.Utilities
             /// <summary>
             ///     The DirectX sprite
             /// </summary>
-            private readonly SharpDX.Direct3D9.Sprite _sprite;// = new SharpDX.Direct3D9.Sprite(Device);
+            private readonly SharpDX.Direct3D9.Sprite _sprite; // = new SharpDX.Direct3D9.Sprite(Device);
 
             /// <summary>
             ///     The color of the sprite.
@@ -1398,9 +1393,9 @@ namespace Ability.Core.Utilities
             public Sprite(BaseTexture texture, Vector2 position)
                 : this()
             {
-                //this.UpdateTextureBitmap(
-                //    (Bitmap)Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)),
-                //    position);
+                // this.UpdateTextureBitmap(
+                // (Bitmap)Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)),
+                // position);
             }
 
             /// <summary>
@@ -1658,20 +1653,20 @@ namespace Ability.Core.Utilities
                 this.OnPreReset();
 
                 // Game.OnUpdate -= this.Game_OnUpdate;
-                //if (!this._sprite.IsDisposed)
-                //{
-                //    this._sprite.Dispose();
-                //}
+                // if (!this._sprite.IsDisposed)
+                // {
+                // this._sprite.Dispose();
+                // }
 
-                //if (!this._texture.IsDisposed)
-                //{
-                //    this._texture.Dispose();
-                //}
+                // if (!this._texture.IsDisposed)
+                // {
+                // this._texture.Dispose();
+                // }
 
-                //if (!this._originalTexture.IsDisposed)
-                //{
-                //    this._originalTexture.Dispose();
-                //}
+                // if (!this._originalTexture.IsDisposed)
+                // {
+                // this._originalTexture.Dispose();
+                // }
             }
 
             /// <summary>
@@ -1705,19 +1700,19 @@ namespace Ability.Core.Utilities
             {
                 // try
                 // {
-                //if (this._sprite.IsDisposed || this._texture.IsDisposed || !this.Position.IsValid() || this._hide)
-                //{
-                //    return;
-                //}
+                // if (this._sprite.IsDisposed || this._texture.IsDisposed || !this.Position.IsValid() || this._hide)
+                // {
+                // return;
+                // }
 
-                //this._sprite.Begin();
-                //var matrix = this._sprite.Transform;
-                //var nMatrix = Matrix.Scaling(this.Scale.X, this.Scale.Y, 0) * Matrix.RotationZ(this.Rotation)
-                //              * Matrix.Translation(this.Position.X, this.Position.Y, 0);
-                //this._sprite.Transform = nMatrix;
-                //this._sprite.Draw(this._texture, this._color, this._crop);
-                //this._sprite.Transform = matrix;
-                //this._sprite.End();
+                // this._sprite.Begin();
+                // var matrix = this._sprite.Transform;
+                // var nMatrix = Matrix.Scaling(this.Scale.X, this.Scale.Y, 0) * Matrix.RotationZ(this.Rotation)
+                // * Matrix.Translation(this.Position.X, this.Position.Y, 0);
+                // this._sprite.Transform = nMatrix;
+                // this._sprite.Draw(this._texture, this._color, this._crop);
+                // this._sprite.Transform = matrix;
+                // this._sprite.End();
 
                 // }
                 // catch (Exception e)
@@ -1732,12 +1727,12 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPostReset()
             {
-                //if (Device == null || Device.IsDisposed)
-                //{
-                //    return;
-                //}
+                // if (Device == null || Device.IsDisposed)
+                // {
+                // return;
+                // }
 
-                //this._sprite.OnResetDevice();
+                // this._sprite.OnResetDevice();
             }
 
             /// <summary>
@@ -1745,12 +1740,12 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPreReset()
             {
-                //if (Device == null || Device.IsDisposed)
-                //{
-                //    return;
-                //}
+                // if (Device == null || Device.IsDisposed)
+                // {
+                // return;
+                // }
 
-                //this._sprite?.OnLostDevice();
+                // this._sprite?.OnLostDevice();
             }
 
             /// <summary>
@@ -1758,9 +1753,8 @@ namespace Ability.Core.Utilities
             /// </summary>
             public void Reset()
             {
-                //this.UpdateTextureBitmap(
-                //    (Bitmap)Image.FromStream(BaseTexture.ToStream(this._originalTexture, ImageFileFormat.Bmp)));
-
+                // this.UpdateTextureBitmap(
+                // (Bitmap)Image.FromStream(BaseTexture.ToStream(this._originalTexture, ImageFileFormat.Bmp)));
                 if (this.OnReset != null)
                 {
                     this.OnReset(this);
@@ -1803,9 +1797,9 @@ namespace Ability.Core.Utilities
 
                 this.Bitmap = newBitmap;
 
-                //this._texture = Texture.FromMemory(
-                //    Device,
-                //    (byte[])new ImageConverter().ConvertTo(newBitmap, typeof(byte[])));
+                // this._texture = Texture.FromMemory(
+                // Device,
+                // (byte[])new ImageConverter().ConvertTo(newBitmap, typeof(byte[])));
 
                 // this._texture = Texture.FromMemory(
                 // Device,
@@ -1831,10 +1825,10 @@ namespace Ability.Core.Utilities
                 // Filter.None,
                 // Filter.None,
                 // 0);
-                //if (this._originalTexture == null)
-                //{
-                //    this._originalTexture = this._texture;
-                //}
+                // if (this._originalTexture == null)
+                // {
+                // this._originalTexture = this._texture;
+                // }
             }
 
             #endregion
@@ -2138,15 +2132,14 @@ namespace Ability.Core.Utilities
 
                 set
                 {
-                    //if (value != this._text && this._textFont != null && !this._textFont.IsDisposed
-                    //    && !string.IsNullOrEmpty(value))
-                    //{
-                    //    var size = this._textFont.MeasureText(null, value, 0);
-                    //    this.Width = size.Width;
-                    //    this.Height = size.Height;
-                    //    this._textFont.PreloadText(value);
-                    //}
-
+                    // if (value != this._text && this._textFont != null && !this._textFont.IsDisposed
+                    // && !string.IsNullOrEmpty(value))
+                    // {
+                    // var size = this._textFont.MeasureText(null, value, 0);
+                    // this.Width = size.Width;
+                    // this.Height = size.Height;
+                    // this._textFont.PreloadText(value);
+                    // }
                     this._text = value;
                 }
             }
@@ -2157,14 +2150,13 @@ namespace Ability.Core.Utilities
             /// <value>The text font description.</value>
             public FontDescription TextFontDescription
             {
-                //get
-                //{
-                //    return null;//this._textFont.Description;
-                //}
-
+                // get
+                // {
+                // return null;//this._textFont.Description;
+                // }
                 set
                 {
-                   // this._textFont.Dispose();
+                    // this._textFont.Dispose();
                     this._textFont = new Font(Device, value);
                 }
             }
@@ -2258,10 +2250,11 @@ namespace Ability.Core.Utilities
             {
                 Game.OnUpdate -= this.Game_OnUpdate;
                 this.OnPreReset();
-                //if (!this._textFont.IsDisposed)
-                //{
-                //    this._textFont.Dispose();
-                //}
+
+                // if (!this._textFont.IsDisposed)
+                // {
+                // this._textFont.Dispose();
+                // }
             }
 
             /// <summary>
@@ -2271,11 +2264,10 @@ namespace Ability.Core.Utilities
             {
                 try
                 {
-                    //if (this._textFont.IsDisposed || this.text == string.Empty)
-                    //{
-                    //    return;
-                    //}
-
+                    // if (this._textFont.IsDisposed || this.text == string.Empty)
+                    // {
+                    // return;
+                    // }
                     if (this.Unit != null && this.Unit.IsValid)
                     {
                         var pos = HUDInfo.GetHPbarPosition(this.Unit) + this.Offset;
@@ -2288,13 +2280,14 @@ namespace Ability.Core.Utilities
                     if (this.OutLined)
                     {
                         var outlineColor = new ColorBGRA(0, 0, 0, 255);
-                        //this._textFont.DrawText(null, this.text, xP - 1, yP - 1, outlineColor);
-                        //this._textFont.DrawText(null, this.text, xP + 1, yP + 1, outlineColor);
-                        //this._textFont.DrawText(null, this.text, xP - 1, yP, outlineColor);
-                        //this._textFont.DrawText(null, this.text, xP + 1, yP, outlineColor);
+
+                        // this._textFont.DrawText(null, this.text, xP - 1, yP - 1, outlineColor);
+                        // this._textFont.DrawText(null, this.text, xP + 1, yP + 1, outlineColor);
+                        // this._textFont.DrawText(null, this.text, xP - 1, yP, outlineColor);
+                        // this._textFont.DrawText(null, this.text, xP + 1, yP, outlineColor);
                     }
 
-                    //this._textFont.DrawText(null, this.text, xP, yP, this.Color);
+                    // this._textFont.DrawText(null, this.text, xP, yP, this.Color);
                 }
                 catch (Exception e)
                 {
@@ -2307,7 +2300,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPostReset()
             {
-                //this._textFont.OnResetDevice();
+                // this._textFont.OnResetDevice();
             }
 
             /// <summary>
@@ -2315,7 +2308,7 @@ namespace Ability.Core.Utilities
             /// </summary>
             public override void OnPreReset()
             {
-                //this._textFont.OnLostDevice();
+                // this._textFont.OnLostDevice();
             }
 
             #endregion
@@ -2374,21 +2367,21 @@ namespace Ability.Core.Utilities
         /// <returns>Rectangle.</returns>
         public static Rectangle MeasureText(this Font font, Sprite sprite, string text)
         {
-            //Dictionary<string, Rectangle> rectangles;
-            //if (!Widths.TryGetValue(font, out rectangles))
-            //{
-            //    rectangles = new Dictionary<string, Rectangle>();
-            //    Widths[font] = rectangles;
-            //}
+            // Dictionary<string, Rectangle> rectangles;
+            // if (!Widths.TryGetValue(font, out rectangles))
+            // {
+            // rectangles = new Dictionary<string, Rectangle>();
+            // Widths[font] = rectangles;
+            // }
 
-            //Rectangle rectangle;
-            //if (rectangles.TryGetValue(text, out rectangle))
-            //{
-            //    return rectangle;
-            //}
+            // Rectangle rectangle;
+            // if (rectangles.TryGetValue(text, out rectangle))
+            // {
+            // return rectangle;
+            // }
 
-            //rectangle = font.MeasureText(sprite, text, 0);
-            //rectangles[text] = rectangle;
+            // rectangle = font.MeasureText(sprite, text, 0);
+            // rectangles[text] = rectangle;
             return new Rectangle();
         }
 
@@ -2401,7 +2394,8 @@ namespace Ability.Core.Utilities
         public static Rectangle MeasureText(this Font font, string text)
         {
             return new Rectangle();
-           // return font.MeasureText(null, text);
+
+            // return font.MeasureText(null, text);
         }
 
         #endregion
