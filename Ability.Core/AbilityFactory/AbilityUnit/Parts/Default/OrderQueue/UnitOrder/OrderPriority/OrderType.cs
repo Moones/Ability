@@ -17,6 +17,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     {
         MoveToPosition,
 
+        TakeRune,
+
         FarmGold,
 
         DropItem,

@@ -93,7 +93,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
             this.IsItem = this.SourceItem != null;
             this.SkillHandle = this.SourceAbility.Handle;
             this.SkillHandleString = this.SkillHandle.ToString(CultureInfo.CurrentCulture);
-            this.AbilityInfo = AbilityDatabase.Find(this.Name);
+            this.AbilityInfo = AbilityDatabase.Find(this.Name) ?? new AbilityInfo();
 
             // this.Variables.DealsDamageToTarget = this.SourceAbility.IsNuke();
             // this.Variables.AppliesDisableOnTarget = this.SourceAbility.IsDisable();
