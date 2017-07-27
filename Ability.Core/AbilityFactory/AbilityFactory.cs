@@ -74,7 +74,7 @@ namespace Ability.Core.AbilityFactory
         /// <summary>
         ///     Gets or sets the ability priority database.
         /// </summary>
-        [Import(typeof(IAbilityDatabase))]
+        //[Import(typeof(IAbilityDatabase))]
         protected Lazy<IAbilityDatabase> AbilityDatabase { get; set; }
 
         [ImportMany]
@@ -109,9 +109,7 @@ namespace Ability.Core.AbilityFactory
         {
             var abilitySkill = new ControllableSkill(skill)
                                    {
-                                       Json =
-                                           this.AbilityDatabase.Value.GetSkillData(skill.StoredName())
-                                           ?? new SkillJson(),
+                                       Json = new SkillJson(),
                                        Owner = owner
                                    };
 
@@ -180,9 +178,7 @@ namespace Ability.Core.AbilityFactory
         {
             var abilitySkill = new UncontrollableSkill(skill)
                                    {
-                                       Json =
-                                           this.AbilityDatabase.Value.GetSkillData(skill.StoredName())
-                                           ?? new SkillJson(),
+                                       Json = new SkillJson(),
                                        Owner = owner
                                    };
 
