@@ -66,6 +66,11 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
 
         public void EntityAdded(Entity entity)
         {
+            if (!entity.IsValid)
+            {
+                return;
+            }
+
             var rune = entity as Rune;
             if (rune != null)
             {
@@ -161,9 +166,9 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
             }
 
             this.bountyUpdateSleeper.Sleep(200);
-            foreach (var rune in ObjectManager.GetEntitiesFast<Rune>())
+            foreach (var rune in ObjectManager.GetEntities<Rune>())
             {
-                if (rune.RuneType == RuneType.Bounty)
+                if (rune.IsValid && rune.RuneType == RuneType.Bounty)
                 {
                     if (
                         !this.AbilityMapData.BountyRuneSpawner.Positions.Any(

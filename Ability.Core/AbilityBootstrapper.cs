@@ -17,6 +17,7 @@ namespace Ability.Core
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
+    using System.Runtime.CompilerServices;
     using System.Security.Permissions;
 
     using Ability.Core.AbilityData.AbilityDataCollector;
@@ -124,6 +125,8 @@ namespace Ability.Core
             }
         }
 
+        private static AbilityBootstrapper instance;
+
         /// <summary>The load.</summary>
         public static void Load()
         {
@@ -133,7 +136,13 @@ namespace Ability.Core
             }
 
             loaded = true;
-            new AbilityBootstrapper().Initialize();
+            instance = new AbilityBootstrapper();
+            instance.Initialize();
+        }
+
+        public static void Close()
+        {
+            instance.Events_OnClose(null, null);
         }
 
         #endregion

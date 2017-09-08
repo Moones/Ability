@@ -184,6 +184,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                             var owner =
                                 this.Unit.Team.UnitManager.Units.FirstOrDefault(
                                     x => x.Value.UnitHandle == abilitySkill.Value.SourceItem.Owner.Handle).Value;
+                            if (owner == null)
+                            {
+                                continue;
+                            }
+
                             Console.WriteLine(
                                 "switching " + abilitySkill.Value.Name + " from " + this.Unit.Name + " to " + owner.Name);
                             itemObserver.Value.Item.Owner = owner;
@@ -208,6 +213,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                     var owner =
                         this.Unit.Team.UnitManager.Units.FirstOrDefault(
                             x => x.Value.UnitHandle == itemObserver.Value.Item.SourceItem.Owner.Handle).Value;
+                    if (owner == null)
+                    {
+                        continue;
+                    }
+
                     Console.WriteLine(
                         "switching " + itemObserver.Value.Item.Name + " from " + this.Unit.Name + " to " + owner.Name);
                     itemObserver.Value.Item.Owner = owner;

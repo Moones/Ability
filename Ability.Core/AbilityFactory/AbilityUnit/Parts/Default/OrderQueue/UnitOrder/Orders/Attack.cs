@@ -33,7 +33,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         public override bool CanExecute()
         {
             if (!this.Unit.Fighting || this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile
-                || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
+                || this.Unit.TargetSelector.TargetIsSet || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
                 || this.Unit.TargetSelector.Target.Modifiers.Invul)
             {
                 return false;

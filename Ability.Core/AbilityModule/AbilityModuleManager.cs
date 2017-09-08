@@ -24,6 +24,7 @@ namespace Ability.Core.AbilityModule
     using Ability.Core.AbilityModule.ModuleBase;
 
     using Ensage;
+    using Ensage.Common;
     using Ensage.Common.Menu;
 
     [Export(typeof(IAbilityModuleManager))]
@@ -195,6 +196,12 @@ namespace Ability.Core.AbilityModule
                     this.ActiveModules.Add(abilityUtilityModule.Value);
                     this.ModuleActivated.Next(abilityUtilityModule.Value);
                 }
+            }
+
+
+            if (!this.ActiveModules.Any())
+            {
+                DelayAction.Add(2, () => AbilityBootstrapper.Close());
             }
         }
 

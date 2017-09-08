@@ -183,6 +183,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health
 
         private void NewValueReceived()
         {
+            if (!this.Unit.SourceUnit.IsValid)
+            {
+                return;
+            }
+
             this.Maximum = this.Unit.SourceUnit.MaximumHealth;
             this.Percentage = this.current * 100 / this.Maximum;
             this.Next(this);

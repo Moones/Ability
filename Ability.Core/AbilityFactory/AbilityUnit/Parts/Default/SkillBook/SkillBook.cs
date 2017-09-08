@@ -256,9 +256,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             // }
             if (skill.IsItem)
             {
-                var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
-                newitems.Add(skill.SkillHandle, skill);
-                this.items = newitems;
+                if (!this.items.ContainsKey(skill.SkillHandle))
+                {
+                    var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
+                    newitems.Add(skill.SkillHandle, skill);
+                    this.items = newitems;
+                }
 
                 if (skill.SourceItem.Id == AbilityId.item_ultimate_scepter)
                 {
@@ -269,9 +272,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             }
             else
             {
-                var newspells = this.spells.ToDictionary(x => x.Key, x => x.Value);
-                newspells.Add(skill.SkillHandle, skill);
-                this.spells = newspells;
+                if (!this.spells.ContainsKey(skill.SkillHandle))
+                {
+                    var newspells = this.spells.ToDictionary(x => x.Key, x => x.Value);
+                    newspells.Add(skill.SkillHandle, skill);
+                    this.spells = newspells;
+                }
             }
 
             // if (skill.CastData.CastPoint > 0)
@@ -280,9 +286,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             // newcastPointSpells.Add(skill.SkillHandle, skill);
             // this.castPointSpells = newcastPointSpells;
             // }
-            var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
-            newallSkills.Add(skill.SkillHandle, skill);
-            this.allSkills = newallSkills;
+            if (this.allSkills.ContainsKey(skill.SkillHandle))
+            {
+                var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
+                newallSkills.Add(skill.SkillHandle, skill);
+                this.allSkills = newallSkills;
+            }
 
             if (skill.Name == "item_blink")
             {
