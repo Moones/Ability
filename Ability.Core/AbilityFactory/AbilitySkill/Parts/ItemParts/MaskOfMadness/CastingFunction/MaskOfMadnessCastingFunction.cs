@@ -18,7 +18,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.MaskOfMadness
 
         public override bool CanCast()
         {
-            return base.CanCast() && this.Skill.Owner.TargetSelector.LastDistanceToTarget < this.Skill.Owner.AttackRange.Value + 150;
+            return base.CanCast()
+                   && this.Skill.Owner.TargetSelector.LastDistanceToTarget < this.Skill.Owner.AttackRange.Value + 150
+                   && this.Skill.Owner.TargetSelector.Target.Modifiers.Attackable;
         }
 
         public override bool TargetIsValid(IAbilityUnit target)

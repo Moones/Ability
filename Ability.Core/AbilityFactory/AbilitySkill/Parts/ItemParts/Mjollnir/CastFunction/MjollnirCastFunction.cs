@@ -20,7 +20,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.Mjollnir.Cast
         {
             return base.CanCast()
                    && this.Skill.Owner.TargetSelector.LastDistanceToTarget
-                   < this.Skill.Owner.TargetSelector.Target.AttackRange.Value + 200;
+                   < this.Skill.Owner.TargetSelector.Target.AttackRange.Value + 200
+                   && this.Skill.Owner.Modifiers.Attackable;
         }
 
         public override bool TargetIsValid(IAbilityUnit target)

@@ -16,7 +16,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.Medallion.Cas
 
         public override bool CanCast()
         {
-            return base.CanCast() && this.Skill.Owner.TargetSelector.LastDistanceToTarget < this.Skill.Owner.AttackRange.Value + 150;
+            return base.CanCast()
+                   && this.Skill.Owner.TargetSelector.LastDistanceToTarget < this.Skill.Owner.AttackRange.Value + 150
+                   && this.Skill.Owner.TargetSelector.Target.Modifiers.Attackable;
         }
     }
 }
