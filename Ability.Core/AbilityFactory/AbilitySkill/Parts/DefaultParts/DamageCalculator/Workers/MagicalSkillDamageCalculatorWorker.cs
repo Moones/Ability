@@ -32,7 +32,11 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
 
         public override void UpdateDamage(float rawDamage)
         {
-            throw new NotImplementedException();
+            this.DamageValue = this.Target.DamageManipulation.ManipulateIncomingMagicalDamage(
+                this.Skill.Owner,
+                rawDamage,
+                0,
+                0);
         }
 
         #endregion

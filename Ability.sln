@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ability.Modules", "Ability.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.LoneDruid", "Ability.Modules\LoneDruid\Ability.LoneDruid.csproj", "{BF65CEAE-4464-4DAD-892F-4D124252D89E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.Brewmaster", "Ability.Modules\Brewmaster\Ability.Brewmaster.csproj", "{37C5340F-EC0A-4A8A-934B-450CD7B7CD13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +25,16 @@ Global
 		{BF65CEAE-4464-4DAD-892F-4D124252D89E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF65CEAE-4464-4DAD-892F-4D124252D89E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF65CEAE-4464-4DAD-892F-4D124252D89E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF65CEAE-4464-4DAD-892F-4D124252D89E} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
+		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
 	EndGlobalSection
 EndGlobal

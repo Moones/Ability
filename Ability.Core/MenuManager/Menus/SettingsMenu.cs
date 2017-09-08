@@ -32,7 +32,7 @@ namespace Ability.Core.MenuManager.Menus
         #region Constructors and Destructors
 
         internal SettingsMenu()
-            : base("Settings", "Ability#.Settings")
+            : base("Core", "Ability#.Settings")
         {
             // var menu = new Menu("Orbwalker", Constants.AssemblyName + "Orbwalker");
             // this.orbwalkerCancelDelay =

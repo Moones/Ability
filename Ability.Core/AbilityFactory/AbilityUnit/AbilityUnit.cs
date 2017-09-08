@@ -24,7 +24,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackDamage;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
@@ -34,9 +36,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Level;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Pathfinder;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.PositionTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ScreenInfo;
@@ -49,6 +54,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     using Ensage;
+    using Ensage.Common.Extensions;
     using Ensage.Common.Objects;
 
     /// <summary>
@@ -85,7 +91,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             this.SourceUnit = unit;
             this.UnitHandleString = unit.Handle.ToString(CultureInfo.CurrentCulture);
             this.Name = unit.StoredName();
-            this.Pathfinder = new NavMeshPathfinding();
             var hero = unit as Hero;
             this.IsHero = hero != null;
             if (this.IsHero)
@@ -93,6 +98,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
                 this.SourceHero = hero;
             }
 
+            //this.SourceHero.GetRealName()
+            this.PrettyName = Game.Localize(this.Name);
             // foreach (var hero in Heroes.GetByTeam(GlobalVariables.EnemyTeam))
             // {
             // this.DamageDealtDictionary.Add(hero.Handle, 0);
@@ -124,6 +131,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         public bool DebugDraw { get; set; }
 
         public IDisableManager DisableManager { get; set; }
+
+        public IMovementManager MovementManager { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
@@ -185,6 +194,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public string Name { get; set; }
 
+        public string PrettyName { get; }
+
         /// <summary>Gets the order issuers.</summary>
         public IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers => this.orderIssuers;
 
@@ -201,7 +212,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <summary>Gets the parts.</summary>
         public IReadOnlyDictionary<Type, IAbilityUnitPart> Parts => this.parts;
 
-        public NavMeshPathfinding Pathfinder { get; }
+        public IPathfinder Pathfinder { get; set; }
+
+        public bool Fighting { get; set; }
+
+        public IAbilityUnit Owner { get; set; }
 
         /// <summary>
         ///     Gets or sets the position.
@@ -242,10 +257,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <summary>Gets or sets the unit composer.</summary>
         public IAbilityUnitHeroComposer UnitComposer { get; set; }
 
+        public IUnitCombo UnitCombo { get; set; }
+
         /// <summary>
         ///     Gets or sets the unit control.
         /// </summary>
         public IUnitControl UnitControl { get; set; }
+
+        public IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit handle.
@@ -416,6 +435,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             // }
             // }
         }
+
+        public IAttackDamage AttackDamage { get; set; }
 
         #endregion
     }

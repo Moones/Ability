@@ -33,6 +33,8 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.A
 
         Rune SourceRune { get; }
 
+        bool Disposed { get; set; }
+
         string TypeName { get; }
 
         #endregion

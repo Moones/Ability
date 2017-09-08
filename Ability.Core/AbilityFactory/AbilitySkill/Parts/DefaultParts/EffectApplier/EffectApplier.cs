@@ -13,6 +13,7 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectApplier
 {
+    using System;
     using System.Collections.Generic;
 
     using Ability.Core.AbilityFactory.AbilityModifier.Parts.Default.ModifierEffectApplier;
@@ -56,20 +57,20 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.EffectAppl
 
         public void Dispose()
         {
-            // foreach (var modifierEffectApplierWorker in this.Workers)
-            // {
-            // modifierEffectApplierWorker.RemoveEffect();
-            // }
+            foreach (var modifierEffectApplierWorker in this.Workers)
+            {
+                modifierEffectApplierWorker.RemoveEffect();
+            }
 
-            // this.levelObserver.Dispose();
+            this.levelObserver.Dispose();
         }
 
         public void Initialize()
         {
-            // this.ApplyEffect();
-            // Console.WriteLine("applying effect " + this.Skill.Name);
-            // this.levelObserver = new DataObserver<ISkillLevel>(level => this.UpdateEffect());
-            // this.levelObserver.Subscribe(this.Skill.Level);
+            this.ApplyEffect();
+            Console.WriteLine("applying effect " + this.Skill.Name);
+            this.levelObserver = new DataObserver<ISkillLevel>(level => this.UpdateEffect());
+            this.levelObserver.Subscribe(this.Skill.Level);
         }
 
         public void UpdateEffect()

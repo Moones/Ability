@@ -21,13 +21,13 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle
     {
         #region Fields
 
-        private readonly List<JungleCamp> ancientCamps = new List<JungleCamp>();
+        internal readonly List<JungleCamp> ancientCamps = new List<JungleCamp>();
 
-        private readonly List<Vector3> entrances = new List<Vector3>();
+        internal readonly List<Vector3> entrances = new List<Vector3>();
 
-        private readonly List<JungleCamp> hardCamps = new List<JungleCamp>();
+        internal readonly List<JungleCamp> hardCamps = new List<JungleCamp>();
 
-        private readonly List<JungleCamp> mediumCamps = new List<JungleCamp>();
+        internal readonly List<JungleCamp> mediumCamps = new List<JungleCamp>();
 
         #endregion
 

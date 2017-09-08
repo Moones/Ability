@@ -13,6 +13,9 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits
 {
+    using System;
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityFactory.Utilities;
 
     public class ControllableUnits : IControllableUnits
@@ -32,6 +35,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
 
         public DataProvider<IAbilityUnit> ControllableUnitRemoved { get; } = new DataProvider<IAbilityUnit>();
 
+        public Dictionary<double, IAbilityUnit> Units { get; } = new Dictionary<double, IAbilityUnit>();
+
+        public DataProvider<IAbilityUnit> AddedUnit { get; } = new DataProvider<IAbilityUnit>();
+
         public IAbilityUnit Unit { get; set; }
 
         #endregion
@@ -44,6 +51,22 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
 
         public virtual void Initialize()
         {
+        }
+
+        public DataProvider<IAbilityUnit> RemovedUnit { get; } = new DataProvider<IAbilityUnit>();
+
+        public virtual void UnitAdded(IAbilityUnit unit)
+        {
+            Console.WriteLine("added controllable unit " + unit.Name);
+            unit.Owner = this.Unit;
+            this.Units.Add(unit.UnitHandle, unit);
+            this.AddedUnit.Next(unit);
+        }
+
+        public virtual void UnitRemoved(IAbilityUnit unit)
+        {
+            this.Units.Remove(unit.UnitHandle);
+            this.RemovedUnit.Next(unit);
         }
 
         #endregion

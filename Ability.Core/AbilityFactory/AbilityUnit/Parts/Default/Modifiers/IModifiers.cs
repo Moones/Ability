@@ -48,6 +48,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         bool Stunned { get; set; }
 
+        bool Attackable { get; set; }
+
+        bool AbleToIssueAttack { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

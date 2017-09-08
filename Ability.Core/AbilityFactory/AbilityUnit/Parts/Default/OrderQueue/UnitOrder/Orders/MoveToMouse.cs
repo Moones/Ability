@@ -22,7 +22,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         #region Constructors and Destructors
 
         public MoveToMouse(OrderType orderType, IAbilityUnit unit)
-            : base(orderType, unit)
+            : base(orderType, unit, "MoveToMouse")
         {
         }
 

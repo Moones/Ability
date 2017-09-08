@@ -16,6 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
     using System;
 
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.Utilities;
 
@@ -41,6 +42,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
         private Reacter targetReset;
 
         private IAbilityUnit unit;
+
+        private bool enabled;
 
         #endregion
 
@@ -80,7 +83,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public UnitBodyblocker Bodyblocker { get; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get
+            {
+                return this.enabled;
+            }
+
+            set
+            {
+                this.enabled = value;
+                if (this.enabled)
+                {
+                    this.Initialize();
+                }
+                else
+                {
+                    this.Dispose();
+                }
+            }
+        }
 
         public uint Id { get; set; }
 
@@ -129,7 +151,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual bool Attack()
         {
-            return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+            this.Unit.OrderQueue.EnqueueOrder(new Attack(this.Unit));
+            return true;
         }
 
         public virtual bool BeforeAttack()
@@ -154,9 +177,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual void Dispose()
         {
+            this.beforeAttackExecuted = false;
+            this.afterAttackExecuted = false;
         }
 
-        public abstract void Initialize();
+        public virtual void Initialize()
+        {
+            this.beforeAttackExecuted = false;
+            this.afterAttackExecuted = false;
+        }
 
         public virtual bool Issue()
         {
@@ -181,10 +210,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 return this.NoTarget();
             }
 
-            if (this.beforeAttackExecuted && !this.Attacking)
-            {
-                return this.Attack();
-            }
+            //if (this.beforeAttackExecuted && !this.Attacking)
+            //{
+            //    return this.Attack();
+            //}
+
+
 
             if (this.MoveToAttack)
             {
@@ -234,7 +265,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                         }
                     }
 
-                    return this.Attack();
+                    return true;
                 }
                 else
                 {
@@ -284,13 +315,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 return false;
             }
 
-            this.Attacking = this.Unit.SourceUnit.IsAttacking();
-
-            if (!this.Attacking && this.CastSpells())
-            {
-                return true;
-            }
-
             this.Time = GlobalVariables.Time * 1000 + Game.Ping;
             this.NextAttack = this.Time - this.Unit.AttackAnimationTracker.NextAttackTime
                               + this.Unit.TurnRate.GetTurnTime(this.Target) * 1000;
@@ -300,21 +324,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
             {
                 this.MoveToAttack = false;
                 this.beforeAttackExecuted = false;
-                if (this.Time >= this.Unit.AttackAnimationTracker.CancelAnimationTime)
+                if (this.afterAttackExecuted)
                 {
-                    if (this.afterAttackExecuted)
-                    {
-                        this.MeanWhile = true;
+                    this.MeanWhile = true;
 
-                        // this.Unit.Target = this.Unit.TargetSelector.GetTarget();
-                        return false;
-                    }
-
-                    this.afterAttackExecuted = true;
-                    return this.CastSpells() || this.AfterAttack();
+                    // this.Unit.Target = this.Unit.TargetSelector.GetTarget();
+                    return false;
                 }
+
+                this.afterAttackExecuted = true;
+                return this.CastSpells() || this.AfterAttack();
             }
-            else if (!this.Attacking)
+            else
             {
                 // Console.WriteLine(
                 // this.Unit.TurnRate.GetTurnTime(this.Target) + " " + this.Unit.AttackAnimation.GetAttackRate() + " "
@@ -333,6 +354,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 }
 
                 this.MeanWhile = false;
+                if (this.CastSpells())
+                {
+                    this.MoveToAttack = false;
+                    return true;
+                }
 
                 if (this.Unit.AttackRange.IsInAttackRange(this.Target) && this.BeforeAttack())
                 {
@@ -363,6 +389,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public bool RunAround(IAbilityUnit unit, Vector3 target)
         {
+            if (this.Unit.SourceUnit.MovementSpeed <= unit.SourceUnit.MovementSpeed)
+            {
+                return false;
+            }
+
             var unitPosition = this.Unit.Position.PredictedByLatency;
             var targetPosition = unit.Position.PredictedByLatency;
 
@@ -411,13 +442,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                     targetPosition,
                     direction1,
                     Math.Max(unit.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 100, distanceFromSegment2),
-                    this.Unit.Pathfinder);
+                    this.Unit.Pathfinder.EnsagePathfinding);
 
                 var position2 = Pathfinding.ExtendUntilWall(
                     targetPosition,
                     direction2,
                     Math.Max(unit.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 100, distanceFromSegment2),
-                    this.Unit.Pathfinder);
+                    this.Unit.Pathfinder.EnsagePathfinding);
 
                 var distance = unitPosition.Distance2D(position);
                 var distance2 = unitPosition.Distance2D(position2);
@@ -431,11 +462,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 {
                     if (distanceFromSegment2 < unit.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50)
                     {
-                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder);
+                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder.EnsagePathfinding);
                     }
                     else
                     {
-                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder);
+                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder.EnsagePathfinding);
                     }
                 }
 

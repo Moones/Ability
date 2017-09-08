@@ -13,7 +13,37 @@
 // </copyright>
 namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle
 {
+    using Ensage;
+    using Ensage.Common.Extensions;
+
+    using SharpDX;
+
     public class JungleCamp
     {
+        public JungleCamp(Vector3 position, Vector3 waitPosition, Vector3 stackPosition, float maxStacks)
+        {
+        }
+
+        public Vector3 Position { get; }
+
+        public void Update()
+        {
+
+        }
+
+        public bool CreepBelongHere(Creep entity)
+        {
+            if (entity.Team == Team.Neutral && entity.IsAlive)
+            {
+                var infront = entity.InFront(200);
+                var infrontDistane = infront.Distance2D(this.Position);
+                if (infrontDistane < 1000 && infrontDistane <= entity.NetworkPosition.Distance2D(this.Position))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

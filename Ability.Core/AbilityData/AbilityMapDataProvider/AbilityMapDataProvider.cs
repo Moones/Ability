@@ -161,7 +161,7 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider
             }
 
             this.bountyUpdateSleeper.Sleep(200);
-            foreach (var rune in ObjectManager.GetEntitiesParallel<Rune>())
+            foreach (var rune in ObjectManager.GetEntitiesFast<Rune>())
             {
                 if (rune.RuneType == RuneType.Bounty)
                 {

@@ -16,6 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
 
+    using Ensage;
     using Ensage.Common.Extensions.SharpDX;
 
     public class PickUpRune : UnitOrderBase
@@ -32,26 +33,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         #region Constructors and Destructors
 
-        public PickUpRune(IAbilityUnit unit)
-            : base(OrderType.PickUpFromGround, unit)
+        public PickUpRune(IAbilityUnit unit, IAbilityRune rune)
+            : base(OrderType.TakeRune, unit, "PickUp rune")
         {
             this.unit = unit;
+            this.rune = rune;
+            rune.RuneDisposed.Subscribe(() => { this.runeDisposed = true; });
+            this.ExecuteOnce = false;
+            this.PrintInLog = true;
+            this.ShouldExecuteFast = true;
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        private bool executed;
 
-        public void AssignRune(IAbilityRune rune)
-        {
-            this.runeDisposed = false;
-            this.rune = rune;
-            rune.RuneDisposed.Subscribe(() => { this.runeDisposed = true; });
-        }
+        #region Public Methods and Operators
 
         public override bool CanExecute()
         {
-            if (this.runeDisposed)
+            if (this.runeDisposed || this.executed)
             {
                 return false;
             }
@@ -61,15 +62,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public override float Execute()
         {
-            if (this.unit.Position.PredictedByLatency.Distance(this.rune.SourceRune.Position) <= this.rune.PickUpRange)
+            if (this.unit.Position.PredictedByLatency.Distance(this.rune.SourceRune.Position) <= 350)
             {
                 this.DoIt();
-                this.DoIt();
-                this.DoIt();
-                this.DoIt();
-                return 100;
+                return 0;
             }
 
+            return 0;
+        }
+
+        public override float ExecuteFast()
+        {
             return 0;
         }
 

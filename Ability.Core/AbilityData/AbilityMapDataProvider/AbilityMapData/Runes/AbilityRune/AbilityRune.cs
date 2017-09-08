@@ -44,6 +44,8 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.A
 
         public Rune SourceRune { get; }
 
+        public bool Disposed { get; set; }
+
         public string TypeName { get; }
 
         #endregion
@@ -54,6 +56,7 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.A
         {
             this.RuneDisposed.Notify();
             this.RuneDisposed.Dispose();
+            this.Disposed = true;
         }
 
         #endregion

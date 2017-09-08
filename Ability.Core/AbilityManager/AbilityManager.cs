@@ -259,6 +259,12 @@ namespace Ability.Core.AbilityManager
 
             this.AssignSkills(unit, abilityUnit);
 
+            abilityUnit.Initialize();
+            foreach (var keyValuePair in abilityUnit.Parts)
+            {
+                keyValuePair.Value.Initialize();
+            }
+
             if (abilityUnit.IsEnemy)
             {
                 this.enemies.Add(unit.Handle, abilityUnit);
@@ -514,11 +520,11 @@ namespace Ability.Core.AbilityManager
 
             var size = new Vector2((float)(HUDInfo.ScreenSizeX() / 2.3), HUDInfo.ScreenSizeY() / 2);
 
-            // this.ui =
-            // new AbilityManagerUserInterface(
-            // new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
-            // size,
-            // this);
+            this.ui =
+            new AbilityManagerUserInterface(
+            new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
+            size,
+            this);
             this.TeamAdd.Next(this.LocalTeam);
             this.TeamAdd.Next(enemyTeam);
             ObjectManager.OnAddEntity += this.OnAddEntity;
@@ -705,7 +711,7 @@ namespace Ability.Core.AbilityManager
         public void RemoveUnit(Unit unit)
         {
             var team = this.Teams.FirstOrDefault(x => x.Name == unit.Team);
-            if (this.controllableUnits.ContainsKey(unit.Handle))
+            if (unit.IsControllable && this.controllableUnits.ContainsKey(unit.Handle))
             {
                 var abilityUnit = this.controllableUnits[unit.Handle];
                 team?.UnitManager.RemoveUnit(abilityUnit);
@@ -724,10 +730,13 @@ namespace Ability.Core.AbilityManager
                 this.OnUnitRemoved(new UnitEventArgs { AbilityUnit = abilityUnit });
                 this.controllableUnits.Remove(unit.Handle);
                 this.units.Remove(unit.Handle);
+                this.allies.Remove(unit.Handle);
+
+                this.LocalHero.ControllableUnits.UnitRemoved(abilityUnit);
                 return;
             }
 
-            if (this.enemies.ContainsKey(unit.Handle))
+            if (unit.Team != GlobalVariables.Team && this.enemies.ContainsKey(unit.Handle))
             {
                 var abilityUnit = this.enemies[unit.Handle];
                 team?.UnitManager.RemoveUnit(abilityUnit);
@@ -749,7 +758,7 @@ namespace Ability.Core.AbilityManager
                 return;
             }
 
-            if (this.allies.ContainsKey(unit.Handle))
+            if (unit.Team == GlobalVariables.Team && this.allies.ContainsKey(unit.Handle))
             {
                 var abilityUnit = this.allies[unit.Handle];
                 team?.UnitManager.RemoveUnit(abilityUnit);
@@ -832,23 +841,42 @@ namespace Ability.Core.AbilityManager
 
         private void AddControllableUnit(Unit unit)
         {
-            var abilityUnit = this.AbilityFactory.Value.CreateNewUnit(unit, this.LocalTeam);
-            Console.WriteLine("adding unit " + abilityUnit.Name);
+            IAbilityUnit owner = null;
+            if (unit.Handle != GlobalVariables.LocalHero.Handle)
+            {
+                owner = this.LocalHero;
+            }
+
+            var abilityUnit = this.AbilityFactory.Value.CreateNewUnit(unit, this.LocalTeam, owner);
+
             this.AssignSkills(unit, abilityUnit);
+            
+            abilityUnit.Initialize();
+            foreach (var keyValuePair in abilityUnit.Parts)
+            {
+                keyValuePair.Value.Initialize();
+            }
 
             if (abilityUnit.SourceUnit.IsControllable)
             {
                 this.controllableUnits.Add(unit.Handle, abilityUnit);
             }
 
+
             this.allies.Add(unit.Handle, abilityUnit);
             this.units.Add(unit.Handle, abilityUnit);
             this.OnUnitAdded(new UnitEventArgs { AbilityUnit = abilityUnit });
             this.abilityUnitProvider.Next(abilityUnit);
 
+
+
             if (abilityUnit.IsLocalHero)
             {
                 this.LocalHero = abilityUnit;
+            }
+            else
+            {
+                this.LocalHero.ControllableUnits.UnitAdded(abilityUnit);
             }
         }
 
@@ -1015,19 +1043,43 @@ namespace Ability.Core.AbilityManager
 
         private void Unit_OnModifierAdded(Unit sender, ModifierChangedEventArgs args)
         {
-            return;
-            var hero = sender as Hero;
-            if (hero == null)
+            var hero = sender;
+            if (hero == null || (hero.Team != GlobalVariables.Team && !(hero is Hero)) || (hero is Building)
+                || (hero.Team == GlobalVariables.Team && !(hero is Hero) && !hero.IsControllable))
             {
                 return;
             }
 
-            Console.WriteLine(
-                "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
-                + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
-                + args.Modifier.Owner?.Name + " ");
+            //Console.WriteLine(
+            //    "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
+            //    + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
+            //    + args.Modifier.Owner?.Name + " ");
 
-            var affectedUnit = this.Units[hero.Handle];
+
+
+            IAbilityUnit affectedUnit = null;
+            if (sender.Team == GlobalVariables.Team)
+            {
+                if (!this.Allies.TryGetValue(hero.Handle, out affectedUnit))
+                {
+                    if (args.Modifier.Name.Equals(
+                        "modifier_item_helm_of_the_dominator_bonushealth",
+                        StringComparison.CurrentCultureIgnoreCase) && hero.IsControllable)
+                    {
+                        this.AddUnit(hero);
+                    }
+
+                    return;
+                }
+            }
+            else
+            {
+                if (!this.Enemies.TryGetValue(hero.Handle, out affectedUnit))
+                {
+                    return;
+                }
+            }
+
             var abilityModifier = this.AbilityFactory.Value.CreateNewModifier(args.Modifier, affectedUnit);
 
             if (!affectedUnit.DataReceiver.SelfModifierGenerators.Any(x => x.Value.TryGenerateModifier(abilityModifier))
@@ -1042,7 +1094,6 @@ namespace Ability.Core.AbilityManager
 
         private void Unit_OnModifierRemoved(Unit sender, ModifierChangedEventArgs args)
         {
-            return;
             var hero = sender as Hero;
             if (hero == null)
             {

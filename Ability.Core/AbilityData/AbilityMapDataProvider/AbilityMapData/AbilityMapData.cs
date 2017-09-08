@@ -16,7 +16,10 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
 
+    using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle;
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune.Types;
+
+    using Ensage;
 
     using SharpDX;
 
@@ -29,10 +32,10 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
             new RuneSpawner<BountyRune>(
                 new List<RunePosition<BountyRune>>
                     {
-                        new RunePosition<BountyRune>(new Vector3(-2827, 4144, 300)),
-                        new RunePosition<BountyRune>(new Vector3(3482, 289, 300)),
-                        new RunePosition<BountyRune>(new Vector3(1287, -4132, 300)),
-                        new RunePosition<BountyRune>(new Vector3(-4352, 194, 300))
+                        new RunePosition<BountyRune>(new Vector3(-2827, 4144, 300), "Dire Jungle Bounty", Team.Dire),
+                        new RunePosition<BountyRune>(new Vector3(3482, 289, 300), "Dire Secret Bounty", Team.Dire),
+                        new RunePosition<BountyRune>(new Vector3(1287, -4132, 300), "Radiant Jungle Bounty", Team.Radiant),
+                        new RunePosition<BountyRune>(new Vector3(-4352, 194, 300), "Radiant Secret Bounty", Team.Radiant)
                     },
                 0);
 
@@ -40,10 +43,12 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
             new RuneSpawner<PowerUpRune>(
                 new List<RunePosition<PowerUpRune>>
                     {
-                        new RunePosition<PowerUpRune>(new Vector3(-1762, 1214, 150)),
-                        new RunePosition<PowerUpRune>(new Vector3(2601, -2015, 150))
+                        new RunePosition<PowerUpRune>(new Vector3(-1762, 1214, 150), "Top PowerUp", Team.Neutral),
+                        new RunePosition<PowerUpRune>(new Vector3(2601, -2015, 150), "Bot PowerUp", Team.Neutral)
                     },
                 120);
+
+        public DireJungle DireJungle { get; } = new DireJungle();
 
         #endregion
     }

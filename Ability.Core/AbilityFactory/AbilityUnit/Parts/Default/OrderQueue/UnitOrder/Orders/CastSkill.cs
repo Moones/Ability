@@ -19,16 +19,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
     using Ability.Core.Utilities;
 
+    using Ensage;
+
+    using SharpDX;
+
     public class CastSkill : UnitOrderBase
     {
         #region Constructors and Destructors
 
         public CastSkill(OrderType orderType, IAbilitySkill skill, Func<bool> executeFunction)
-            : base(orderType, skill.Owner)
+            : base(orderType, skill.Owner, "Cast skill " + skill.Name)
         {
             this.Skill = skill;
             this.ExecutionInterval = this.Skill.IsItem ? 250 : (float)(this.Skill.CastData.CastPoint * 250);
             this.ExecuteAction = executeFunction;
+            this.Color = Color.GreenYellow;
         }
 
         #endregion
@@ -49,7 +54,24 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public override bool CanExecute()
         {
-            return this.Skill.CastFunction.CanCast();
+            if (!this.Skill.CastFunction.CanCast())
+            {
+                if (this.executed)
+                {
+                    this.Skill.CastSleeper.Sleep(500 + Game.Ping);
+                }
+
+                return false;
+            }
+
+            if (!this.Skill.CastFunction.TargetIsValid(this.Skill.Owner.TargetSelector.Target))
+            {
+                this.Skill.Owner.SourceUnit.Stop();
+
+                return false;
+            }
+
+            return true;
         }
 
         public override void Dequeue()
@@ -60,7 +82,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         public override void Enqueue()
         {
             this.Skill.CastData.Queued = true;
+            //this.target = this.Skill.Owner.TargetSelector.Target;
         }
+
+        private bool executed;
+
+        //private IAbilityUnit target;
 
         public override float Execute()
         {
@@ -71,6 +98,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
             if (this.ExecuteAction())
             {
+                this.executed = true;
                 if (this.Skill.AbilityInfo.IsDisable)
                 {
                     this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(this.Skill.HitDelay.Get());

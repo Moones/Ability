@@ -17,6 +17,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
     using Ability.Core.AbilityFactory.AbilitySkill;
 
+    using Ensage;
+
     public interface IItemManager : IAbilityUnitPart
     {
         #region Public Properties
@@ -30,6 +32,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
         ItemObserver PhaseBoots { get; }
 
         ItemObserver TravelBoots { get; }
+        ItemObserver Bottle { get; }
+        ItemObserver IronTalon { get; }
+        ItemObserver MaskOfMadness { get; }
+
+        ItemObserver MedallionOfCourage { get; }
+
+        ItemObserver SolarCrest { get; }
+        ItemObserver DrumOfEndurance { get; }
+
+        ItemObserver DiffusalBlade { get; }
+        ItemObserver MantaStyle { get; }
+
+        ItemObserver Necronomicon { get; } 
+        ItemObserver Blademail { get; }
+        Dictionary<AbilityId, ItemObserver> ItemObservers { get; }
 
         #endregion
 

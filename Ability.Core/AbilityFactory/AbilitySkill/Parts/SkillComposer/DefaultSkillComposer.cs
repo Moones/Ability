@@ -49,16 +49,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
             this.AssignPart<ISkillLevel>(skill => skill.IsItem ? new ItemLevel(skill) : new SkillLevel(skill));
             this.AssignPart<ICooldown>(skill => skill.SourceAbility.GetCooldown(2) <= 0 ? null : new Cooldown(skill));
             this.AssignPart<ISkillCastData>(skill => new SkillCastData(skill));
-            this.AssignPart<IHitDelay>(
-                skill =>
-                    {
-                        if (!skill.Owner.IsEnemy && skill.Owner.SourceUnit.IsControllable)
-                        {
-                            return new HitDelay(skill);
-                        }
-
-                        return null;
-                    });
+            this.AssignPart<IHitDelay>(skill => new HitDelay(skill));
             this.AssignPart<ICharges>(
                 skill =>
                     {
@@ -74,25 +65,12 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
             this.AssignPart<ICastRange>(
                 skill =>
                     {
-                        if (!skill.Owner.IsEnemy && skill.Owner.SourceUnit.IsControllable)
-                        {
-                            return new CastRange(skill);
-                        }
-
-                        return null;
+                        return new CastRange(skill);
                     });
-            this.AssignPart<ICastFunction>(
+            this.AssignControllablePart<ICastFunction>(
                 skill =>
                     {
-                        if (skill.Owner.SourceUnit.IsControllable)
-                        {
-                            if (!skill.Owner.IsEnemy)
-                            {
-                                return new DefaultCastingFunction(skill);
-                            }
-                        }
-
-                        return null;
+                        return new DefaultCastingFunction(skill);
                     });
 
             // this.AssignPart<ISkillOverlayProvider>(skill => new SkillOverlayProvider(skill));
@@ -116,6 +94,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
         public IDictionary<Type, Action<IAbilitySkill>> Assignments { get; } =
             new Dictionary<Type, Action<IAbilitySkill>>();
 
+        /// <summary>Gets the controllable assignments.</summary>
+        public IDictionary<Type, Action<IAbilitySkill>> ControllableAssignments { get; } =
+            new Dictionary<Type, Action<IAbilitySkill>>();
+
         #endregion
 
         #region Public Methods and Operators
@@ -127,6 +109,12 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
         {
             var type = typeof(T);
             this.Assignments[type] = unit => unit.AddPart(factory);
+        }
+
+        public void AssignControllablePart<T>(Func<IAbilitySkill, T> factory) where T : IAbilitySkillPart
+        {
+            var type = typeof(T);
+            this.ControllableAssignments[type] = unit => unit.AddPart(factory);
         }
 
         /// <summary>
@@ -142,10 +130,18 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
             {
                 return;
             }
-
+            
             foreach (var keyValuePair in this.Assignments)
             {
                 keyValuePair.Value.Invoke(skill);
+            }
+
+            foreach (var controllableAssignment in this.ControllableAssignments)
+            {
+                if (!skill.Owner.IsEnemy && skill.Owner.SourceUnit.IsControllable)
+                {
+                    controllableAssignment.Value.Invoke(skill);
+                }
             }
 
             if (skill.AbilityPhase == null && skill.CastData.CastPoint > 0)

@@ -13,6 +13,8 @@
 // </copyright>
 namespace LoneDruid.ChaseCombo
 {
+    using System.Linq;
+
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
@@ -73,18 +75,6 @@ namespace LoneDruid.ChaseCombo
             return base.Attack();
         }
 
-        public bool CastDisable()
-        {
-            if (this.Unit.ItemManager.AbyssalBlade.Equipped
-                && this.Unit.TargetSelector.Target.DisableManager.CanDisable(0)
-                && this.Unit.ItemManager.AbyssalBlade.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public override bool CastSpells()
         {
             // Console.WriteLine(
@@ -112,23 +102,7 @@ namespace LoneDruid.ChaseCombo
                 return true;
             }
 
-            if (!this.Target.DisableManager.WillGetDisabled)
-            {
-                if (this.CastDisable())
-                {
-                    return true;
-                }
-            }
-
-            if (this.Unit.ItemManager.Mjollnir.Equipped
-                && this.Unit.TargetSelector.LastDistanceToTarget
-                < this.Unit.TargetSelector.Target.AttackRange.Value + 100
-                && this.Unit.ItemManager.Mjollnir.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
+            return this.Unit.UnitCombo.CastAllSpellsOnTarget();
         }
 
         public override void Initialize()
@@ -143,20 +117,25 @@ namespace LoneDruid.ChaseCombo
 
         public override bool Move()
         {
-            if (!this.RunAround(this.LocalHero, this.Target))
+            if (this.RunAround(this.Unit.Owner, this.Target)
+                || this.Unit.Owner.ControllableUnits.Units.Any(x => this.RunAround(x.Value, this.Target)))
             {
-                this.Bodyblock();
+                return true;
             }
-
+            
+            this.Bodyblock();
             return true;
         }
 
         public override void MoveBeforeAttack()
         {
-            if (!this.RunAround(this.LocalHero, this.Target))
+            if (this.RunAround(this.Unit.Owner, this.Target)
+                || this.Unit.Owner.ControllableUnits.Units.Any(x => this.RunAround(x.Value, this.Target)))
             {
-                this.Attack();
+                return;
             }
+
+            this.Attack();
         }
 
         public override bool NoTarget()
@@ -178,11 +157,13 @@ namespace LoneDruid.ChaseCombo
                 return true;
             }
 
-            if (!this.RunAround(this.LocalHero, Game.MousePosition))
+            if (this.RunAround(this.Unit.Owner, Game.MousePosition)
+                || this.Unit.Owner.ControllableUnits.Units.Any(x => this.RunAround(x.Value, Game.MousePosition)))
             {
-                this.Unit.SourceUnit.Move(Game.MousePosition);
+                return true;
             }
 
+            this.Unit.SourceUnit.Move(Game.MousePosition);
             return true;
         }
 
@@ -192,12 +173,7 @@ namespace LoneDruid.ChaseCombo
 
         private bool CastSpellsNoTarget()
         {
-            if (this.Unit.ItemManager.PhaseBoots.Equipped && this.Unit.ItemManager.PhaseBoots.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
+            return this.Unit.UnitCombo.NoTarget();
         }
 
         #endregion

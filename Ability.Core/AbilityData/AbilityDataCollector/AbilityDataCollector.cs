@@ -78,7 +78,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                 new GetValue<Slider, float>(
                     this.menu.AddItem(
                         new MenuItem(this.menu.Name + nameof(this.updateInterval), "Data update interval (ms)").SetValue
-                            (new Slider(25, 0, 300))
+                            (new Slider(25, 0, 170))
                             .SetTooltip(
                                 "If you are experiencing FPS drops while ONLY THIS ASSEMBLY is loaded, increase the interval")),
                     slider => slider.Value);
@@ -113,7 +113,18 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
         public void AddOrbwalker(IUnitOrbwalker orbwalker)
         {
-            this.Orbwalkers.Add(orbwalker);
+            var newList = new List<IUnitOrbwalker>(this.Orbwalkers);
+            newList.Add(orbwalker);
+
+            this.Orbwalkers = newList;
+        }
+
+        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
+        {
+            var newList = new List<IUnitOrbwalker>(this.Orbwalkers);
+            newList.Remove(orbwalker);
+
+            this.Orbwalkers = newList;
         }
 
         /// <summary>The menu.</summary>
@@ -269,7 +280,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
             GlobalVariables.Time = Game.RawGameTime;
 
-            // this.AbilityMapDataProvider.Value.OnDraw();
+            this.AbilityMapDataProvider.Value.OnDraw();
             foreach (var keyValuePair in this.AbilityUnitManager.Value.Units)
             {
                 if (!keyValuePair.Value.SourceUnit.IsAlive)
@@ -577,7 +588,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
             this.updateSleeper.Sleep(this.updateInterval.Value);
 
-            // this.AbilityMapDataProvider.Value.OnUpdate();
+            this.AbilityMapDataProvider.Value.OnUpdate();
             var orderSleeping = this.orderSleeper.Sleeping;
             var orderCount = 0;
 

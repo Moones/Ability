@@ -13,42 +13,22 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
 {
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityFactory.Utilities;
 
     public interface IUnitCombo : IAbilityUnitPart
     {
-        #region Public Properties
+        List<ComboEntry> Entries { get; set; }
+        List<ComboEntry> DisableEntries { get; set; }
+        List<List<ComboEntry>> NukeCombos { get; set; }
 
-        FunctionManager AttackCancel { get; }
+        bool CastAllSpellsOnTarget();
 
-        bool Attacking { get; set; }
+        bool DisableTarget();
 
-        FunctionManager BeforeAttack { get; }
+        bool NukeTarget();
 
-        FunctionManager BetweenAttacks { get; }
-
-        OrderedComboEntries DamageTargetEntries { get; }
-
-        OrderedComboEntries DisableTargetEntries { get; }
-
-        OrderedComboEntries GetCloserToTargetEntries { get; }
-
-        bool TargetIsValid { get; set; }
-
-        FunctionManager TargetStartAttacking { get; }
-
-        FunctionManager TargetStartCasting { get; }
-
-        FunctionManager TargetStartMoving { get; }
-
-        OrderedComboEntries WeakenTargetEntries { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        bool Execute();
-
-        #endregion
+        bool NoTarget();
     }
 }

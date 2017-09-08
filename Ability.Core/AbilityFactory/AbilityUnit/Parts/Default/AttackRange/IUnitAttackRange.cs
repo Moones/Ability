@@ -13,11 +13,17 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
 {
+    using Ability.Core.AbilityFactory.Utilities;
+
     public interface IUnitAttackRange : IAbilityUnitPart
     {
         #region Public Properties
 
         float Value { get; set; }
+
+        Notifier TargetIsInRangeNotifier { get; set; }
+
+        bool TargetIsInRange { get; set; }
 
         #endregion
 

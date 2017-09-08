@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilityUnit;
 
     public interface ICastFunction : IAbilitySkillPart
@@ -21,11 +23,16 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
         bool CanCast();
 
+        bool TargetIsValid(IAbilityUnit target);
+
+        IAbilityUnit LastTarget { get; set; }
+
         bool Cast(IAbilityUnit target);
 
         bool Cast();
 
         bool Cast(IAbilityUnit[] targets);
+        Func<bool> CastFunc { get; set; }
 
         #endregion
     }

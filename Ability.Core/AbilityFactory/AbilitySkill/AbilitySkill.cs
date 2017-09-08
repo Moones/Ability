@@ -39,6 +39,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.TargetFind;
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.Utilities;
+    using Ability.Core.Utilities;
 
     using Ensage;
     using Ensage.Common.AbilityInfo;
@@ -363,6 +364,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
 
         #region Public Methods and Operators
 
+        public Sleeper CastSleeper { get; } = new Sleeper();
+
         /// <summary>The add part.</summary>
         /// <param name="partFactory">The part factory.</param>
         /// <typeparam name="T">The type of part</typeparam>
@@ -452,7 +455,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         {
             return this.Level.Current > 0 && this.CastData.EnoughMana && !this.CastData.IsOnCooldown
                    && (!this.HasCharges || this.Charges.Primary > 0) && !this.SourceAbility.IsInAbilityPhase
-                   && (this.IsItem ? this.Source.CanUseItems() : this.Source.CanCast()) && !this.SourceAbility.IsHidden;
+                   && (this.IsItem ? this.Source.CanUseItems() : this.Source.CanCast()) && !this.SourceAbility.IsHidden
+                   && !this.CastSleeper.Sleeping;
         }
 
         /// <summary>

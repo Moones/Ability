@@ -13,6 +13,8 @@
 // </copyright>
 namespace LoneDruid.ChaseCombo
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackRange;
@@ -23,6 +25,8 @@ namespace LoneDruid.ChaseCombo
 
     public class LoneDruidOrbwalker : UnitOrbwalkerBase
     {
+        private bool enabled;
+
         #region Constructors and Destructors
 
         public LoneDruidOrbwalker(IAbilityUnit unit)
@@ -78,18 +82,6 @@ namespace LoneDruid.ChaseCombo
             return base.BeforeAttack();
         }
 
-        public bool CastDisable()
-        {
-            if (this.Unit.ItemManager.AbyssalBlade.Equipped
-                && this.Unit.TargetSelector.Target.DisableManager.CanDisable(0)
-                && this.Unit.ItemManager.AbyssalBlade.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public override bool CastSpells()
         {
             // Console.WriteLine(
@@ -101,49 +93,27 @@ namespace LoneDruid.ChaseCombo
             }
 
             // Console.WriteLine(this.Target.Modifiers.Immobile);
-            if (!this.Target.DisableManager.WillGetDisabled)
-            {
-                if (this.CastDisable())
-                {
-                    return true;
-                }
-            }
-
-            if (this.Unit.ItemManager.Mjollnir.Equipped
-                && this.Unit.TargetSelector.LastDistanceToTarget
-                < this.Unit.TargetSelector.Target.AttackRange.Value + 100
-                && this.Unit.ItemManager.Mjollnir.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            if (this.Unit.TargetSelector.LastDistanceToTarget < 1500 && this.SkillBook.Rabid.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            if (this.Unit.ItemManager.PhaseBoots.Equipped
-                && this.Unit.TargetSelector.LastDistanceToTarget > this.Unit.AttackRange.Value
-                && this.Unit.ItemManager.PhaseBoots.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            if ((this.Unit.AttackRange.IsInAttackRange(this.Unit.TargetSelector.Target)
-                 || this.Bear.AttackRange.IsInAttackRange(this.Unit.TargetSelector.Target))
-                && (this.Unit.TargetSelector.Target.SourceUnit.IsAttacking()
-                    || !this.Unit.TargetSelector.Target.SourceUnit.CanMove()
-                    || this.Unit.TargetSelector.Target.SourceUnit.MovementSpeed < this.Unit.SourceUnit.MovementSpeed)
-                && this.SkillBook.BattleCry.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
+            return this.Unit.UnitCombo.CastAllSpellsOnTarget();
         }
 
         public override void Initialize()
         {
+            base.Initialize();
+            //this.Unit.Fighting = true;
+            //if (this.Unit.TargetSelector.TargetIsSet && this.Bear != null && this.Bear.TargetSelector.LastDistanceToTarget < 1000)
+            //{
+            //    this.Bear.Fighting = true;
+            //}
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            //this.Unit.Fighting = false;
+            //if (this.Bear != null)
+            //{
+            //    this.Bear.Fighting = false;
+            //}
         }
 
         public override bool Meanwhile()
@@ -168,10 +138,20 @@ namespace LoneDruid.ChaseCombo
             return this.KeepRange();
         }
 
+        public override bool Attack()
+        {
+            if (this.AttackRange.TrueForm)
+            {
+                return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+            }
+
+            return base.Attack();
+        }
+
         public override bool NoTarget()
         {
             this.Unit.TargetSelector.GetTarget();
-
+            
             if (this.CastSpellsNoTarget())
             {
                 return true;
@@ -186,12 +166,7 @@ namespace LoneDruid.ChaseCombo
 
         private bool CastSpellsNoTarget()
         {
-            if (this.Unit.ItemManager.PhaseBoots.Equipped && this.Unit.ItemManager.PhaseBoots.Item.CastFunction.Cast())
-            {
-                return true;
-            }
-
-            return false;
+            return this.Unit.UnitCombo.NoTarget();
         }
 
         #endregion

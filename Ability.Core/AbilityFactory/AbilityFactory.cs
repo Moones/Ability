@@ -243,7 +243,7 @@ namespace Ability.Core.AbilityFactory
         /// <returns>
         ///     The <see cref="IAbilityUnit" />.
         /// </returns>
-        public IAbilityUnit CreateNewUnit(Unit unit, IAbilityTeam team)
+        public IAbilityUnit CreateNewUnit(Unit unit, IAbilityTeam team, IAbilityUnit owner = null)
         {
             IAbilityUnit abilityUnit;
             if (unit is Hero)
@@ -267,6 +267,11 @@ namespace Ability.Core.AbilityFactory
             }
 
             team.UnitManager.AddUnit(abilityUnit);
+
+            if (owner != null)
+            {
+                abilityUnit.Owner = owner;
+            }
 
             if (abilityUnit.IsHero)
             {

@@ -17,8 +17,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     {
         MoveToPosition,
 
-        TakeRune,
-
         FarmGold,
 
         DropItem,
@@ -34,6 +32,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         Escape,
 
         HelpAlly,
+
+        TakeRune,
 
         PickUpFromGround,
 

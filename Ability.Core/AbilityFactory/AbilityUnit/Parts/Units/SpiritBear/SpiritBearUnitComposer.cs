@@ -18,6 +18,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear
     using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
 
@@ -31,6 +32,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear
         public SpiritBearUnitComposer()
         {
             this.AssignPart<ISkillBook<IAbilitySkill>>(unit => new SpiritBearSkillBook(unit));
+            this.AssignControllablePart<IUnitCombo>(unit => new UnitCombo(unit));
         }
 
         #endregion

@@ -35,6 +35,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
         Notifier TargetStartMoving { get; }
 
+        Notifier FightingNotifier { get; }
+
         #endregion
 
         #region Public Methods and Operators

@@ -71,6 +71,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 else
                 {
                     this.TargetIsSet = false;
+                    this.Unit.Fighting = false;
+                    //Console.WriteLine(this.Unit.PrettyName + " fighting false");
                 }
 
                 this.TargetChanged.Notify();
@@ -86,6 +88,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         public Notifier TargetStartAttacking { get; } = new Notifier();
 
         public Notifier TargetStartMoving { get; } = new Notifier();
+
+        public Notifier FightingNotifier { get; } = new Notifier();
 
         public IAbilityUnit Unit { get; set; }
 
@@ -151,6 +155,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         {
             this.target?.Health.ZeroHealth.Unsubscribe(this.lastZeroHealthId);
             this.positionUnsubscriber?.Dispose();
+            this.Target = null;
         }
 
         #endregion
@@ -171,6 +176,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
             this.LastDistanceToTarget =
                 this.Unit.Position.PredictedByLatency.Distance2D(this.Target.Position.PredictedByLatency);
+            if (this.LastDistanceToTarget < 1000 && !this.Unit.Fighting)
+            {
+                this.Unit.Fighting = true;
+                //Console.WriteLine(this.Unit.PrettyName + " fighting true");
+            }
+            else if (this.Unit.Fighting && this.LastDistanceToTarget > 1000)
+            {
+                this.Unit.Fighting = false;
+                //Console.WriteLine(this.Unit.PrettyName + " fighting false");
+            }
+
             this.TargetDistanceChanged.Notify();
         }
 

@@ -13,19 +13,35 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.LoneDruid.Rabid
 {
+    using System.ComponentModel.Composition;
+
+    using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.LoneDruid.Rabid.CastData;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.LoneDruid.Rabid.CastingFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
-    // [Export(typeof(IAbilitySkillComposer))]
-    // [AbilitySkillMetadata((uint)AbilityId.lone_druid_rabid)]
+    using Ensage;
+
+    [Export(typeof(IAbilitySkillComposer))]
+    [AbilitySkillMetadata((uint)AbilityId.lone_druid_rabid)]
     internal class RabidSkillComposer : DefaultSkillComposer
     {
         #region Constructors and Destructors
 
         public RabidSkillComposer()
         {
-            this.AssignPart<ISkillCastData>(skill => new RabidCastData(skill));
+            this.AssignPart<ICastFunction>(
+                skill =>
+                    {
+                        if (!skill.Owner.IsEnemy && skill.Owner.SourceUnit.IsControllable)
+                        {
+                            return new RabidCastingFunction(skill);
+                        }
+
+                        return null;
+                    });
         }
 
         #endregion

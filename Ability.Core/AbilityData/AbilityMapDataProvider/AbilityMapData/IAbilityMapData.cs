@@ -13,6 +13,7 @@
 // </copyright>
 namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
 {
+    using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle;
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune.Types;
 
     public interface IAbilityMapData
@@ -24,6 +25,10 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
 
         /// <summary>Gets the power up rune spawner.</summary>
         RuneSpawner<PowerUpRune> PowerUpRuneSpawner { get; }
+
+        DireJungle DireJungle { get; }
+
+
 
         #endregion
     }

@@ -36,7 +36,7 @@ namespace LoneDruid.RetreatCombo
         {
             if (!this.Target.DisableManager.WillGetDisabled)
             {
-                if (this.CastDisable())
+                if (this.Unit.UnitCombo.DisableTarget())
                 {
                     return true;
                 }

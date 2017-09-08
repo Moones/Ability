@@ -14,6 +14,8 @@
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits
 {
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
+    using Ability.Core.AbilityFactory.Utilities;
 
     public class LoneDruidControllableUnits : ControllableUnits
     {
@@ -26,10 +28,34 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.Control
 
         #endregion
 
+        public IAbilityUnit Bear { get; set; }
+
+        public Notifier BearAdded { get; } = new Notifier();
+
         #region Public Methods and Operators
 
-        public override void Initialize()
+        public override void UnitAdded(IAbilityUnit unit)
         {
+            if (unit.SkillBook is SpiritBearSkillBook)
+            {
+                this.Bear = unit;
+                this.Bear.Owner = this.Unit;
+                this.BearAdded.Notify();
+                return;
+            }
+
+            base.UnitAdded(unit);
+        }
+
+        public override void UnitRemoved(IAbilityUnit unit)
+        {
+            if (unit.SkillBook is SpiritBearSkillBook)
+            {
+                this.Bear = null;
+                return;
+            }
+
+            base.UnitRemoved(unit);
         }
 
         #endregion

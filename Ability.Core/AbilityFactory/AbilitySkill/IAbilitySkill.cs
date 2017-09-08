@@ -37,6 +37,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.TargetFind;
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.Utilities;
+    using Ability.Core.Utilities;
 
     using Ensage;
     using Ensage.Common.AbilityInfo;
@@ -244,6 +245,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the variables.
         /// </summary>
         SkillDynamic Variables { get; set; }
+
+        Sleeper CastSleeper { get; }
 
         #endregion
 

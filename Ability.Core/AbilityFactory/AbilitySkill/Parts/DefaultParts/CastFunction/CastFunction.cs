@@ -28,7 +28,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
         private Func<bool> canCast;
 
-        private Func<bool> cast;
+        private Func<IAbilityUnit, bool> validTarget;
+
+        public Func<bool> CastFunc { get; set; }
 
         #endregion
 
@@ -49,27 +51,38 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
         #region Public Methods and Operators
 
-        public bool CanCast()
+        public virtual bool CanCast()
         {
             return this.Skill.CanCast() && this.canCast();
         }
 
-        public abstract bool Cast(IAbilityUnit target);
-
-        public virtual bool Cast()
+        public virtual bool TargetIsValid(IAbilityUnit target)
         {
-            if (!this.CanCast() || this.Skill.CastData.Queued)
+            return this.validTarget(target);
+        }
+
+        public IAbilityUnit LastTarget { get; set; }
+
+        public virtual bool Cast(IAbilityUnit target)
+        {
+            if (!this.CanCast() || this.Skill.CastData.Queued
+                || !this.TargetIsValid(this.Skill.Owner.TargetSelector.Target))
             {
                 return false;
             }
 
-            if (this.Skill.AbilityInfo.IsDisable)
-            {
-                this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(this.Skill.HitDelay.Get());
-            }
+            return this.CastFunc();
+        }
 
-            this.Skill.Owner.OrderQueue.EnqueueOrder(new CastSkill(OrderType.DealDamageToEnemy, this.Skill, this.cast));
-            return true;
+        public virtual bool Cast()
+        {
+            if (!this.CanCast() || this.Skill.CastData.Queued
+                || !this.TargetIsValid(this.Skill.Owner.TargetSelector.Target))
+            {
+                return false;
+            }
+            
+            return this.CastFunc();
         }
 
         public abstract bool Cast(IAbilityUnit[] targets);
@@ -78,50 +91,137 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
         {
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             if (this.Skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.NoTarget))
             {
-                this.cast = () => this.Skill.SourceAbility.UseAbility();
+                if (this.Skill.AbilityInfo.IsDisable)
+                {
+                    this.CastFunc = () =>
+                        {
+                            if (!this.Skill.Owner.TargetSelector.Target.DisableManager.CanDisable(0))
+                            {
+                                return false;
+                            }
+
+                            this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(
+                                this.Skill.HitDelay.Get());
+                            this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                new CastSkill(
+                                    OrderType.DealDamageToEnemy,
+                                    this.Skill,
+                                    () => this.Skill.SourceAbility.UseAbility()));
+                            return true;
+                        };
+                }
+                else
+                {
+                    this.CastFunc =
+                        () =>
+                            {
+                                this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                    new CastSkill(
+                                        OrderType.DealDamageToEnemy,
+                                        this.Skill,
+                                        () => this.Skill.SourceAbility.UseAbility()));
+                                return true;
+                            };
+                }
+
+                this.canCast =
+                    () =>
+                        this.Skill.Owner.TargetSelector.TargetIsSet
+                        && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible;
             }
             else if (this.Skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.UnitTarget))
             {
                 if (this.Skill.SourceAbility.TargetTeamType.HasFlag(TargetTeamType.Enemy))
                 {
-                    this.cast =
-                        () => this.Skill.SourceAbility.UseAbility(this.Skill.Owner.TargetSelector.Target.SourceUnit);
+                    if (this.Skill.AbilityInfo.IsDisable)
+                    {
+                        this.CastFunc = () =>
+                            {
+                                if (!this.Skill.Owner.TargetSelector.Target.DisableManager.CanDisable(0))
+                                {
+                                    return false;
+                                }
+
+                                this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(
+                                    this.Skill.HitDelay.Get());
+                                this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                    new CastSkill(
+                                        OrderType.DealDamageToEnemy,
+                                        this.Skill,
+                                        () =>
+                                            this.Skill.SourceAbility.UseAbility(
+                                                this.Skill.Owner.TargetSelector.Target.SourceUnit)));
+                                return true;
+                            };
+                    }
+                    else
+                    {
+                        this.CastFunc = () =>
+                            {
+                                this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                    new CastSkill(
+                                        OrderType.DealDamageToEnemy,
+                                        this.Skill,
+                                        () =>
+                                            this.Skill.SourceAbility.UseAbility(
+                                                this.Skill.Owner.TargetSelector.Target.SourceUnit)));
+                                return true;
+                            };
+
+                    }
                 }
                 else
                 {
-                    this.cast = () => this.Skill.SourceAbility.UseAbility(this.Skill.Owner.SourceUnit);
+                    this.CastFunc =
+                        () =>
+                            {
+                                this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                    new CastSkill(
+                                        OrderType.DealDamageToEnemy,
+                                        this.Skill,
+                                        () => this.Skill.SourceAbility.UseAbility(this.Skill.Owner.SourceUnit)));
+                                return true;
+                            };
                 }
+
+
+                this.canCast =
+                    () =>
+                        this.Skill.Owner.TargetSelector.TargetIsSet
+                        && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible
+                        && this.Skill.CastRange.TargetInRange(this.Skill.Owner.TargetSelector.Target);
             }
+
 
             if (this.Skill.SourceAbility.TargetTeamType.HasFlag(TargetTeamType.Enemy))
             {
                 if (this.Skill.SourceAbility.SpellPierceImmunityType == SpellPierceImmunityType.EnemiesNo)
                 {
-                    this.canCast =
-                        () =>
-                            this.Skill.Owner.TargetSelector.TargetIsSet
-                            && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsAlive
-                            && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible
-                            && !this.Skill.Owner.TargetSelector.Target.Modifiers.MagicImmune
-                            && this.Skill.CastRange.IsTargetInRange;
+                    this.validTarget =
+                        (target) =>
+                            target.SourceUnit.IsAlive
+                            && !target.Modifiers.MagicImmune
+                            && !target.Modifiers.Invul;
                 }
                 else
                 {
-                    this.canCast =
-                        () =>
-                            this.Skill.Owner.TargetSelector.TargetIsSet
-                            && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsAlive
-                            && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible
-                            && this.Skill.CastRange.IsTargetInRange;
+                    this.validTarget =
+                        (target) =>
+                            target.SourceUnit.IsAlive
+                            && !target.Modifiers.Invul;
                 }
             }
             else
             {
-                this.canCast = () => true;
+                this.validTarget =
+                    (target) =>
+                        target.SourceUnit.IsAlive
+                        && !target.Modifiers.MagicImmune
+                        && !target.Modifiers.Invul;
             }
         }
 

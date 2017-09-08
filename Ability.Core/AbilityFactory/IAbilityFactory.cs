@@ -82,7 +82,7 @@ namespace Ability.Core.AbilityFactory
         /// <returns>
         ///     The <see cref="IAbilityUnit" />.
         /// </returns>
-        IAbilityUnit CreateNewUnit(Unit unit, IAbilityTeam team);
+        IAbilityUnit CreateNewUnit(Unit unit, IAbilityTeam team, IAbilityUnit owner = null);
 
         #endregion
     }

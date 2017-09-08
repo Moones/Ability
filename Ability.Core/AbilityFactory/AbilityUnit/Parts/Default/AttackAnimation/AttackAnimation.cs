@@ -53,12 +53,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation
         {
         }
 
-        public float GetAttackPoint()
+        public virtual float GetAttackPoint()
         {
             return (float)(this.baseAttackPoint / (1.0 + (this.GetAttackSpeed() - 100.0) / 100.0));
         }
 
-        public float GetAttackRate()
+        public virtual float GetAttackRate()
         {
             return 1f / this.Unit.SourceUnit.AttacksPerSecond;
         }

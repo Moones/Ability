@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
 {
+    using System;
+
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune;
     using Ability.Core.AbilityFactory.Utilities;
 
@@ -37,15 +39,23 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
 
         #region Constructors and Destructors
 
-        public RunePosition(Vector3 position)
+        public RunePosition(Vector3 position, string name, Team team)
         {
             this.Position = position;
             this.text = new DrawText { Shadow = true, Color = Color.White, Size = new Vector2(20 * HUDInfo.Monitor) };
+            this.Name = name;
+            this.Team = team;
         }
 
         #endregion
 
         #region Public Properties
+
+        public string Name { get; }
+
+        public Team Team { get; }
+
+        public bool HasRune { get; set; }
 
         public T CurrentRune
         {
@@ -57,7 +67,16 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
             internal set
             {
                 this.currentRune = value;
+                if (this.currentRune == null)
+                {
+                    this.HasRune = false;
+                    return;
+                }
+
                 this.NewRuneProvider.Next(this.currentRune);
+                this.HasRune = true;
+                this.currentRune.RuneDisposed.Subscribe(
+                    () => this.HasRune = this.currentRune != null && !this.currentRune.Disposed);
             }
         }
 
@@ -90,8 +109,16 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
                 return;
             }
 
-            this.text.Text = "current: " + this.CurrentRune?.TypeName + " next in "
-                             + (this.nextSpawnTime - Game.GameTime);
+            if (this.HasRune)
+            {
+                this.text.Text = "[" + this.Name + "] current: " + this.CurrentRune?.TypeName + " next in "
+                                 + Math.Ceiling(this.nextSpawnTime - Game.GameTime);
+            }
+            else
+            {
+                this.text.Text = "[" + this.Name + "] next in " + Math.Ceiling(this.nextSpawnTime - Game.GameTime);
+            }
+
             this.text.Draw();
         }
 

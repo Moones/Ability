@@ -19,9 +19,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackRange;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.Combo;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.SkillBook;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     using Ensage;
 
@@ -35,6 +39,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid
         {
             this.AssignPart<IUnitAttackRange>(unit => new LoneDruidAttackRange(unit));
             this.AssignPart<ISkillBook<IAbilitySkill>>(unit => new LoneDruidSkillBook(unit));
+            this.AssignControllablePart<IUnitCombo>(unit => new LoneDruidCombo(unit));
+            this.AssignPart<IControllableUnits>(
+                unit =>
+                    {
+                        if (unit.IsLocalHero)
+                        {
+                            return new LoneDruidControllableUnits(unit);
+                        }
+
+                        return null;
+                    });
         }
 
         #endregion

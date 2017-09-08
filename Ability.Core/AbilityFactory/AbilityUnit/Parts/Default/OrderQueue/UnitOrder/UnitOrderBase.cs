@@ -15,22 +15,27 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 {
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
 
+    using SharpDX;
+
     public abstract class UnitOrderBase : IUnitOrder
     {
         #region Constructors and Destructors
 
-        protected UnitOrderBase(OrderType orderType, IAbilityUnit unit)
+        protected UnitOrderBase(OrderType orderType, IAbilityUnit unit, string name)
         {
             this.OrderType = orderType;
             this.Priority = (uint)orderType;
             this.Unit = unit;
+            this.Name = name;
+
+            this.Color = Color.AliceBlue;
         }
 
         #endregion
 
         #region Public Properties
 
-        public bool ExecuteOnce { get; }
+        public bool ExecuteOnce { get; set; }
 
         public uint Id { get; set; }
 
@@ -39,6 +44,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         public uint Priority { get; }
 
         public IAbilityUnit Unit { get; }
+
+        public string Name { get; }
 
         #endregion
 
@@ -54,7 +61,25 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         {
         }
 
+        public bool ShouldExecuteFast { get; set; }
+
+        public bool PrintInLog { get; set; } = true;
+
+        public virtual float ExecuteFast()
+        {
+            return 0;
+        }
+
         public abstract float Execute();
+
+        public Color Color { get; set; }
+
+        public bool Canceled { get; set; }
+
+        public void Cancel()
+        {
+            this.Canceled = true;
+        }
 
         #endregion
     }

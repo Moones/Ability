@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
 {
+    using Ability.Core.AbilityFactory.Utilities;
+
     using Ensage;
     using Ensage.Common.Extensions;
 
@@ -41,6 +43,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
 
         public float Value { get; set; }
 
+        public Notifier TargetIsInRangeNotifier { get; set; } = new Notifier();
+
         #endregion
 
         #region Public Methods and Operators
@@ -53,16 +57,36 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
         {
             this.Value = this.Unit.SourceUnit.AttackRange;
 
-            // if (this.Unit.)
+            //var wasInRange = false;
+            //this.Unit.TargetSelector?.TargetDistanceChanged.Subscribe(
+            //    () =>
+            //        {
+            //            wasInRange = this.TargetIsInRange;
+            //            this.TargetIsInRange = this.IsInAttackRange(this.Unit.TargetSelector.Target);
+            //            if (!wasInRange && this.TargetIsInRange)
+            //            {
+            //                this.TargetIsInRangeNotifier.Notify();
+            //                this.TargetIsInRange = true;
+            //                wasInRange = true;
+            //            }
+            //        });
+
+            //this.Unit.TargetSelector?.TargetChanged.Subscribe(() => wasInRange = false);
         }
+
+
 
         public bool IsInAttackRange(IAbilityUnit target)
         {
             return
                 target.Position.Predict((float)(Game.Ping + this.Unit.TurnRate.GetTurnTime(target) * 1000f))
-                    .Distance2D(this.Unit.Position.Current)
-                <= this.Value + target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50;
+                    .Distance2D(this.Unit.Position.PredictedByLatency)
+                <= this.Value + target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50
+                && target.Position.PredictedByLatency.Distance2D((this.Unit.Position.PredictedByLatency))
+                < this.Value + target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50;
         }
+
+        public bool TargetIsInRange { get; set; }
 
         #endregion
     }

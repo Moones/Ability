@@ -65,12 +65,16 @@
   <ItemGroup>
     <Compile Include="BodyblockCombo\BearBodyblocker.cs" />
     <Compile Include="ChaseCombo\BearOrbwalker.cs" />
+    <Compile Include="ChaseCombo\ControllableUnitOrbwalker.cs" />
+    <Compile Include="ChaseCombo\ControllableUnitSpellsOrbwalker.cs" />
     <Compile Include="LoneDruidModule.cs" />
     <Compile Include="ChaseCombo\LoneDruidOrbwalker.cs" />
     <Compile Include="RetreatCombo\BearRetreatOrbwalker.cs" />
     <Compile Include="RetreatCombo\LoneDruidRetreatOrbwalker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RuneTaker\BearRuneForRune.cs" />
+    <Compile Include="RuneTaker\BearRuneTaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

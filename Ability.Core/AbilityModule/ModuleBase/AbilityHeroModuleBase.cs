@@ -79,6 +79,11 @@ namespace Ability.Core.AbilityModule.ModuleBase
             this.AbilityDataCollector.AddOrbwalker(orbwalker);
         }
 
+        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
+        {
+            this.AbilityDataCollector.RemoveOrbwalker(orbwalker);
+        }
+
         public OneKeyCombo NewCombo(
             string name,
             List<IUnitOrbwalker> orbwalkers,

@@ -21,10 +21,16 @@ namespace LoneDruid
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
+    using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.Combo;
     using Ability.Core.AbilityModule.Metadata;
     using Ability.Core.AbilityModule.ModuleBase;
+    using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
+    using Ability.LoneDruid.ChaseCombo;
+    using Ability.LoneDruid.RuneTaker;
 
     using Ensage;
 
@@ -34,7 +40,7 @@ namespace LoneDruid
 
     [Export(typeof(IAbilityHeroModule))]
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_lone_druid)]
-    internal class LoneDruidModule : AbilityHeroModuleBase, IAbilityUnitModule
+    internal class LoneDruidModule : AbilityHeroModuleBase
     {
         #region Constructors and Destructors
 
@@ -67,14 +73,12 @@ namespace LoneDruid
 
         #region Public Methods and Operators
 
-        public bool IsBear(IAbilityUnit unit)
-        {
-            return unit.SkillBook is SpiritBearSkillBook;
-        }
-
         public override void OnLoad()
         {
             this.LoneDruidOrbwalker = new LoneDruidOrbwalker(this.LocalHero);
+            var loneRuneTaker = new RuneTaker(this.LocalHero, this.MapData, false);
+            this.LocalHero.AddOrderIssuer(loneRuneTaker);
+
             this.AddOrbwalker(this.LoneDruidOrbwalker);
 
             var orbwalkers = new List<IUnitOrbwalker> { this.LoneDruidOrbwalker };
@@ -87,6 +91,11 @@ namespace LoneDruid
             this.LocalHero.TargetSelector.TargetChanged.Subscribe(
                 () =>
                     {
+                        foreach (var localHeroControllableUnit in this.LocalHero.ControllableUnits.Units)
+                        {
+                            localHeroControllableUnit.Value.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
+                        }
+
                         if (this.Bear == null)
                         {
                             return;
@@ -122,68 +131,154 @@ namespace LoneDruid
                 new List<IUnitOrbwalker> { new LoneDruidRetreatOrbwalker(this.LocalHero) },
                 new List<IOrderIssuer>(),
                 'H',
-                () => { this.Bear?.TargetSelector.GetTarget(); },
-                () => { this.Bear?.TargetSelector.ResetTarget(); },
+                () =>
+                    {
+                        this.Bear?.TargetSelector.GetTarget();
+                        foreach (var localHeroControllableUnit in this.LocalHero.ControllableUnits.Units)
+                        {
+                            localHeroControllableUnit.Value.TargetSelector.GetTarget();
+                        }
+                    },
+                () =>
+                    {
+                        this.Bear?.TargetSelector.ResetTarget();
+                        foreach (var localHeroControllableUnit in this.LocalHero.ControllableUnits.Units)
+                        {
+                            localHeroControllableUnit.Value.TargetSelector.ResetTarget();
+                        }
+                    },
                 false,
                 "lone will run to mouse, bear will attack/bodyblock target or run if low hp");
 
             this.BearRetreatOrbwalker.LowHp.AddToMenu(this.RetreatCombo.SubMenu);
-        }
 
-        public void UnitAdded(IAbilityUnit unit)
-        {
-            if (!unit.IsEnemy && this.IsBear(unit))
+            this.controllableUnits = this.LocalHero.ControllableUnits as LoneDruidControllableUnits;
+            this.controllableUnits.BearAdded.Subscribe(this.BearAdded);
+
+            this.controllableUnits.AddedUnit.Subscribe(new DataObserver<IAbilityUnit>(unit => this.UnitAdded(unit)));
+            this.controllableUnits.RemovedUnit.Subscribe(new DataObserver<IAbilityUnit>(unit => this.UnitRemoved(unit)));
+
+            var runeTakerMenu = new AbilitySubMenu("RuneTaker");
+            runeTakerMenu.AddToMenu(this.Menu);
+
+            this.BearRuneTaker = new BearRuneTaker(null, this.MapData);
+            this.BearRuneTaker.ConnectToMenu(runeTakerMenu, true, true);
+
+            loneRuneTaker.ConnectToMenu(runeTakerMenu, false, false);
+
+
+            if (this.controllableUnits.Bear != null)
             {
-                if (this.Bear != null)
-                {
-                    unit.TargetSelector.Target = this.Bear.TargetSelector.Target;
-                }
+                this.BearAdded();
+            }
 
-                this.Bear = unit;
-
-                if (this.BearBodyblocker == null)
-                {
-                    this.BearBodyblocker = new BearBodyblocker(this.Bear);
-                    this.BearOrbwalker = new BearOrbwalker { LocalHero = this.LocalHero, Unit = this.Bear };
-                    this.BearRetreatOrbwalker.Unit = this.Bear;
-
-                    this.AddOrbwalker(this.BearOrbwalker);
-                    this.AddOrbwalker(this.BearRetreatOrbwalker);
-
-                    this.BodyBlockCombo.AddOrderIssuer(this.BearBodyblocker);
-                    this.ChaseCombo.AddOrderIssuer(this.BearOrbwalker);
-                    this.RetreatCombo.AddOrderIssuer(this.BearRetreatOrbwalker);
-                }
-                else
-                {
-                    this.BearBodyblocker.Unit = this.Bear;
-                    this.BearOrbwalker.Unit = this.Bear;
-                    this.BearRetreatOrbwalker.Unit = this.Bear;
-
-                    if (this.BearBodyblocker.Enabled)
-                    {
-                        this.Bear.AddOrderIssuer(this.BearBodyblocker);
-                    }
-
-                    if (this.BearOrbwalker.Enabled)
-                    {
-                        this.Bear.AddOrderIssuer(this.BearOrbwalker);
-                    }
-
-                    if (this.BearRetreatOrbwalker.Enabled)
-                    {
-                        this.Bear.AddOrderIssuer(this.BearRetreatOrbwalker);
-                    }
-                }
-
-                this.LoneDruidOrbwalker.Bear = this.Bear;
+            foreach (var controllableUnitsUnit in this.controllableUnits.Units)
+            {
+                this.UnitAdded(controllableUnitsUnit.Value);
             }
         }
 
-        public void UnitRemoved(IAbilityUnit unit)
+        private LoneDruidControllableUnits controllableUnits;
+
+        private BearRuneTaker BearRuneTaker;
+
+
+
+        private void UnitAdded(IAbilityUnit unit)
         {
+           //unit.TargetSelector.Target = this
+            if (unit.UnitCombo != null)
+            {
+                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitSpellsOrbwalker(unit));
+            }
+            else
+            {
+                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitOrbwalker(unit));
+            }
+
+            this.AddOrbwalker(unit.Orbwalker);
+            
+            //unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
+            //unit.Fighting = this.LocalHero.Fighting;
+
+            this.BodyBlockCombo.AddOrderIssuer(unit.Orbwalker);
+            this.ChaseCombo.AddOrderIssuer(unit.Orbwalker);
+            this.RetreatCombo.AddOrderIssuer(unit.Orbwalker);
+
+            if (this.RetreatCombo.Key.Value.Active || this.ChaseCombo.Key.Value.Active || this.BodyBlockCombo.Key.Value.Active)
+            {
+                unit.AddOrderIssuer(unit.Orbwalker);
+                unit.Orbwalker.Enabled = true;
+            }
+
+            unit.Fighting = this.LocalHero.Fighting;
+            unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
         }
 
+        private void UnitRemoved(IAbilityUnit unit)
+        {
+            this.RemoveOrbwalker(unit.Orbwalker);
+
+            this.ChaseCombo.RemoveOrderIssuer(unit.Orbwalker);
+            this.RetreatCombo.RemoveOrderIssuer(unit.Orbwalker);
+            this.BodyBlockCombo.RemoveOrderIssuer(unit.Orbwalker);
+        }
+
+        private void BearAdded()
+        {
+            if (this.Bear != null)
+            {
+                this.controllableUnits.Bear.TargetSelector.Target = this.Bear.TargetSelector.Target;
+                this.controllableUnits.Bear.Fighting = this.LocalHero.Fighting;
+            }
+
+            this.Bear = this.controllableUnits.Bear;
+            this.controllableUnits.Bear.Fighting = this.LocalHero.Fighting;
+
+            if (this.BearBodyblocker == null)
+            {
+                this.BearBodyblocker = new BearBodyblocker(this.Bear);
+                this.BearOrbwalker = new BearOrbwalker { LocalHero = this.LocalHero, Unit = this.Bear };
+                this.BearRetreatOrbwalker.Unit = this.Bear;
+
+                this.AddOrbwalker(this.BearOrbwalker);
+                this.AddOrbwalker(this.BearRetreatOrbwalker);
+
+                this.BodyBlockCombo.AddOrderIssuer(this.BearBodyblocker);
+                this.ChaseCombo.AddOrderIssuer(this.BearOrbwalker);
+                this.RetreatCombo.AddOrderIssuer(this.BearRetreatOrbwalker);
+
+                this.BearRuneTaker.Unit = this.Bear;
+                this.Bear.AddOrderIssuer(this.BearRuneTaker);
+            }
+            else
+            {
+                this.BearBodyblocker.Unit = this.Bear;
+                this.BearOrbwalker.Unit = this.Bear;
+                this.BearRetreatOrbwalker.Unit = this.Bear;
+                this.BearRuneTaker.Unit = this.Bear;
+
+                if (this.BearBodyblocker.Enabled)
+                {
+                    this.Bear.AddOrderIssuer(this.BearBodyblocker);
+                }
+
+                if (this.BearOrbwalker.Enabled)
+                {
+                    this.Bear.AddOrderIssuer(this.BearOrbwalker);
+                }
+
+                if (this.BearRetreatOrbwalker.Enabled)
+                {
+                    this.Bear.AddOrderIssuer(this.BearRetreatOrbwalker);
+                }
+                
+                this.Bear.AddOrderIssuer(this.BearRuneTaker);
+            }
+
+            this.LoneDruidOrbwalker.Bear = this.Bear;
+        }
+        
         #endregion
     }
 }

@@ -41,6 +41,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
 
         private bool wasMoving;
 
+        private bool enabled;
+
         #endregion
 
         #region Constructors and Destructors
@@ -60,7 +62,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
 
         public bool Bodyblocking { get; set; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get
+            {
+                return this.enabled;
+            }
+
+            set
+            {
+                this.enabled = value;
+            }
+        }
 
         public uint Id { get; set; }
 
@@ -181,7 +194,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                     Math.Max(
                         this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 100,
                         distanceFromSegment2),
-                    this.Unit.Pathfinder);
+                    this.Unit.Pathfinder.EnsagePathfinding);
 
                 var position2 = Pathfinding.ExtendUntilWall(
                     this.targetPosition,
@@ -189,7 +202,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                     Math.Max(
                         this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 100,
                         distanceFromSegment2),
-                    this.Unit.Pathfinder);
+                    this.Unit.Pathfinder.EnsagePathfinding);
 
                 var distance = unitPosition.Distance2D(position);
                 var distance2 = unitPosition.Distance2D(position2);
@@ -203,11 +216,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                 {
                     if (distanceFromSegment2 < this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50)
                     {
-                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder);
+                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder.EnsagePathfinding);
                     }
                     else
                     {
-                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder);
+                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder.EnsagePathfinding);
                     }
                 }
 

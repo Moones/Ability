@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits
 {
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityFactory.Utilities;
 
     public interface IControllableUnits : IAbilityUnitPart
@@ -22,6 +24,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
         DataProvider<IAbilityUnit> ControllableUnitAdded { get; }
 
         DataProvider<IAbilityUnit> ControllableUnitRemoved { get; }
+
+        Dictionary<double, IAbilityUnit> Units { get; }
+
+        DataProvider<IAbilityUnit> AddedUnit { get; }
+        DataProvider<IAbilityUnit> RemovedUnit { get; }
+
+        void UnitAdded(IAbilityUnit unit);
+
+        void UnitRemoved(IAbilityUnit unit);
 
         #endregion
     }

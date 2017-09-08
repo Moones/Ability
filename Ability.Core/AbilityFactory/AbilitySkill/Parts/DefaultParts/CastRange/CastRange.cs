@@ -16,6 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
     using System;
 
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
+    using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.Utilities;
 
     public class CastRange : ICastRange
@@ -73,6 +74,11 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         public float Value { get; set; }
 
+        public bool TargetInRange(IAbilityUnit target)
+        {
+            return this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -86,13 +92,13 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
             this.UpdateValue();
             this.Skill.Level.Subscribe(new DataObserver<ISkillLevel>(level => { this.UpdateValue(); }));
 
-            this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
+            this.Skill.Owner.TargetSelector?.TargetDistanceChanged.Subscribe(
                 () => { this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value; });
         }
 
         public virtual void UpdateValue()
         {
-            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange, 300) + this.Skill.Owner.SourceUnit.HullRadius;
+            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange + 150, 300) + this.Skill.Owner.SourceUnit.HullRadius;
         }
 
         #endregion

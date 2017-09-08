@@ -138,6 +138,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
             this.Silenced = this.Unit.SourceUnit.IsSilenced();
             this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
 
+            this.Attackable = !this.AttackImmune && !this.Invul;
+            this.AbleToIssueAttack = !this.Disarmed && !this.Stunned && !this.Invul;
+
             this.ModifierAdded.Next(modifier);
         }
 
@@ -176,6 +179,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
             this.ModifierRemoved.Next(modifier);
         }
+
+        public bool Attackable { get; set; }
+
+        public bool AbleToIssueAttack { get; set; }
 
         #endregion
     }

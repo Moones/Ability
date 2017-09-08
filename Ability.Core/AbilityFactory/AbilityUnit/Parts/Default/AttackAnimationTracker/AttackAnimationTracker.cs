@@ -13,7 +13,11 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker
 {
+    using System;
+
     using Ability.Core.AbilityFactory.Utilities;
+
+    using Ensage;
 
     public class AttackAnimationTracker : IAttackAnimationTracker
     {
@@ -32,6 +36,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
 
         public float NextAttackTime { get; set; }
 
+        public float LastAttackStartTime { get; set; }
+
+        public Notifier AttackReadyNotifier { get; set; } = new Notifier();
+
         public FunctionManager<bool> OnAttackCancel { get; } = new FunctionManager<bool>();
 
         public FunctionManager<bool> OnAttackReady { get; } = new FunctionManager<bool>();
@@ -42,12 +50,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
 
         #region Public Methods and Operators
 
-        public void AttackStarted()
+        public virtual void AttackStarted()
         {
-            var time = GlobalVariables.Time * 1000 - 0.01f;
-            this.CancelAnimationTime = this.Unit.AttackAnimation.GetAttackPoint() * 1000f + time;
-            this.NextAttackTime = this.Unit.AttackAnimation.GetAttackRate() * 1000f + time;
+            this.LastAttackStartTime = GlobalVariables.Time * 1000;
+
+            this.CancelAnimationTime = this.Unit.AttackAnimation.GetAttackPoint() * 1000f + this.LastAttackStartTime;
+            this.NextAttackTime = this.Unit.AttackAnimation.GetAttackRate() * 1000f + this.LastAttackStartTime - 1;
         }
+        
 
         public void Dispose()
         {
@@ -55,7 +65,28 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
 
         public void Initialize()
         {
+            //this.Unit.DataReceiver.Drawings.Subscribe(
+            //    () =>
+            //        {
+            //            if (this.Unit.TargetSelector.TargetIsSet)
+            //            {
+            //                var time = GlobalVariables.Time * 1000 + Game.Ping;
+            //                var nextAttack = time - this.Unit.AttackAnimationTracker.NextAttackTime
+            //                                 + this.Unit.TurnRate.GetTurnTime(this.Unit.TargetSelector.Target) * 1000;
+            //                if (nextAttack >= 0)
+            //                {
+            //                    this.AttackReadyNotifier.Notify();
+            //                    this.AttackReady = true;
+            //                }
+            //                else
+            //                {
+            //                    this.AttackReady = false;
+            //                }
+            //            }
+            //        });
         }
+
+        public bool AttackReady { get; set; }
 
         #endregion
     }

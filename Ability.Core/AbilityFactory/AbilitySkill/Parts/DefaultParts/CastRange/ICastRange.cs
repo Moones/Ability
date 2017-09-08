@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 {
+    using Ability.Core.AbilityFactory.AbilityUnit;
+
     public interface ICastRange : IAbilitySkillPart
     {
         #region Public Properties
@@ -20,6 +22,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
         bool IsTargetInRange { get; set; }
 
         float Value { get; set; }
+
+        bool TargetInRange(IAbilityUnit target);
 
         #endregion
     }

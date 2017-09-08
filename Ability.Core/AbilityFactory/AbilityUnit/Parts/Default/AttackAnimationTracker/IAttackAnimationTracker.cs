@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker
 {
+    using Ability.Core.AbilityFactory.Utilities;
+
     public interface IAttackAnimationTracker : IAbilityUnitPart
     {
         #region Public Properties
@@ -20,6 +22,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
         float CancelAnimationTime { get; set; }
 
         float NextAttackTime { get; set; }
+
+        float LastAttackStartTime { get; set; }
+
+        Notifier AttackReadyNotifier { get; set; }
+        bool AttackReady { get; set; }
 
         #endregion
 

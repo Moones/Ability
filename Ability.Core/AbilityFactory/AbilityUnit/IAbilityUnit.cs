@@ -22,7 +22,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackDamage;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
@@ -32,9 +34,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Level;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Pathfinder;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ScreenInfo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
@@ -75,6 +80,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         bool DebugDraw { get; set; }
 
         IDisableManager DisableManager { get; set; }
+
+        IMovementManager MovementManager { get; set; }
+
+        IAttackDamage AttackDamage { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
@@ -133,6 +142,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         string Name { get; set; }
 
+        string PrettyName { get; }
+
         /// <summary>Gets the order issuers.</summary>
         IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers { get; }
 
@@ -151,7 +162,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         IReadOnlyDictionary<Type, IAbilityUnitPart> Parts { get; }
 
         /// <summary>Gets the pathfinder.</summary>
-        NavMeshPathfinding Pathfinder { get; }
+        IPathfinder Pathfinder { get; set; }
+
+        bool Fighting { get; set; }
+
+        IAbilityUnit Owner { get; set; }
 
         /// <summary>
         ///     Gets the position.
@@ -190,10 +205,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <summary>Gets or sets the unit composer.</summary>
         IAbilityUnitHeroComposer UnitComposer { get; set; }
 
+        IUnitCombo UnitCombo { get; set; }
+
         /// <summary>
         ///     Gets the unit control.
         /// </summary>
         IUnitControl UnitControl { get; set; }
+
+        IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit handle.

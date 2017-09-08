@@ -19,7 +19,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.Utilities;
 
-    internal abstract class SkillRawDamageCalculatorWorker : ISkillRawDamageCalculatorWorker
+    public abstract class SkillRawDamageCalculatorWorker : ISkillRawDamageCalculatorWorker
     {
         #region Fields
 

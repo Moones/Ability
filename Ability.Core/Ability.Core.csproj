@@ -63,28 +63,39 @@
       <HintPath>C:\NvdKTVgtv\References\Ensage.Common.dll</HintPath>
     </Reference>
     <Reference Include="EnsageSharp.Sandbox">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\System\EnsageSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PlaySharp.Toolkit">
-      <HintPath>C:\NvdKTVgtv\References\PlaySharp.Toolkit.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\NvdKTVgtv\References\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX.Direct3D9">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\NvdKTVgtv\References\SharpDX.DXGI.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX.Mathematics">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XInput">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NvdKTVgtv\References\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -106,6 +117,7 @@
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapDataProvider.cs" />
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\AbilityMapData.cs" />
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\IAbilityMapData.cs" />
+    <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\Jungle\DireJungle.cs" />
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\Jungle\Jungle.cs" />
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\Jungle\JungleCampBase.cs" />
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\Jungle\JungleCamps.cs" />
@@ -131,6 +143,7 @@
     <Compile Include="AbilityData\AbilityMapDataProvider\AbilityMapData\Runes\AbilityRune\IAbilityRune.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Data\PriorityData.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastRange\CastRange.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastRange\CastRangeLevelIndependent.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastRange\ICastRange.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\CastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\CastFunction\Generic\DefaultCastingFunction.cs" />
@@ -157,6 +170,23 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\IModifierGenerator.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\ModifierGenerator.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\ModifierGeneratorWorker.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\HurlBoulder\CastFunction\HurlBoulderCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\HurlBoulder\HurlBoulderSkillComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\ThunderClap\CastFunction\ThunderClapCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\ThunderClap\CastRange\ThunderClapCastRange.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\ThunderClap\ThunderClapSkillComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\BattleCry\BattleCrySkillComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\BattleCry\CastingFunction\BattleCryCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\Rabid\CastingFunction\RabidCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\DiffusalBlade\DiffusalBladeItemComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\CastingFunction\MaskOfMadnessCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\MaskOfMadnessItemComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Medallion\CastingFunction\MedallionCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Medallion\MedallionItemComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Mjollnir\CastFunction\MjollnirCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Mjollnir\MjollnirItemComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\PhaseBoots\CastFunction\PhaseBootsCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\PhaseBoots\PhaseBootsComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\SkillComposer\IAbilitySkillItemComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillLevel\ItemLevel.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillModifiers\ISkillModifiers.cs" />
@@ -192,6 +222,10 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\SilverEdge\SilverEdgeSkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\StoutShield\StoutShieldSkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Vanguard\VanguardSkillComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\UnitParts\Necronomicon\ManaBurn\CastFunction\ManaBurnCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\UnitParts\Necronomicon\ManaBurn\DamageCalculator\ManaBurnDamageCalculator.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\UnitParts\Necronomicon\ManaBurn\DamageCalculator\ManaBurnDamageCalculatorWorker.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\UnitParts\Necronomicon\ManaBurn\ManaBurnSkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilityTalent\AbilityTalent.cs" />
     <Compile Include="AbilityFactory\AbilityTalent\IAbilityTalent.cs" />
     <Compile Include="AbilityFactory\AbilityTalent\Metadata\AbilityTalentMetadataAttribute.cs" />
@@ -209,16 +243,20 @@
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackAnimationTracker\IAttackAnimationTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackAnimation\AttackAnimation.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackAnimation\IAttackAnimation.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackDamage\AttackDamage.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackDamage\IAttackDamage.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Attacker\Attacker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Attacker\IAttacker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackRange\IUnitAttackRange.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\AttackRange\UnitAttackRange.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Bodyblocker\IUnitBodyblocker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Bodyblocker\UnitBodyblocker.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Combo\ComboEntry.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Combo\IUnitCombo.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Combo\OrderedComboEntries.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Combo\UnitCombo.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Composer\IAbilityUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Combo\UnitComboNoItems.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\DamageManipulation\DamageManipulation.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\DamageManipulation\IDamageManipulation.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\DamageManipulation\IDamageManipulationValues.cs" />
@@ -231,36 +269,50 @@
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\ItemManager\IItemManager.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\ItemManager\ItemManager.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\ItemManager\ItemObserver.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\MovementManager\IMovementManager.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\MovementManager\MovementManager.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\MovementTracker\IMovementTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\MovementTracker\MovementTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Orbwalker\IUnitOrbwalker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Orbwalker\UnitOrbwalkerBase.cs" />
-    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderIssuer\Custom\RunePicker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderIssuer\IOrderIssuer.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderIssuer\OrderIssuerBase.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\IUnitOrderManager.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\IUnitOrderQueue.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\OrderQueueMenu.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrderQueue.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\IUnitOrder.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\OrderPriority\IOrderPriority.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\OrderPriority\OrderPriorityBase.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\OrderPriority\OrderType.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\Attack.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\CastSkill.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\GetCloseAndCastSkill.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\MoveToMouse.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\PickUpRune.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\Orders\RunForRune.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\OrderQueue\UnitOrder\UnitOrderBase.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Pathfinder\IPathfinder.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\Pathfinder\Pathfinder.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\PositionTracker\Types\DotaBasePositionTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\PositionTracker\Types\EntityOwnerPositionTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\PositionTracker\WorldIcon.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\RuneTaker\IRuneTaker.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\RuneTaker\RuneTaker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\TargetSelector\IUnitTargetSelector.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\TargetSelector\UnitTargetSelector.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\TurnRate\IUnitTurnRate.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Default\TurnRate\UnitTurnRate.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Brewmaster\AttackAnimationTracker\BrewmasterAttackAnimationTracker.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Brewmaster\BrewmasterUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Brewmaster\Combo\BrewmasterCombo.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Brewmaster\Skillbook\BrewmasterSkillbook.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\EmberSpirit\SkillBook\EmberSpiritSkillBook.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\HeroMenuBase.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Invoker\InvokerUnitMenu.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Invoker\PositionTracker\InvokerPositionTracker.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\AttackRange\LoneDruidAttackRange.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\Combo\LoneDruidCombo.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\ControllableUnits\LoneDruidControllableUnits.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\LoneDruidComposer.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\SkillBook\LoneDruidSkillBook.cs" />
@@ -288,10 +340,24 @@
     <Compile Include="AbilityFactory\AbilityUnit\Metadata\AbilityUnitHeroMetadataAttribute.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Metadata\IAbilitySkillItemMetadata.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Metadata\IAbilityUnitHeroMetadata.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\LaneCreep\AttackAnimationTracker\LaneCreepAttackAnimationTracker.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\LaneCreep\CreepWave\ICreepWave.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\LocalHero\ControllableUnits\ControllableUnits.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\LocalHero\ControllableUnits\IControllableUnits.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\LocalHero\KeyTrigger\AutomaticKeyTrigger.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\LocalHero\KeyTrigger\IUnitKeyTrigger.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\LocalHero\KeyTrigger\UnitKeyTriggerBase.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\NecroArcher\NecroArcherUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\NecroArcher\UnitCombo\NecroArcherUnitCombo.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\NecroWarrior\AttackAnimation\NecroWarriorAttackAnimation.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\NecroWarrior\NecroWarriorUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\PrimalSplit\Earth\EarthUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\PrimalSplit\Earth\UnitCombo\EarthCombo.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\PrimalSplit\Storm\StormUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\PrimalSplit\Storm\UnitCombo\StormCombo.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\SpiritBear\SkillBook\SpiritBearSkillBook.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Units\SpiritBear\SpiritBearUnitComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Types\LaneCreep\LaneCreep.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Types\Meepo\AbilityUnitMeepo.cs" />
     <Compile Include="AbilityFactory\Database\AbilityDatabase.cs" />
     <Compile Include="AbilityFactory\Database\IAbilityDatabase.cs" />
@@ -492,8 +558,11 @@
   <ItemGroup>
     <Folder Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillComposer\" />
     <Folder Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillOverlay\Types\" />
+    <Folder Include="AbilityFactory\AbilitySkill\Parts\ItemParts\DiffusalBlade\CastingFunction\" />
+    <Folder Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\CastRange\" />
     <Folder Include="AbilityFactory\AbilityTalent\Parts\Default\TalentLevel\" />
     <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\Composer\" />
+    <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\OrderIssuer\Custom\" />
     <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\Overlay\Bars\HealthBar\" />
     <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\Overlay\Bars\ManaBar\" />
     <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\Overlay\PanelFields\DirectionOriented\" />

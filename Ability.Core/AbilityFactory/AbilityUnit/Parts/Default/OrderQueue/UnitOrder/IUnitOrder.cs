@@ -15,6 +15,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 {
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
 
+    using SharpDX;
+
     /// <summary>The UnitOrder interface.</summary>
     public interface IUnitOrder
     {
@@ -30,6 +32,20 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         IAbilityUnit Unit { get; }
 
+        string Name { get; }
+
+        Color Color { get; set; }
+
+        bool ShouldExecuteFast { get; set; }
+
+        bool PrintInLog { get; set; }
+
+        float ExecuteFast();
+
+        bool Canceled { get; set; }
+
+
+
         #endregion
 
         #region Public Methods and Operators
@@ -41,6 +57,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         void Enqueue();
 
         float Execute();
+
+        void Cancel();
 
         #endregion
     }

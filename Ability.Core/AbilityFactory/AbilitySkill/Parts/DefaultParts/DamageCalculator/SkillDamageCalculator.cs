@@ -24,7 +24,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalc
     using Ensage;
     using Ensage.Common.Extensions;
 
-    internal class SkillDamageCalculator : ISkillDamageCalculator
+    public class SkillDamageCalculator : ISkillDamageCalculator
     {
         #region Fields
 

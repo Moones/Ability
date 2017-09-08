@@ -16,6 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder;
     using Ability.Core.AbilityFactory.Utilities;
+    using Ability.Core.MenuManager.GetValue;
 
     public interface IUnitOrderQueue : IOrderIssuer
     {
@@ -26,6 +27,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
         DataProvider<IUnitOrder> NewOrderQueued { get; }
 
         Notifier QueueEmpty { get; }
+
+        GetValue<bool,bool> DrawOrder { get; set; }
 
         DataProvider<IUnitOrder> StartedExecution { get; }
 

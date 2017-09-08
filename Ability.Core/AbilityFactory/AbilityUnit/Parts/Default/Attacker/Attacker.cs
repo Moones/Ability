@@ -13,6 +13,7 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
 {
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders;
     using Ability.Core.AbilityFactory.Utilities;
 
     using Ensage;
@@ -44,8 +45,60 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
         {
         }
 
+        private Attack attackOrder;
+
         public void Initialize()
         {
+            this.attackOrder = new Attack(this.Unit);
+        }
+
+        private int targetChanged;
+        private int targetDistanceChanged;
+        private int attackReady;
+
+        public void Activate()
+        {
+            if (this.Unit.TargetSelector.TargetIsSet
+                && this.Unit.AttackRange.IsInAttackRange(this.Unit.TargetSelector.Target)
+                && this.Unit.Modifiers.AbleToIssueAttack && this.Unit.TargetSelector.Target.Modifiers.Attackable
+                && this.Unit.AttackAnimationTracker.AttackReady)
+            {
+                this.Unit.OrderQueue.EnqueueOrder(this.attackOrder);
+            }
+
+            this.targetChanged = this.Unit.TargetSelector.TargetChanged.Subscribe(() => this.attackOrder.Cancel());
+            this.targetDistanceChanged = this.Unit.TargetSelector.TargetDistanceChanged.Subscribe(
+                () =>
+                    {
+                        if (this.Unit.AttackAnimationTracker.AttackReady && this.Unit.Modifiers.AbleToIssueAttack
+                            && this.Unit.TargetSelector.Target.Modifiers.Attackable)
+                        {
+                            this.Unit.OrderQueue.EnqueueOrder(this.attackOrder);
+                        }
+                    });
+
+            this.attackReady = this.Unit.AttackAnimationTracker.AttackReadyNotifier.Subscribe(
+                () =>
+                    {
+                        if (this.Unit.AttackRange.TargetIsInRange && this.Unit.Modifiers.AbleToIssueAttack
+                            && this.Unit.TargetSelector.Target.Modifiers.Attackable)
+                        {
+
+                        }
+                    });
+        }
+
+        private void Attack()
+        {
+
+            this.Unit.OrderQueue.EnqueueOrder(this.attackOrder);
+        }
+
+        public void Deactivate()
+        {
+            this.attackOrder.Cancel();
+
+            this.Unit.TargetSelector.TargetChanged.Unsubscribe(this.targetChanged);
         }
 
         #endregion

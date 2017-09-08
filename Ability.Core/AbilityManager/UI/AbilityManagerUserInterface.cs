@@ -18,6 +18,7 @@ namespace Ability.Core.AbilityManager.UI
 
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityManager.UI.Elements.Body;
+    using Ability.Core.AbilityManager.UI.Elements.Body.Bodies.DamageManipulation;
     using Ability.Core.AbilityManager.UI.Elements.Window;
     using Ability.Core.MenuManager;
     using Ability.Core.MenuManager.MenuItems;
@@ -48,7 +49,7 @@ namespace Ability.Core.AbilityManager.UI
             AbilityBootstrapper.ComposeParts(this);
 
             // this.units = new Units(size, position, abilityManager);
-            // this.units = new DamageManipulation(size, position, abilityManager);
+            this.units = new DamageManipulation(size, position, abilityManager);
             this.window = new Window(size, position, "Ability# Manager", this.units);
 
             var menu = new Menu("AbilityManagerUI", this.MainMenuManager.Value.MainMenu.Name + "abilityManagerUi");
@@ -85,8 +86,8 @@ namespace Ability.Core.AbilityManager.UI
                         }));
             this.MainMenuManager.Value.MainMenu.SettingsMenu.AddSubMenu(menu);
 
-            // Game.OnWndProc += this.Game_OnWndProc;
-            // Drawing.OnDraw += this.Drawing_OnDraw;
+            Game.OnWndProc += this.Game_OnWndProc;
+            Drawing.OnDraw += this.Drawing_OnDraw;
         }
 
         #endregion

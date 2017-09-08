@@ -43,6 +43,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
         public ItemManager(IAbilityUnit unit)
         {
             this.Unit = unit;
+
+            foreach (var propertyInfo in this.GetType().GetProperties())
+            {
+                if (propertyInfo.PropertyType == typeof(ItemObserver))
+                {
+                    var obj = propertyInfo.GetValue(this) as ItemObserver;
+                    this.all.Add(obj.ItemId, obj);
+                }
+            }
         }
 
         #endregion
@@ -63,7 +72,31 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         public ItemObserver PhaseBoots { get; } = new ItemObserver(AbilityId.item_phase_boots);
 
-        public ItemObserver TravelBoots { get; } = new ItemObserver(AbilityId.item_travel_boots);
+        public ItemObserver TravelBoots { get; } = new ItemObserver(
+            AbilityId.item_travel_boots,
+            AbilityId.item_travel_boots_2);
+
+        public Dictionary<AbilityId, ItemObserver> ItemObservers => this.all;
+
+        public ItemObserver Bottle { get; } = new ItemObserver(AbilityId.item_bottle);
+        public ItemObserver IronTalon { get; } = new ItemObserver(AbilityId.item_iron_talon);
+        public ItemObserver MaskOfMadness { get; } = new ItemObserver(AbilityId.item_mask_of_madness);
+
+        public ItemObserver MedallionOfCourage { get; } = new ItemObserver(AbilityId.item_medallion_of_courage);
+        public ItemObserver SolarCrest { get; } = new ItemObserver(AbilityId.item_solar_crest);
+        public ItemObserver DrumOfEndurance { get; } = new ItemObserver(AbilityId.item_ancient_janggo);
+
+        public ItemObserver DiffusalBlade { get; } = new ItemObserver(
+            AbilityId.item_diffusal_blade,
+            AbilityId.item_diffusal_blade_2);
+        public ItemObserver MantaStyle { get; } = new ItemObserver(AbilityId.item_manta);
+
+        public ItemObserver Necronomicon { get; } = new ItemObserver(
+            AbilityId.item_necronomicon,
+            AbilityId.item_necronomicon_2,
+            AbilityId.item_necronomicon_3);
+
+        public ItemObserver Blademail { get; } = new ItemObserver(AbilityId.item_blade_mail);
 
         public IAbilityUnit Unit { get; set; }
 
@@ -78,14 +111,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         public void Initialize()
         {
-            foreach (var propertyInfo in this.GetType().GetProperties())
-            {
-                if (propertyInfo.PropertyType == typeof(ItemObserver))
-                {
-                    var obj = propertyInfo.GetValue(this) as ItemObserver;
-                    this.all.Add(obj.ItemId, obj);
-                }
-            }
 
             this.updateId = this.Unit.DataReceiver.Updates.Subscribe(this.Update);
         }
@@ -95,7 +120,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
             var newDict = new Dictionary<AbilityId, ItemObserver>(this.all);
             foreach (var itemObserver in newDict)
             {
-                if (itemObserver.Key == item.SourceItem.Id)
+                if (itemObserver.Value.ItemIds.Contains(item.SourceItem.Id)
+                    || itemObserver.Value.ItemId == item.SourceItem.Id)
                 {
                     itemObserver.Value.ItemAdded(item);
                     break;
@@ -108,7 +134,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
             var newDict = new Dictionary<AbilityId, ItemObserver>(this.all);
             foreach (var itemObserver in newDict)
             {
-                if (itemObserver.Value.Equipped && itemObserver.Key == item.SourceItem.Id)
+                if (itemObserver.Value.Equipped
+                    && (itemObserver.Value.ItemIds.Contains(item.SourceItem.Id)
+                        || itemObserver.Value.ItemId == item.SourceItem.Id))
                 {
                     itemObserver.Value.ItemRemoved(item);
                     break;

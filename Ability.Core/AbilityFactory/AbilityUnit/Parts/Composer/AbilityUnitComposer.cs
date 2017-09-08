@@ -21,7 +21,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackDamage;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager;
@@ -30,6 +33,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.MovementTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Pathfinder;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ScreenInfo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
@@ -37,6 +41,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TurnRate;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.UnitDataReceiver;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Visibility;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     /// <summary>
     ///     The ability unit composer.
@@ -66,61 +71,30 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
             this.AssignPart<IUnitDataReceiver>(abilityUnit => new UnitDataReceiver(abilityUnit));
             this.AssignPart<IItemManager>(abilityUnit => new ItemManager(abilityUnit));
             this.AssignPart<ISkillBook<IAbilitySkill>>(abilityUnit => new SkillBook<IAbilitySkill>(abilityUnit));
-            this.AssignPart<IDisableManager>(
+            this.AssignEnemyPart<IDisableManager>(unit => new DisableManager(unit));
+            this.AssignEnemyPart<IMovementTracker>(unit => new MovementTracker(unit));
+            this.AssignPart<IControllableUnits>(
                 unit =>
+                {
+                    if (unit.IsLocalHero)
                     {
-                        if (unit.IsEnemy)
-                        {
-                            return new DisableManager(unit);
-                        }
+                        return new ControllableUnits(unit);
+                    }
 
-                        return null;
-                    });
-            this.AssignPart<IMovementTracker>(
-                unit =>
-                    {
-                        if (unit.IsEnemy)
-                        {
-                            return new MovementTracker(unit);
-                        }
+                    return null;
+                });
 
-                        return null;
-                    });
-
-            // this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
-            this.AssignPart<IUnitOrderQueue>(
-                unit =>
-                    {
-                        if (!unit.IsEnemy && unit.SourceUnit.IsControllable)
-                        {
-                            return new UnitOrderQueue(unit);
-                        }
-
-                        return null;
-                    });
-            this.AssignPart<IUnitTargetSelector>(
-                unit =>
-                    {
-                        if (!unit.IsEnemy && unit.SourceUnit.IsControllable)
-                        {
-                            return new UnitTargetSelector(unit);
-                        }
-
-                        return null;
-                    });
+            this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
+            this.AssignControllablePart<IUnitOrderQueue>(unit => new UnitOrderQueue(unit));
+            this.AssignControllablePart<IUnitTargetSelector>(unit => new UnitTargetSelector(unit));
             this.AssignPart<IUnitAttackRange>(unit => new UnitAttackRange(unit));
             this.AssignPart<IUnitTurnRate>(unit => new UnitTurnRate(unit));
             this.AssignPart<IAttackAnimation>(unit => new AttackAnimation(unit));
-            this.AssignPart<IAttackAnimationTracker>(
-                unit =>
-                    {
-                        if (!unit.IsEnemy && unit.SourceUnit.IsControllable)
-                        {
-                            return new AttackAnimationTracker(unit);
-                        }
+            this.AssignControllablePart<IAttackAnimationTracker>(unit => new AttackAnimationTracker(unit));
+            //this.AssignControllablePart<IUnitCombo>(unit => new UnitCombo(unit));
 
-                        return null;
-                    });
+            this.AssignPart<IPathfinder>(unit => new Pathfinder(unit));
+            this.AssignPart<IAttackDamage>(unit => new AttackDamage(unit));
         }
 
         #endregion
@@ -129,6 +103,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
 
         /// <summary>Gets the assignments.</summary>
         public IDictionary<Type, Action<IAbilityUnit>> Assignments { get; } =
+            new Dictionary<Type, Action<IAbilityUnit>>();
+
+
+        public IDictionary<Type, Action<IAbilityUnit>> ControllableAssignments { get; } =
+            new Dictionary<Type, Action<IAbilityUnit>>();
+
+
+        public IDictionary<Type, Action<IAbilityUnit>> EnemyAssignments { get; } =
             new Dictionary<Type, Action<IAbilityUnit>>();
 
         #endregion
@@ -142,6 +124,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
         {
             var type = typeof(T);
             this.Assignments[type] = unit => unit.AddPart(factory);
+        }
+
+        public void AssignControllablePart<T>(Func<IAbilityUnit, T> factory) where T : IAbilityUnitPart
+        {
+            var type = typeof(T);
+            this.ControllableAssignments[type] = unit => unit.AddPart(factory);
+        }
+
+        public void AssignEnemyPart<T>(Func<IAbilityUnit, T> factory) where T : IAbilityUnitPart
+        {
+            var type = typeof(T);
+            this.EnemyAssignments[type] = unit => unit.AddPart(factory);
         }
 
         /// <summary>
@@ -158,16 +152,25 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
             // }
             unit.UnitComposer = this;
 
-            unit.Initialize();
-
             foreach (var keyValuePair in this.Assignments)
             {
                 keyValuePair.Value.Invoke(unit);
             }
 
-            foreach (var keyValuePair in unit.Parts)
+            if (unit.IsEnemy)
             {
-                keyValuePair.Value.Initialize();
+                foreach (var keyValuePair in this.EnemyAssignments)
+                {
+                    keyValuePair.Value.Invoke(unit);
+                }
+            }
+
+            if (!unit.IsEnemy && unit.SourceUnit.IsControllable)
+            {
+                foreach (var keyValuePair in this.ControllableAssignments)
+                {
+                    keyValuePair.Value.Invoke(unit);
+                }
             }
 
             // unit.Interaction = new UnitInteraction(unit);
