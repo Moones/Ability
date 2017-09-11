@@ -64,7 +64,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
             this.DisableEntries = new List<ComboEntry>
                                       {
                                           new ComboEntry(this.Unit.ItemManager.AbyssalBlade),
-                                          new ComboEntry(this.Unit.ItemManager.DiffusalBlade)
+                                          new ComboEntry(this.Unit.ItemManager.Orchid),
+                                          new ComboEntry(this.Unit.ItemManager.Bloodthorn)
+                                          // new ComboEntry(this.Unit.ItemManager.DiffusalBlade)
                                       };
         }
 

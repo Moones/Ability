@@ -9,6 +9,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm.
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
 
     using Ensage;
+    using Ensage.Common;
 
     public class StormCombo : UnitComboNoItems
     {
@@ -19,6 +20,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm.
 
         public override void Initialize()
         {
+            //Console.WriteLine("allspells");
+            //foreach (var skillBookAllSkill in this.Unit.SourceUnit.Spellbook.Spells)
+            //{
+            //    Console.WriteLine(
+            //        skillBookAllSkill.Name + " " + skillBookAllSkill.Id + " " + AbilityId.brewmaster_storm_wind_walk);
+            //}
 
             this.Entries = new List<ComboEntry>
                                       {

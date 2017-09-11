@@ -17,16 +17,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Earth.
         {
         }
 
+        /// <exception cref="NullReferenceException">Happens at the end of game where aghanim is deleted.</exception>
         public override void Initialize()
         {
             this.DisableEntries = new List<ComboEntry>
-                                      {
-                                          new ComboEntry(
-                                              this.Unit.SkillBook.AllSkills.FirstOrDefault(
-                                                  x =>
-                                                      x.Value.SourceAbility.Id
-                                                      == AbilityId.brewmaster_earth_hurl_boulder).Value)
-                                      };
+                                        {
+                                            new ComboEntry(
+                                                this.Unit.SkillBook.AllSkills.FirstOrDefault(
+                                                    x =>
+                                                        x.Value.SourceAbility.Id
+                                                        == AbilityId.brewmaster_earth_hurl_boulder).Value)
+                                        };
 
             if (this.Unit.Owner.SkillBook.HasAghanim)
             {

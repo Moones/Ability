@@ -235,8 +235,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
 
         public void AddDamageBlock(double handle, float value)
         {
+            if (this.DamageBlocks.ContainsKey(handle))
+            {
+                this.UpdateDamageBlock(handle, value);
+                return;
+            }
+
             this.DamageBlocks.Add(handle, value);
-            Console.WriteLine("added damage block " + value);
+            //Console.WriteLine("added damage block " + value);
             this.DamageBlock = this.DamageBlocks.MaxOrDefault(x => x.Value).Value;
         }
 

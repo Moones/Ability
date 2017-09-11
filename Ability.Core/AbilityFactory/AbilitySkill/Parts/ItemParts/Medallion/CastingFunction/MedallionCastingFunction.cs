@@ -18,7 +18,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.Medallion.Cas
         {
             return base.CanCast()
                    && this.Skill.Owner.TargetSelector.LastDistanceToTarget < this.Skill.Owner.AttackRange.Value + 150
-                   && this.Skill.Owner.TargetSelector.Target.Modifiers.Attackable;
+                   && this.Skill.Owner.TargetSelector.Target.Modifiers.Attackable
+                   && (this.Skill.Owner.TargetSelector.Target.Health.Current
+                       > this.Skill.Owner.AttackDamage.GetDamage(this.Skill.Owner.TargetSelector.Target) * 1.5);
         }
     }
 }

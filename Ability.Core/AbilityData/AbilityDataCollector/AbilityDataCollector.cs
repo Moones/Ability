@@ -155,6 +155,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
             ObjectManager.OnAddEntity -= this.ObjectManager_OnAddEntity;
             ObjectManager.OnRemoveEntity -= this.ObjectManager_OnRemoveEntity;
+
+            this.AbilityMapDataProvider.Value.OnClose();
         }
 
         /// <summary>

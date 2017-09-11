@@ -312,6 +312,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
             if (!this.TargetValid)
             {
+                this.MeanWhile = true;
                 return false;
             }
 
@@ -347,7 +348,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 }
 
                 if (this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile || this.Target.Modifiers.AttackImmune
-                    || this.Target.Modifiers.Invul)
+                    || this.Target.Modifiers.Invul || !this.Target.Visibility.Visible)
                 {
                     this.MeanWhile = true;
                     return false;

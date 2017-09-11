@@ -134,12 +134,24 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </summary>
         public IOrderedEnumerable<T> DamageAmpsOrderedForCast { get; set; }
 
-        public bool HasAghanim { get; set; }
+        public bool HasAghanim
+        {
+            get
+            {
+                return this.Unit.ItemManager.AghanimScepter.Equipped;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets a value indicating whether has blink.
         /// </summary>
-        public bool HasBlink { get; set; }
+        public bool HasBlink
+        {
+            get
+            {
+                return this.Unit.ItemManager.Blink.Equipped;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the items.
@@ -262,12 +274,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                     newitems.Add(skill.SkillHandle, skill);
                     this.items = newitems;
                 }
-
-                if (skill.SourceItem.Id == AbilityId.item_ultimate_scepter)
-                {
-                    this.HasAghanim = true;
-                }
-
+                
                 this.Unit.ItemManager.ItemAdded(skill);
             }
             else
@@ -286,17 +293,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             // newcastPointSpells.Add(skill.SkillHandle, skill);
             // this.castPointSpells = newcastPointSpells;
             // }
-            if (this.allSkills.ContainsKey(skill.SkillHandle))
+            if (!this.allSkills.ContainsKey(skill.SkillHandle))
             {
                 var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
                 newallSkills.Add(skill.SkillHandle, skill);
                 this.allSkills = newallSkills;
             }
-
-            if (skill.Name == "item_blink")
-            {
-                this.HasBlink = true;
-            }
+            
 
             // if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
             // {
@@ -316,22 +319,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
             newitems.Remove(item.SkillHandle);
             this.items = newitems;
-
-            if (item.SourceItem.Id == AbilityId.item_ultimate_scepter)
-            {
-                this.HasAghanim = false;
-            }
+            
 
             this.Unit.ItemManager.ItemRemoved(item);
 
             var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
             newallSkills.Remove(item.SkillHandle);
             this.allSkills = newallSkills;
-
-            if (item.Name == "item_blink")
-            {
-                this.HasBlink = false;
-            }
+            
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
@@ -398,11 +393,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
                 newitems.Remove(skill.SkillHandle);
                 this.items = newitems;
-
-                if (skill.SourceItem.Id == AbilityId.item_ultimate_scepter)
-                {
-                    this.HasAghanim = false;
-                }
+                
 
                 this.Unit.ItemManager.ItemRemoved(skill);
             }
@@ -422,11 +413,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
             newallSkills.Remove(skill.SkillHandle);
             this.allSkills = newallSkills;
-
-            if (skill.Name == "item_blink")
-            {
-                this.HasBlink = false;
-            }
+            
 
             // if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
             // {

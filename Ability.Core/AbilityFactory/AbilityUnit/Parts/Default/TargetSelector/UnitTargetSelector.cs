@@ -59,9 +59,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             {
                 this.target?.Health.ZeroHealth.Unsubscribe(this.lastZeroHealthId);
                 this.positionUnsubscriber?.Dispose();
-                this.target = value;
-                if (this.target != null)
+                var targett = value;
+                if (targett != null)
                 {
+                    this.target = value;
                     this.TargetIsSet = true;
                     this.lastZeroHealthId = this.target.Health.ZeroHealth.Subscribe(this.TargetDied);
                     this.positionUnsubscriber =
@@ -176,12 +177,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
             this.LastDistanceToTarget =
                 this.Unit.Position.PredictedByLatency.Distance2D(this.Target.Position.PredictedByLatency);
-            if (this.LastDistanceToTarget < 1000 && !this.Unit.Fighting)
+            if (this.LastDistanceToTarget < 1500 && !this.Unit.Fighting)
             {
                 this.Unit.Fighting = true;
                 //Console.WriteLine(this.Unit.PrettyName + " fighting true");
             }
-            else if (this.Unit.Fighting && this.LastDistanceToTarget > 1000)
+            else if (this.Unit.Fighting && this.LastDistanceToTarget > 1500)
             {
                 this.Unit.Fighting = false;
                 //Console.WriteLine(this.Unit.PrettyName + " fighting false");

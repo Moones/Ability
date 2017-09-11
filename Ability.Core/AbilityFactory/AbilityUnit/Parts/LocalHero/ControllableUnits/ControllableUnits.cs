@@ -18,6 +18,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
 
     using Ability.Core.AbilityFactory.Utilities;
 
+    using Ensage;
+
     public class ControllableUnits : IControllableUnits
     {
         #region Constructors and Destructors
@@ -57,7 +59,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
 
         public virtual void UnitAdded(IAbilityUnit unit)
         {
-            Console.WriteLine("added controllable unit " + unit.Name);
+            Console.WriteLine("added controllable unit " + unit.Name + " isHero: " + (unit.SourceUnit is Hero));
             unit.Owner = this.Unit;
             this.Units.Add(unit.UnitHandle, unit);
             this.AddedUnit.Next(unit);

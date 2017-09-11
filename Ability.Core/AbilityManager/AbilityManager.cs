@@ -890,7 +890,7 @@ namespace Ability.Core.AbilityManager
                     {
                         continue;
                     }
-
+                    
                     if (skill.Name.Contains("special_bonus"))
                     {
                         if (abilityUnit.SkillBook.Talents.ContainsKey(skill.Handle))

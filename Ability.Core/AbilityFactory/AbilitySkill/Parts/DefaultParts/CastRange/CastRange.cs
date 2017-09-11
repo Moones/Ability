@@ -19,6 +19,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.Utilities;
 
+    using Ensage.Common.Extensions;
+
     public class CastRange : ICastRange
     {
         #region Fields
@@ -93,7 +95,20 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
             this.Skill.Level.Subscribe(new DataObserver<ISkillLevel>(level => { this.UpdateValue(); }));
 
             this.Skill.Owner.TargetSelector?.TargetDistanceChanged.Subscribe(
-                () => { this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value; });
+                () =>
+                    {
+                        if (!this.Skill.Owner.TargetSelector.TargetIsSet)
+                        {
+                            return;
+                        }
+
+                        this.IsTargetInRange =
+                            Math.Max(
+                                this.Skill.Owner.Position.PredictedByLatency.Distance2D(
+                                    this.Skill.Owner.TargetSelector.Target.Position.Predict(this.Skill.HitDelay.Get())),
+                                this.Skill.Owner.Position.PredictedByLatency.Distance2D(
+                                    this.Skill.Owner.TargetSelector.Target.Position.PredictedByLatency)) <= this.Value;
+                    });
         }
 
         public virtual void UpdateValue()

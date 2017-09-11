@@ -32,9 +32,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public override bool CanExecute()
         {
-            if (!this.Unit.Fighting || this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile
-                || this.Unit.TargetSelector.TargetIsSet || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
-                || this.Unit.TargetSelector.Target.Modifiers.Invul)
+            if (this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile
+                || !this.Unit.TargetSelector.TargetIsSet || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
+                || this.Unit.TargetSelector.Target.Modifiers.Invul || !this.Unit.TargetSelector.Target.Visibility.Visible)
             {
                 return false;
             }
@@ -55,7 +55,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             {
                 return 0;
             }
-
+            
             this.sleeper.Sleep(300);
             this.executedOnce = true;
             this.attack();
@@ -81,6 +81,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         private void attack()
         {
+            //if (this.Unit.TargetSelector.Target == null)
+            //{
+            //    return;
+            //}
+
             this.Unit.SourceUnit.Attack(this.Unit.TargetSelector.Target.SourceUnit);
         }
     }

@@ -54,12 +54,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
         /// </summary>
         IOrderedEnumerable<T> DamageAmpsOrderedForCast { get; set; }
 
-        bool HasAghanim { get; set; }
+        bool HasAghanim { get; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether has blink.
         /// </summary>
-        bool HasBlink { get; set; }
+        bool HasBlink { get; }
 
         /// <summary>
         ///     Gets or sets the items.

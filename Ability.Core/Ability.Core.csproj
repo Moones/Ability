@@ -185,6 +185,8 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Medallion\MedallionItemComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Mjollnir\CastFunction\MjollnirCastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Mjollnir\MjollnirItemComposer.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Orchid\CastFunction\OrchidCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\Orchid\OrchidItemComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\PhaseBoots\CastFunction\PhaseBootsCastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\PhaseBoots\PhaseBootsComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\SkillComposer\IAbilitySkillItemComposer.cs" />
@@ -363,6 +365,7 @@
     <Compile Include="AbilityFactory\Database\IAbilityDatabase.cs" />
     <Compile Include="AbilityFactory\ExternalPartManager.cs" />
     <Compile Include="AbilityFactory\IExternalPartManager.cs" />
+    <Compile Include="AbilityFactory\Utilities\AbilityException.cs" />
     <Compile Include="AbilityFactory\Utilities\ActionManager.cs" />
     <Compile Include="AbilityFactory\Utilities\ActionExecutor.cs" />
     <Compile Include="AbilityFactory\Utilities\FunctionExecutor.cs" />

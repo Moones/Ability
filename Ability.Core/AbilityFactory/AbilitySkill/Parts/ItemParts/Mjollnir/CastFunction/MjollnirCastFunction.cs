@@ -21,7 +21,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.Mjollnir.Cast
             return base.CanCast()
                    && this.Skill.Owner.TargetSelector.LastDistanceToTarget
                    < this.Skill.Owner.TargetSelector.Target.AttackRange.Value + 200
-                   && this.Skill.Owner.Modifiers.Attackable;
+                   && this.Skill.Owner.Modifiers.Attackable && (this.Skill.Owner.TargetSelector.Target.Health.Current
+                       > this.Skill.Owner.AttackDamage.GetDamage(this.Skill.Owner.TargetSelector.Target) * 1.5);
         }
 
         public override bool TargetIsValid(IAbilityUnit target)

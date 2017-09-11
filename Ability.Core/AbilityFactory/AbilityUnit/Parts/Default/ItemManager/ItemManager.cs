@@ -176,7 +176,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                     var found = false;
                     foreach (var abilitySkill in itemObserver.Value.Items)
                     {
-                        if (abilitySkill.Value.SourceItem.Owner != null && abilitySkill.Value.SourceItem.Owner.IsValid
+                        if (abilitySkill.Value.SourceItem.IsValid && abilitySkill.Value.SourceItem.Owner != null
+                            && abilitySkill.Value.SourceItem.Owner.IsValid
                             && !abilitySkill.Value.SourceItem.Owner.Name.Equals(
                                 this.Unit.Name,
                                 StringComparison.InvariantCultureIgnoreCase))
@@ -205,7 +206,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                     }
                 }
 
-                if (itemObserver.Value.Item.SourceItem.Owner != null && itemObserver.Value.Item.SourceItem.Owner.IsValid
+                if (itemObserver.Value.Item.SourceItem.IsValid && itemObserver.Value.Item.SourceItem.Owner != null
+                    && itemObserver.Value.Item.SourceItem.Owner.IsValid
                     && !itemObserver.Value.Item.SourceItem.Owner.Name.Equals(
                         this.Unit.Name,
                         StringComparison.InvariantCultureIgnoreCase))
@@ -226,6 +228,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                 }
             }
         }
+
+        public ItemObserver AghanimScepter { get; } = new ItemObserver(AbilityId.item_ultimate_scepter);
+
+        public ItemObserver Blink { get; } = new ItemObserver(AbilityId.item_blink);
+
+        public ItemObserver Orchid { get; } = new ItemObserver(AbilityId.item_orchid);
+
+        public ItemObserver Bloodthorn { get; } = new ItemObserver(AbilityId.item_bloodthorn);
 
         #endregion
     }

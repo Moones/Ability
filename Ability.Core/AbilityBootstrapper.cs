@@ -17,6 +17,7 @@ namespace Ability.Core
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Security.Permissions;
 
@@ -184,9 +185,12 @@ namespace Ability.Core
 
             this.AbilityDataCollector.Value?.OnClose();
 
-            foreach (var abilityService in this.AbilityServices)
+            if (this.AbilityServices != null && this.AbilityServices.Any())
             {
-                abilityService.Value?.OnClose();
+                foreach (var abilityService in this.AbilityServices)
+                {
+                    abilityService.Value?.OnClose();
+                }
             }
 
             container?.Dispose();
@@ -264,11 +268,14 @@ namespace Ability.Core
                         this.AbilityUnitManager.Value.OnLoad();
 
                         this.MainMenuManager.Value.OnLoad();
-
-                        foreach (var abilityService in this.AbilityServices)
+                        
+                        if (this.AbilityServices != null && this.AbilityServices.Any())
                         {
-                            Console.WriteLine("Service: " + abilityService.Value);
-                            abilityService.Value.OnLoad();
+                            foreach (var abilityService in this.AbilityServices)
+                            {
+                                Console.WriteLine("Service: " + abilityService.Value);
+                                abilityService.Value?.OnLoad();
+                            }
                         }
 
                         this.AbilityModuleManager.Value.OnLoad();

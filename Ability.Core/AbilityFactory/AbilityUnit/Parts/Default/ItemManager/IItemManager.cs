@@ -46,6 +46,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         ItemObserver Necronomicon { get; } 
         ItemObserver Blademail { get; }
+        ItemObserver AghanimScepter { get; }
+        ItemObserver Blink { get; }
+        ItemObserver Orchid { get; }
+        ItemObserver Bloodthorn { get; }
+
         Dictionary<AbilityId, ItemObserver> ItemObservers { get; }
 
         #endregion
