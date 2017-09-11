@@ -42,12 +42,24 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.HitDelay
 
         public float Get(IAbilityUnit target)
         {
-            return (float)(Game.Ping + this.Skill.CastData.CastPoint * 1000f);
+            var castPoint = 0d;
+            if (this.Skill != null && this.Skill.CastData != null)
+            {
+                castPoint = this.Skill.CastData.CastPoint * 1000f;
+            }
+
+            return (float)(Game.Ping + castPoint);
         }
 
         public float Get()
         {
-            return (float)(Game.Ping + this.Skill.CastData.CastPoint * 1000f);
+            var castPoint = 0d;
+            if (this.Skill != null && this.Skill.CastData != null)
+            {
+                castPoint = this.Skill.CastData.CastPoint * 1000f;
+            }
+
+            return (float)(Game.Ping + castPoint);
         }
 
         public void Initialize()

@@ -85,8 +85,14 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         #region Public Methods and Operators
 
+        private int targetDistanceChanged;
+
         public void Dispose()
         {
+            if (this.Skill.Owner.TargetSelector != null)
+            {
+                this.Skill.Owner.TargetSelector.TargetDistanceChanged.Unsubscribe(this.targetDistanceChanged);
+            }
         }
 
         public virtual void Initialize()
@@ -94,21 +100,26 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
             this.UpdateValue();
             this.Skill.Level.Subscribe(new DataObserver<ISkillLevel>(level => { this.UpdateValue(); }));
 
-            this.Skill.Owner.TargetSelector?.TargetDistanceChanged.Subscribe(
-                () =>
-                    {
-                        if (!this.Skill.Owner.TargetSelector.TargetIsSet)
+            if (this.Skill.Owner.TargetSelector != null)
+            {
+                this.targetDistanceChanged = this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
+                    () =>
                         {
-                            return;
-                        }
+                            if (!this.Skill.Owner.TargetSelector.TargetIsSet)
+                            {
+                                return;
+                            }
 
-                        this.IsTargetInRange =
-                            Math.Max(
-                                this.Skill.Owner.Position.PredictedByLatency.Distance2D(
-                                    this.Skill.Owner.TargetSelector.Target.Position.Predict(this.Skill.HitDelay.Get())),
-                                this.Skill.Owner.Position.PredictedByLatency.Distance2D(
-                                    this.Skill.Owner.TargetSelector.Target.Position.PredictedByLatency)) <= this.Value;
-                    });
+                            this.IsTargetInRange =
+                                Math.Max(
+                                    this.Skill.Owner.Position.PredictedByLatency.Distance2D(
+                                        this.Skill.Owner.TargetSelector.Target.Position.Predict(
+                                            this.Skill.HitDelay.Get())),
+                                    this.Skill.Owner.Position.PredictedByLatency.Distance2D(
+                                        this.Skill.Owner.TargetSelector.Target.Position.PredictedByLatency))
+                                <= this.Value;
+                        });
+            }
         }
 
         public virtual void UpdateValue()
