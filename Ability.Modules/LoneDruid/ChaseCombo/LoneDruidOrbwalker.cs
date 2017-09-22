@@ -57,19 +57,44 @@ namespace LoneDruid.ChaseCombo
                 return true;
             }
 
+            return this.KeepRange();
+        }
+
+        public override bool IssueMeanwhileActions()
+        {
             if (this.AttackRange.TrueForm)
             {
-                if (!this.Target.SourceUnit.CanMove()
-                    && this.Unit.TargetSelector.LastDistanceToTarget
-                    > this.Target.Position.PredictedByLatency.Distance2D(Game.MousePosition))
+                if (!this.TargetValid)
                 {
-                    return this.Attack();
+                    return this.NoTarget();
+                }
+
+                if (this.CastSpells())
+                {
+                    return true;
+                }
+                
+
+                if (this.Unit.TargetSelector.LastDistanceToTarget
+                     < 800)
+                {
+                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
                 }
 
                 return this.Move();
             }
 
-            return this.KeepRange();
+            return base.IssueMeanwhileActions();
+        }
+
+        public override bool PreciseIssue()
+        {
+            if (this.AttackRange.TrueForm)
+            {
+                return false;
+            }
+
+            return base.PreciseIssue();
         }
 
         public override bool BeforeAttack()
@@ -123,29 +148,7 @@ namespace LoneDruid.ChaseCombo
                 return true;
             }
 
-            if (this.AttackRange.TrueForm)
-            {
-                if (!this.Target.SourceUnit.CanMove()
-                    && this.Unit.TargetSelector.LastDistanceToTarget
-                    > this.Target.Position.PredictedByLatency.Distance2D(Game.MousePosition))
-                {
-                    return this.Attack();
-                }
-
-                return this.Move();
-            }
-
             return this.KeepRange();
-        }
-
-        public override bool Attack()
-        {
-            if (this.AttackRange.TrueForm)
-            {
-                return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
-            }
-
-            return base.Attack();
         }
 
         public override bool NoTarget()

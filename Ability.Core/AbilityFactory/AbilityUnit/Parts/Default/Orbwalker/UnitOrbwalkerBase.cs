@@ -108,7 +108,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public float IssueSleep { get; set; } = 120;
 
-        public float MaxTargetDistance { get; set; } = 2000;
+        public float MaxTargetDistance { get; set; } = 1000;
 
         public bool MeanWhile { get; set; }
 
@@ -234,7 +234,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
         public virtual bool IsTargetValid()
         {
             return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsAlive
-                   && this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance;
+                   && this.Target.Visibility.Visible
+                   && this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value
+                   && this.Target.Modifiers.Attackable;
         }
 
         public bool KeepRange()

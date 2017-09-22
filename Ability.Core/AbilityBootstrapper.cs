@@ -176,14 +176,16 @@ namespace Ability.Core
             }
 
             this.initialized = false;
+
+            this.AbilityDataCollector.Value?.OnClose();
+
             this.MainMenuManager.Value?.OnClose();
+
             this.AbilityUnitManager.Value?.OnClose();
 
             this.AbilityFactory.Value?.OnClose();
 
             this.AbilityModuleManager.Value?.OnClose();
-
-            this.AbilityDataCollector.Value?.OnClose();
 
             if (this.AbilityServices != null && this.AbilityServices.Any())
             {

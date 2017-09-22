@@ -19,7 +19,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     public class RunForRune<T> : UnitOrderBase where T : IAbilityRune
     {
         public RunForRune(IAbilityUnit unit, RunePosition<T> rune, List<Vector3> path)
-            : base(OrderType.MoveToPosition, unit, "Running for rune")
+            : base(OrderType.TakeRune, unit, "Running for rune")
         {
             this.Path = path;
             this.RunePosition = rune;

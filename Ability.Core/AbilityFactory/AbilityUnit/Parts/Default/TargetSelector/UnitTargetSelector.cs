@@ -68,6 +68,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                     this.positionUnsubscriber =
                         this.Target.Position.Subscribe(
                             new DataObserver<IPosition>(position => { this.UpdateDistance(); }));
+                    this.TargetChanged.Notify();
                 }
                 else
                 {
@@ -76,7 +77,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                     //Console.WriteLine(this.Unit.PrettyName + " fighting false");
                 }
 
-                this.TargetChanged.Notify();
+                //this.TargetChanged.Notify();
             }
         }
 

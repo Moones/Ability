@@ -32,10 +32,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public override bool CanExecute()
         {
-            if (this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile
-                || !this.Unit.TargetSelector.TargetIsSet || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
-                || this.Unit.TargetSelector.Target.Modifiers.Invul || !this.Unit.TargetSelector.Target.Visibility.Visible)
+            if (this.Unit.Modifiers.Disarmed || this.Unit.Modifiers.Immobile || !this.Unit.TargetSelector.TargetIsSet
+                || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
+                || this.Unit.TargetSelector.Target.Modifiers.Invul
+                || !this.Unit.TargetSelector.Target.Visibility.Visible
+                || this.Unit.TargetSelector.LastDistanceToTarget > this.Unit.AttackRange.Value + 1000)
             {
+                Console.WriteLine("attack canceled");
                 return false;
             }
 
@@ -47,6 +50,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             }
 
             return true;
+        }
+
+        private IAbilityUnit target;
+
+        public override void Enqueue()
+        {
+            this.target = this.Unit.TargetSelector.Target;
+            base.Enqueue();
         }
 
         public override float Execute()

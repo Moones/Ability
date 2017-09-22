@@ -78,7 +78,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         public bool Immobile => this.immobile;
 
-        public float ImmobileDuration => this.immobile ? this.immobileModifier.RemainingTime : 0;
+        public float ImmobileDuration => (this.immobile && this.immobileModifier.IsValid) ? this.immobileModifier.RemainingTime : 0;
 
         public bool Invul { get; set; }
 
