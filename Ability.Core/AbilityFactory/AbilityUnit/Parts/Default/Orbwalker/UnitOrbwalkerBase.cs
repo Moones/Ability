@@ -233,7 +233,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual bool IsTargetValid()
         {
-            return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsAlive
+            return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsValid && this.Target.SourceUnit.IsAlive
                    && this.Target.Visibility.Visible
                    && this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value
                    && this.Target.Modifiers.Attackable;

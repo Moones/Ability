@@ -14,6 +14,7 @@
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 {
     using System;
+    using System.Linq;
 
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Position;
     using Ability.Core.AbilityFactory.Utilities;
@@ -110,6 +111,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             IAbilityUnit result = null;
             foreach (var teamOtherTeam in this.Unit.Team.OtherTeams)
             {
+                if (teamOtherTeam?.UnitManager?.Units == null || !teamOtherTeam.UnitManager.Units.Any())
+                {
+                    continue;
+                }
+
                 foreach (var unitManagerUnit in teamOtherTeam.UnitManager.Units)
                 {
                     if (!unitManagerUnit.Value.SourceUnit.IsAlive || !unitManagerUnit.Value.Visibility.Visible

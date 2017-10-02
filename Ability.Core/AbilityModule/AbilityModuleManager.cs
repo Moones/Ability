@@ -201,7 +201,7 @@ namespace Ability.Core.AbilityModule
 
             if (!this.ActiveModules.Any())
             {
-                DelayAction.Add(1000, () => AbilityBootstrapper.Close());
+                DelayAction.Add(100, () => AbilityBootstrapper.Close());
             }
         }
 

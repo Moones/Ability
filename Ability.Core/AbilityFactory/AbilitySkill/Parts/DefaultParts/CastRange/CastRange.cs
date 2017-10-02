@@ -105,7 +105,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
                 this.targetDistanceChanged = this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
                     () =>
                         {
-                            if (!this.Skill.Owner.TargetSelector.TargetIsSet)
+                            if (!this.Skill.Owner.TargetSelector.TargetIsSet
+                                || this.Skill.Owner.TargetSelector.Target == null
+                                || !this.Skill.Owner.TargetSelector.Target.SourceUnit.IsValid)
                             {
                                 return;
                             }

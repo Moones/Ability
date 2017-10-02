@@ -13,6 +13,8 @@
 // </copyright>
 namespace Ability.Core.AbilityModule
 {
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.ModuleBase;
     using Ability.Core.AbilityService;
@@ -22,6 +24,7 @@ namespace Ability.Core.AbilityModule
         #region Public Properties
 
         DataProvider<IAbilityModule> ModuleActivated { get; set; }
+        List<IAbilityModule> ActiveModules { get; }
 
         #endregion
     }

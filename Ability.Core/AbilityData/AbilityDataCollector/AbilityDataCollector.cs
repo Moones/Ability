@@ -18,6 +18,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Ability.Core.AbilityData.AbilityMapDataProvider;
     using Ability.Core.AbilityFactory.AbilitySkill;
@@ -134,11 +135,14 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             return this.menu;
         }
 
+        private bool closed;
+
         /// <summary>
         ///     The on close.
         /// </summary>
         public void OnClose()
         {
+            this.closed = true;
             Game.OnUpdate -= this.Game_OnUpdate;
 
             // Entity.OnFloatPropertyChange -= this.Entity_OnFloatPropertyChange;
@@ -167,10 +171,10 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             this.AbilityMapDataProvider.Value.OnLoad();
             this.StartUp();
             DelayAction.Add(
-                500,
+                400,
                 () =>
                     {
-                        if (!Game.IsInGame)
+                        if (!Game.IsInGame || this.closed)
                         {
                             return;
                         }
@@ -208,7 +212,17 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
                         Unit.OnModifierAdded += this.Unit_OnModifierAdded;
                         Unit.OnModifierRemoved += this.Unit_OnModifierRemoved;
 
-                        DelayAction.Add(500, () => Drawing.OnDraw += this.Drawing_OnDraw);
+                        DelayAction.Add(
+                            400,
+                            () =>
+                                {
+                                    if (!Game.IsInGame || this.closed)
+                                    {
+                                        return;
+                                    }
+
+                                    Drawing.OnDraw += this.Drawing_OnDraw;
+                                });
 
                         // Drawing.OnEndScene += Drawing_OnEndScene;
 
@@ -285,7 +299,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             this.AbilityMapDataProvider.Value.OnDraw();
             foreach (var keyValuePair in this.AbilityUnitManager.Value.Units)
             {
-                if (!keyValuePair.Value.SourceUnit.IsAlive)
+                if (!keyValuePair.Value.SourceUnit.IsValid || keyValuePair.Value.SourceUnit.IsAlive)
                 {
                     continue;
                 }

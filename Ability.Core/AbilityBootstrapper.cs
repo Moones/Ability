@@ -176,6 +176,7 @@ namespace Ability.Core
             }
 
             this.initialized = false;
+            Events.OnClose -= this.Events_OnClose;
 
             this.AbilityDataCollector.Value?.OnClose();
 
@@ -225,7 +226,7 @@ namespace Ability.Core
             catalog = new AggregateCatalog();
 
             // Adds all the parts found in the Ability# assembly
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(AbilityBootstrapper).Assembly));
+            var count = 0f;
 
             foreach (var cacheAssembly in AssemblyResolver.AssemblyCache)
             {
@@ -234,10 +235,17 @@ namespace Ability.Core
                     continue;
                 }
 
+                count++;
                 //Console.WriteLine(cacheAssembly.AssemblyName + " " + cacheAssembly.Name);
                 catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly.Assembly));
             }
 
+            if (count == 0)
+            {
+                return;
+            }
+
+            catalog.Catalogs.Add(new AssemblyCatalog(typeof(AbilityBootstrapper).Assembly));
             // Environment.
             // catalog.Catalogs.Add(new AssemblyCatalog());
             container = new CompositionContainer(catalog);
