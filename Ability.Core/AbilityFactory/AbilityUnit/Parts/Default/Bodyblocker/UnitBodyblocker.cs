@@ -274,7 +274,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
             this.issueSleeper.Sleep(this.IssueSleep);
 
             if (!this.Unit.TargetSelector.TargetIsSet || !this.Target.Visibility.Visible
-                || !this.Target.SourceUnit.IsAlive
+                || !this.Target.SourceUnit.IsValid || !this.Target.SourceUnit.IsAlive
                 || this.Target.Position.Current.Distance2D(this.Unit.Position.Current) > this.MaxTargetDistance)
             {
                 // this.Unit.TargetSelector.GetTarget();

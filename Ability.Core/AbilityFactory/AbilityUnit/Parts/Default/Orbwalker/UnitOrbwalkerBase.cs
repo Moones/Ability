@@ -233,6 +233,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual bool IsTargetValid()
         {
+            //Console.WriteLine((this.Target.SourceUnit.IsAlive)
+            //       + " " + (this.Target.Visibility.Visible)
+            //       + " " + (this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value)
+            //       + " " + (this.Target.Modifiers.Attackable));
             return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsValid && this.Target.SourceUnit.IsAlive
                    && this.Target.Visibility.Visible
                    && this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value
@@ -312,11 +316,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
             this.TargetValid = this.IsTargetValid();
 
+            //Console.WriteLine(this.TargetValid);
             if (!this.TargetValid)
             {
                 this.MeanWhile = true;
                 return false;
             }
+
 
             this.Time = GlobalVariables.Time * 1000 + Game.Ping;
             this.NextAttack = this.Time - this.Unit.AttackAnimationTracker.NextAttackTime

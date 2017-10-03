@@ -52,7 +52,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public override bool CanExecute()
         {
-            if (this.runeDisposed || this.executed)
+            if (this.runeDisposed || this.executed || !this.rune.SourceRune.IsValid)
             {
                 return false;
             }

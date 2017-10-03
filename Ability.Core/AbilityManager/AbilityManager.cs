@@ -229,11 +229,12 @@ namespace Ability.Core.AbilityManager
                 return;
             }
 
-            if (unit.IsControllable && unit.Team != GlobalVariables.EnemyTeam)
+            if (unit.IsControllable && unit.Team == GlobalVariables.Team)
             {
                 this.AddControllableUnit(unit);
                 return;
             }
+
 
             // Console.WriteLine(unit.Name);
             // foreach (var modifier in unit.Modifiers)
@@ -255,6 +256,8 @@ namespace Ability.Core.AbilityManager
                 this.TeamAdd.Next(team);
             }
 
+
+            Console.WriteLine("adding enemy " + team.Name + " " + GlobalVariables.EnemyTeam);
             var abilityUnit = this.AbilityFactory.Value.CreateNewUnit(unit, team);
 
             this.AssignSkills(unit, abilityUnit);

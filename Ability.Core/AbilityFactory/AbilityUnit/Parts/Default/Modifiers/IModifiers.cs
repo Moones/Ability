@@ -52,6 +52,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         bool AbleToIssueAttack { get; set; }
 
+        bool HasBuffs { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

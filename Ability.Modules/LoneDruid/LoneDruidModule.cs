@@ -77,7 +77,10 @@ namespace LoneDruid
         {
             this.LoneDruidOrbwalker = new LoneDruidOrbwalker(this.LocalHero);
             var loneRuneTaker = new RuneTaker(this.LocalHero, this.MapData, false);
-            this.LocalHero.AddOrderIssuer(loneRuneTaker);
+            if (Game.ShortLevelName == "start")
+            {
+                this.LocalHero.AddOrderIssuer(loneRuneTaker);
+            }
 
             this.AddOrbwalker(this.LoneDruidOrbwalker);
 
@@ -247,9 +250,11 @@ namespace LoneDruid
                 this.BodyBlockCombo.AddOrderIssuer(this.BearBodyblocker);
                 this.ChaseCombo.AddOrderIssuer(this.BearOrbwalker);
                 this.RetreatCombo.AddOrderIssuer(this.BearRetreatOrbwalker);
-
-                this.BearRuneTaker.Unit = this.Bear;
-                this.Bear.AddOrderIssuer(this.BearRuneTaker);
+                if (Game.ShortLevelName == "start")
+                {
+                    this.BearRuneTaker.Unit = this.Bear;
+                    this.Bear.AddOrderIssuer(this.BearRuneTaker);
+                }
             }
             else
             {
@@ -272,8 +277,11 @@ namespace LoneDruid
                 {
                     this.Bear.AddOrderIssuer(this.BearRetreatOrbwalker);
                 }
-                
-                this.Bear.AddOrderIssuer(this.BearRuneTaker);
+
+                if (Game.ShortLevelName == "start")
+                {
+                    this.Bear.AddOrderIssuer(this.BearRuneTaker);
+                }
             }
 
             this.LoneDruidOrbwalker.Bear = this.Bear;

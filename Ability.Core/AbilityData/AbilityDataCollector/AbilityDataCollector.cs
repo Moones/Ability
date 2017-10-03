@@ -299,7 +299,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             this.AbilityMapDataProvider.Value.OnDraw();
             foreach (var keyValuePair in this.AbilityUnitManager.Value.Units)
             {
-                if (!keyValuePair.Value.SourceUnit.IsValid || keyValuePair.Value.SourceUnit.IsAlive)
+                if (!keyValuePair.Value.SourceUnit.IsValid || !keyValuePair.Value.SourceUnit.IsAlive)
                 {
                     continue;
                 }

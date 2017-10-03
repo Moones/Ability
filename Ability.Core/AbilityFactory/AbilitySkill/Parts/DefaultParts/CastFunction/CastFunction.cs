@@ -176,16 +176,15 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                 }
                 else
                 {
-                    this.CastFunc =
-                        () =>
-                            {
-                                this.Skill.Owner.OrderQueue.EnqueueOrder(
-                                    new CastSkill(
-                                        OrderType.DealDamageToEnemy,
-                                        this.Skill,
-                                        () => this.Skill.SourceAbility.UseAbility(this.Skill.Owner.SourceUnit)));
-                                return true;
-                            };
+                    this.CastFunc = () =>
+                        {
+                            this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                new CastSkill(
+                                    OrderType.DealDamageToEnemy,
+                                    this.Skill,
+                                    () => this.Skill.SourceAbility.UseAbility(this.Skill.Owner.SourceUnit)));
+                            return true;
+                        };
                 }
 
 
@@ -194,6 +193,26 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                         this.Skill.Owner.TargetSelector.TargetIsSet
                         && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible
                         && this.Skill.CastRange.TargetInRange(this.Skill.Owner.TargetSelector.Target);
+            }
+            else if (this.Skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.Point)
+                     || this.Skill.SourceAbility.IsAbilityBehavior(AbilityBehavior.AreaOfEffect))
+            {
+                this.canCast =
+                    () =>
+                        this.Skill.Owner.TargetSelector.TargetIsSet
+                        && this.Skill.Owner.TargetSelector.Target.SourceUnit.IsVisible
+                        && this.Skill.CastRange.TargetInRange(this.Skill.Owner.TargetSelector.Target);
+                this.CastFunc = () =>
+                    {
+                        this.Skill.Owner.OrderQueue.EnqueueOrder(
+                            new CastSkill(
+                                OrderType.DealDamageToEnemy,
+                                this.Skill,
+                                () =>
+                                    this.Skill.SourceAbility.UseAbility(
+                                        this.Skill.Owner.TargetSelector.Target.Position.PredictedByLatency)));
+                    return true;
+                };
             }
 
 

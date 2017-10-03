@@ -94,6 +94,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         public bool Stunned { get; set; }
 
+        public bool HasBuffs { get; set; }
+        public bool HasDebuffs { get; set; }
+
+        public bool AphoticShield { get; set; }
+
+        public bool ChillingTouch { get; set; }
+
+        public bool Bloodrage { get; set; }
+
+        public bool TestOfFaithTeleport { get; set; }
+        public bool Strafe { get; set; }
+        public bool IonShell { get; set; }
+
+        public Dictionary<string, Action<bool>> Buffs { get; set; } 
+
         /// <summary>
         ///     Gets or sets the unit.
         /// </summary>
@@ -111,11 +126,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
         /// </param>
         public virtual void AddModifier(Modifier modifier)
         {
-            if (modifier.Name == "modifier_item_ultimate_scepter_consumed")
-            {
-                this.ConsumedAghanim = true;
-            }
-            else if (modifier.IsStunDebuff || this.DisableModifiers.Contains(modifier.Name))
+            Action<bool> modifierAction;
+            if (modifier.IsStunDebuff || this.DisableModifiers.Contains(modifier.Name))
             {
                 var remainingTime = modifier.RemainingTime;
                 if (modifier.Name == "modifier_eul_cyclone" || modifier.Name == "modifier_invoker_tornado")
@@ -129,6 +141,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
                     this.immobileModifier = modifier;
                 }
             }
+            else if (this.Buffs.TryGetValue(modifier.Name, out modifierAction))
+            {
+                modifierAction(true);
+            }
 
             this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
             this.Invul = this.Unit.SourceUnit.IsInvul();
@@ -137,6 +153,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
             this.Stunned = this.Unit.SourceUnit.IsStunned();
             this.Silenced = this.Unit.SourceUnit.IsSilenced();
             this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
+
+            this.HasBuffs = this.AphoticShield || this.ChillingTouch || this.Bloodrage || this.TestOfFaithTeleport
+                            || this.Strafe || this.IonShell || this.Surge || this.FlameGuard || this.RocketBarrage
+                            || this.InnerVitality || this.Alacrity || this.Recall || this.FrostArmor || this.Rabid
+                            || this.Empower || this.QuadrupleTap || this.Transform || this.SadistActive
+                            || this.GuardianAngel || this.Sprint || this.Overpower || this.Windrun;
 
             this.Attackable = !this.AttackImmune && !this.Invul;
             this.AbleToIssueAttack = !this.Disarmed && !this.Stunned && !this.Invul;
@@ -150,7 +172,83 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         public virtual void Initialize()
         {
+            this.Buffs = new Dictionary<string, Action<bool>>
+                             {
+                                 { "modifier_item_ultimate_scepter_consumed", b => this.ConsumedAghanim = b },
+                                 { "modifier_abaddon_aphotic_shield", b => this.AphoticShield = b },
+                                 { "modifier_chilling_touch", b => this.ChillingTouch = b },
+                                 { "modifier_bloodseeker_bloodrage", b => this.Bloodrage = b },
+                                 { "modifier_chen_test_of_faith_teleport", b => this.TestOfFaithTeleport = b },
+                                 { "modifier_clinkz_strafe", b => this.Strafe = b },
+                                 { "modifier_dark_seer_ion_shell", b => this.IonShell = b },
+                                 { "modifier_dark_seer_surge", b => this.Surge = b },
+                                 { "modifier_ember_spirit_flame_guard", b => this.FlameGuard = b },
+                                 { "modifier_gyrocopter_rocket_barrage", b => this.RocketBarrage = b },
+                                 { "modifier_huskar_inner_vitality", b => this.InnerVitality = b },
+                                 { "modifier_invoker_alacrity", b => this.Alacrity = b },
+                                 { "modifier_keeper_of_the_light_recall", b => this.Recall = b },
+                                 { "modifier_lich_frost_armor", b => this.FrostArmor = b },
+                                 { "modifier_lone_druid_rabid", b => this.Rabid = b },
+                                 { "modifier_magnataur_empower", b => this.Empower = b },
+                                 { "modifier_monkey_king_quadruple_tap_bonuses", b => this.QuadrupleTap = b },
+                                 { "modifier_monkey_king_transform", b => this.Transform = b },
+                                 { "modifier_necrolyte_sadist_active", b => this.SadistActive = b },
+                                 { "modifier_omninight_guardian_angel", b => this.GuardianAngel = b },
+                                 { "modifier_slardar_sprint", b => this.Sprint = b },
+                                 { "modifier_ursa_overpower", b => this.Overpower = b },
+                                 { "modifier_windrunner_windrun", b => this.Windrun = b }
+                             };
+
+
+            this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
+            this.Invul = this.Unit.SourceUnit.IsInvul();
+            this.MagicImmune = this.Unit.SourceUnit.IsMagicImmune();
+            this.Rooted = this.Unit.SourceUnit.IsRooted();
+            this.Stunned = this.Unit.SourceUnit.IsStunned();
+            this.Silenced = this.Unit.SourceUnit.IsSilenced();
+            this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
+
+            this.Attackable = !this.AttackImmune && !this.Invul;
+            this.AbleToIssueAttack = !this.Disarmed && !this.Stunned && !this.Invul;
+
+            this.HasBuffs = this.AphoticShield || this.ChillingTouch || this.Bloodrage || this.TestOfFaithTeleport
+                            || this.Strafe || this.IonShell || this.Surge || this.FlameGuard || this.RocketBarrage
+                            || this.InnerVitality || this.Alacrity || this.Recall || this.FrostArmor || this.Rabid
+                            || this.Empower || this.QuadrupleTap || this.Transform || this.SadistActive
+                            || this.GuardianAngel || this.Sprint || this.Overpower || this.Windrun;
         }
+
+        public bool Windrun { get; set; }
+
+        public bool Overpower { get; set; }
+
+        public bool Sprint { get; set; }
+
+        public bool GuardianAngel { get; set; }
+
+        public bool SadistActive { get; set; }
+
+        public bool Transform { get; set; }
+
+        public bool QuadrupleTap { get; set; }
+
+        public bool Empower { get; set; }
+
+        public bool Rabid { get; set; }
+
+        public bool FrostArmor { get; set; }
+
+        public bool Recall { get; set; }
+
+        public bool Alacrity { get; set; }
+
+        public bool InnerVitality { get; set; }
+
+        public bool RocketBarrage { get; set; }
+
+        public bool FlameGuard { get; set; }
+
+        public bool Surge { get; set; }
 
         /// <summary>
         ///     The modifier removed.
@@ -160,13 +258,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
         /// </param>
         public virtual void RemoveModifier(Modifier modifier)
         {
-            if (modifier.Name == "modifier_item_ultimate_scepter_consumed")
-            {
-                this.ConsumedAghanim = false;
-            }
-            else if (this.immobile && modifier.Handle.Equals(this.immobileModifier.Handle))
+            Action<bool> modifierAction;
+            if (this.immobile && modifier.Handle.Equals(this.immobileModifier.Handle))
             {
                 this.immobile = false;
+            }
+            else if (this.Buffs.TryGetValue(modifier.Name, out modifierAction))
+            {
+                modifierAction(false);
             }
 
             this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
@@ -176,6 +275,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
             this.Stunned = this.Unit.SourceUnit.IsStunned();
             this.Silenced = this.Unit.SourceUnit.IsSilenced();
             this.Disarmed = this.Unit.SourceUnit.IsDisarmed();
+
+            this.Attackable = !this.AttackImmune && !this.Invul;
+            this.AbleToIssueAttack = !this.Disarmed && !this.Stunned && !this.Invul;
+
+            this.HasBuffs = this.AphoticShield || this.ChillingTouch || this.Bloodrage || this.TestOfFaithTeleport
+                            || this.Strafe || this.IonShell || this.Surge || this.FlameGuard || this.RocketBarrage
+                            || this.InnerVitality || this.Alacrity || this.Recall || this.FrostArmor || this.Rabid
+                            || this.Empower || this.QuadrupleTap || this.Transform || this.SadistActive
+                            || this.GuardianAngel || this.Sprint || this.Overpower || this.Windrun;
 
             this.ModifierRemoved.Next(modifier);
         }

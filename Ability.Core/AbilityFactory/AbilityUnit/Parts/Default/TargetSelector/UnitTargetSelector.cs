@@ -109,9 +109,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             var mouseDistance = 9999999f;
             var mousePosition = Game.MousePosition;
             IAbilityUnit result = null;
+            //Console.WriteLine("looking for target");
             foreach (var teamOtherTeam in this.Unit.Team.OtherTeams)
             {
-                if (teamOtherTeam?.UnitManager?.Units == null || !teamOtherTeam.UnitManager.Units.Any())
+                if (teamOtherTeam?.UnitManager == null || !teamOtherTeam.UnitManager.Units.Any())
                 {
                     continue;
                 }
@@ -124,6 +125,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                         continue;
                     }
 
+                    //Console.WriteLine("unit " + unitManagerUnit.Value.Name);
                     var distance = unitManagerUnit.Value.Position.Current.Distance2D(mousePosition);
                     if (distance < mouseDistance)
                     {
@@ -133,10 +135,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 }
             }
 
-            // if (result != null)
-            // {
-            // Console.WriteLine("setting target " + result.Name);
-            // }
+            //if (result != null)
+            //{
+            //    Console.WriteLine("setting target " + result.Name);
+            //}
             this.Target = result;
             return result;
         }

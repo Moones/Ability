@@ -29,11 +29,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm.
 
             this.Entries = new List<ComboEntry>
                                       {
-                                          //new ComboEntry(
-                                          //    this.Unit.SkillBook.AllSkills.FirstOrDefault(
-                                          //        x =>
-                                          //            x.Value.SourceAbility.Id
-                                          //            == AbilityId.brewmaster_storm_dispel_magic).Value),
+                                          new ComboEntry(
+                                              this.Unit.SkillBook.AllSkills.FirstOrDefault(
+                                                  x =>
+                                                      x.Value.SourceAbility.Id
+                                                      == AbilityId.brewmaster_storm_dispel_magic).Value),
 
                                           new ComboEntry(
                                               this.Unit.SkillBook.AllSkills.FirstOrDefault(

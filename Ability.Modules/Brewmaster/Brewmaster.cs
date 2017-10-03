@@ -62,7 +62,10 @@ namespace Ability.Brewmaster
         {
             this.BrewmasterOrbwalker = new BrewmasterOrbwalker(this.LocalHero);
             var brewRuneTaker = new RuneTaker(this.LocalHero, this.MapData, false);
-            this.LocalHero.AddOrderIssuer(brewRuneTaker);
+            if (Game.ShortLevelName == "start")
+            {
+                this.LocalHero.AddOrderIssuer(brewRuneTaker);
+            }
 
             this.AddOrbwalker(this.BrewmasterOrbwalker);
 

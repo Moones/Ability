@@ -170,6 +170,8 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\IModifierGenerator.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\ModifierGenerator.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\ModifierGenerator\ModifierGeneratorWorker.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\DispelMagic\CastFunction\DispelMagicCastFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\DispelMagic\DispelMagicSkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\HurlBoulder\CastFunction\HurlBoulderCastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\HurlBoulder\HurlBoulderSkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\Brewmaster\ThunderClap\CastFunction\ThunderClapCastFunction.cs" />
