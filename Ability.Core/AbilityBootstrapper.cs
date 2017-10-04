@@ -178,21 +178,21 @@ namespace Ability.Core
             this.initialized = false;
             Events.OnClose -= this.Events_OnClose;
 
-            this.AbilityDataCollector.Value?.OnClose();
+            this.AbilityDataCollector?.Value?.OnClose();
 
-            this.MainMenuManager.Value?.OnClose();
+            this.MainMenuManager?.Value?.OnClose();
 
-            this.AbilityUnitManager.Value?.OnClose();
+            this.AbilityUnitManager?.Value?.OnClose();
 
-            this.AbilityFactory.Value?.OnClose();
+            this.AbilityFactory?.Value?.OnClose();
 
-            this.AbilityModuleManager.Value?.OnClose();
+            this.AbilityModuleManager?.Value?.OnClose();
 
             if (this.AbilityServices != null && this.AbilityServices.Any())
             {
                 foreach (var abilityService in this.AbilityServices)
                 {
-                    abilityService.Value?.OnClose();
+                    abilityService?.Value?.OnClose();
                 }
             }
 
@@ -217,7 +217,6 @@ namespace Ability.Core
                 return;
             }
 
-            this.initialized = true;
             GlobalVariables.LocalHero = ObjectManager.LocalHero;
             GlobalVariables.EnemyTeam = UnitExtensions.GetEnemyTeam(GlobalVariables.LocalHero);
             GlobalVariables.Team = GlobalVariables.LocalHero.Team;
@@ -240,10 +239,10 @@ namespace Ability.Core
                 catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly.Assembly));
             }
 
-            if (count == 0)
-            {
-                return;
-            }
+            //if (count == 0)
+            //{
+            //    return;
+            //}
 
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(AbilityBootstrapper).Assembly));
             // Environment.
@@ -262,11 +261,12 @@ namespace Ability.Core
             // //    }
             // //}
             // }
-            var delay = Game.GameTime < 0 ? 3000 : 500;
+            var delay = Game.GameTime < 0 ? 1500 : 500;
             DelayAction.Add(
                 delay,
                 () =>
                     {
+                        this.initialized = true;
                         ComposeParts(this);
                         if (!Game.IsInGame)
                         {
@@ -278,7 +278,7 @@ namespace Ability.Core
                         this.AbilityUnitManager.Value.OnLoad();
 
                         this.MainMenuManager.Value.OnLoad();
-                        
+
                         if (this.AbilityServices != null && this.AbilityServices.Any())
                         {
                             foreach (var abilityService in this.AbilityServices)

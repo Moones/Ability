@@ -119,8 +119,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
                 foreach (var unitManagerUnit in teamOtherTeam.UnitManager.Units)
                 {
-                    if (!unitManagerUnit.Value.SourceUnit.IsAlive || !unitManagerUnit.Value.Visibility.Visible
-                        || unitManagerUnit.Value.Health.Current <= 0)
+                    if (!unitManagerUnit.Value.SourceUnit.IsValid || !unitManagerUnit.Value.SourceUnit.IsAlive
+                        || !unitManagerUnit.Value.Visibility.Visible || unitManagerUnit.Value.Health.Current <= 0)
                     {
                         continue;
                     }

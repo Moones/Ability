@@ -76,10 +76,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimation
 
         public void Initialize()
         {
-            this.baseAttackPoint =
-                Game.FindKeyValues(
-                    this.Unit.Name + "/AttackAnimationPoint",
-                    this.Unit.IsHero ? KeyValueSource.Hero : KeyValueSource.Unit).FloatValue;
+            try
+            {
+                this.baseAttackPoint =
+                    Game.FindKeyValues(
+                        this.Unit.Name + "/AttackAnimationPoint",
+                        this.Unit.IsHero ? KeyValueSource.Hero : KeyValueSource.Unit).FloatValue;
+            }
+            catch (KeyValuesNotFoundException)
+            {
+                this.baseAttackPoint = 1;
+            }
 
             if (this.Unit.SkillBook.Spells.Any(x => x.Value.SourceAbility.Id == AbilityId.ursa_overpower))
             {
