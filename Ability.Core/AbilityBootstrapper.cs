@@ -239,10 +239,10 @@ namespace Ability.Core
                 catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly.Assembly));
             }
 
-            //if (count == 0)
-            //{
-            //    return;
-            //}
+            if (count == 0)
+            {
+                return;
+            }
 
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(AbilityBootstrapper).Assembly));
             // Environment.

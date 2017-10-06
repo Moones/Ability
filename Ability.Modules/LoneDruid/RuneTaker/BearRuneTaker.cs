@@ -85,7 +85,7 @@ namespace Ability.LoneDruid.RuneTaker
         public override void EnqueueRunForRune(List<Vector3> path)
         {
             this.Unit.OrderQueue.EnqueueOrder(new BearRuneForRune(this.Unit, this.ClosestBounty, path));
-            this.Return.CastFunction.Cast();
+            this.Return?.CastFunction.Cast();
         }
     }
 
