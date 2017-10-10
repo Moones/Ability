@@ -1,4 +1,4 @@
-﻿// <copyright file="LoneDruidRetreatOrbwalker.cs" company="EnsageSharp">
+﻿// <copyright file="WolfRetreatOrbwalker.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -15,54 +15,52 @@ namespace Ability.Lycan.RetreatCombo
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
 
-    using Ensage;
-
     using Ability.Lycan.ChaseCombo;
 
-    public class LoneDruidRetreatOrbwalker : LoneDruidOrbwalker
+    public class WolfRetreatOrbwalker : WolfOrbwalker
     {
+        #region Fields
+
+        private IAbilityUnit unit1;
+
+        #endregion
+
         #region Constructors and Destructors
 
-        public LoneDruidRetreatOrbwalker(IAbilityUnit unit)
+        public WolfRetreatOrbwalker(IAbilityUnit unit)
             : base(unit)
         {
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Public Properties
 
-        public override bool CastSpells()
+        public override IAbilityUnit Unit
         {
-            if (!this.Target.DisableManager.WillGetDisabled)
+            get
             {
-                if (this.Unit.UnitCombo.DisableTarget())
-                {
-                    return true;
-                }
-
-                if (this.Unit.TargetSelector.LastDistanceToTarget < 325 && this.SkillBook.SavageRoar.CastFunction.Cast())
-                {
-                    return true;
-                }
+                return this.unit1;
             }
 
-            return false;
+            set
+            {
+                this.unit1 = value;
+            }
         }
 
-        public override void Initialize()
-        {
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         public override bool IssueMeanwhileActions()
         {
-            this.Unit.SourceUnit.Move(Game.MousePosition);
-            return true;
+            return base.IssueMeanwhileActions();
         }
 
         public override bool PreciseIssue()
         {
-            return false;
+            return base.PreciseIssue();
         }
 
         #endregion

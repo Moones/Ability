@@ -11,7 +11,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace LoneDruid
+namespace Ability.Lycan
 {
     using System;
     using System.Collections.Generic;
@@ -34,9 +34,9 @@ namespace LoneDruid
 
     using Ensage;
 
-    using LoneDruid.BodyblockCombo;
-    using LoneDruid.ChaseCombo;
-    using LoneDruid.RetreatCombo;
+    using Ability.Lycan.BodyblockCombo;
+    using Ability.Lycan.ChaseCombo;
+    using Ability.Lycan.RetreatCombo;
 
     [Export(typeof(IAbilityHeroModule))]
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_lone_druid)]

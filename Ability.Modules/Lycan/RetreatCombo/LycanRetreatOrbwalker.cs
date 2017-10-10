@@ -1,4 +1,4 @@
-﻿// <copyright file="LoneDruidRetreatOrbwalker.cs" company="EnsageSharp">
+﻿// <copyright file="LycanRetreatOrbwalker.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@ namespace Ability.Lycan.RetreatCombo
 
     using Ability.Lycan.ChaseCombo;
 
-    public class LoneDruidRetreatOrbwalker : LoneDruidOrbwalker
+    public class LycanRetreatOrbwalker : LycanOrbwalker
     {
         #region Constructors and Destructors
 
-        public LoneDruidRetreatOrbwalker(IAbilityUnit unit)
+        public LycanRetreatOrbwalker(IAbilityUnit unit)
             : base(unit)
         {
         }
@@ -37,11 +37,6 @@ namespace Ability.Lycan.RetreatCombo
             if (!this.Target.DisableManager.WillGetDisabled)
             {
                 if (this.Unit.UnitCombo.DisableTarget())
-                {
-                    return true;
-                }
-
-                if (this.Unit.TargetSelector.LastDistanceToTarget < 325 && this.SkillBook.SavageRoar.CastFunction.Cast())
                 {
                     return true;
                 }

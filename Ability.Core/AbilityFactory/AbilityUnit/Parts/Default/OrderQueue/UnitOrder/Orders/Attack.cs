@@ -36,7 +36,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
                 || this.Unit.TargetSelector.Target.Modifiers.AttackImmune
                 || this.Unit.TargetSelector.Target.Modifiers.Invul
                 || !this.Unit.TargetSelector.Target.Visibility.Visible
-                || this.Unit.TargetSelector.LastDistanceToTarget > this.Unit.AttackRange.Value + 1000)
+                || this.Unit.TargetSelector.LastDistanceToTarget > this.Unit.AttackRange.Value + 1000
+                || !this.Unit.TargetSelector.Target.SourceUnit.IsAlive)
             {
                 Console.WriteLine("attack canceled");
                 return false;
@@ -67,6 +68,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
                 return 0;
             }
             
+            //Console.WriteLine("Executing attack " + this.Unit.PrettyName + " target: " + this.Unit.TargetSelector.Target.PrettyName);
             this.sleeper.Sleep(300);
             this.executedOnce = true;
             this.attack();

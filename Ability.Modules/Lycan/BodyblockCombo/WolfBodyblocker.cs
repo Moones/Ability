@@ -1,4 +1,4 @@
-﻿// <copyright file="BearBodyblocker.cs" company="EnsageSharp">
+﻿// <copyright file="WolfBodyblocker.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@ namespace Ability.Lycan.BodyblockCombo
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker;
 
-    public class BearBodyblocker : UnitBodyblocker
+    public class WolfBodyblocker : UnitBodyblocker
     {
         #region Constructors and Destructors
 
-        public BearBodyblocker(IAbilityUnit unit)
+        public WolfBodyblocker(IAbilityUnit unit)
             : base(unit)
         {
             this.IssueSleep = 150;

@@ -1,4 +1,4 @@
-﻿// <copyright file="LoneDruidOrbwalker.cs" company="EnsageSharp">
+﻿// <copyright file="LycanOrbwalker.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -13,38 +13,30 @@
 // </copyright>
 namespace Ability.Lycan.ChaseCombo
 {
-    using System;
-
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackRange;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.SkillBook;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Lycan.Modifiers;
 
     using Ensage;
     using Ensage.Common.Extensions;
 
-    public class LoneDruidOrbwalker : UnitOrbwalkerBase
+    public class LycanOrbwalker : UnitOrbwalkerBase
     {
+        #region Fields
+
         private bool enabled;
-
-        #region Constructors and Destructors
-
-        public LoneDruidOrbwalker(IAbilityUnit unit)
-            : base(unit)
-        {
-            this.AttackRange = unit.AttackRange as LoneDruidAttackRange;
-            this.SkillBook = unit.SkillBook as LoneDruidSkillBook;
-        }
 
         #endregion
 
-        #region Public Properties
+        #region Constructors and Destructors
 
-        public LoneDruidAttackRange AttackRange { get; }
+        public LycanOrbwalker(IAbilityUnit unit)
+            : base(unit)
+        {
+            this.modifiers = unit.Modifiers as LycanModifiers;
+        }
 
-        public IAbilityUnit Bear { get; set; }
-
-        public LoneDruidSkillBook SkillBook { get; }
+        private LycanModifiers modifiers { get; set; }
 
         #endregion
 
@@ -57,44 +49,14 @@ namespace Ability.Lycan.ChaseCombo
                 return true;
             }
 
-            return this.KeepRange();
-        }
-
-        public override bool IssueMeanwhileActions()
-        {
-            if (this.AttackRange.TrueForm)
+            if (!this.Target.SourceUnit.CanMove()
+                && this.Unit.TargetSelector.LastDistanceToTarget
+                > this.Target.Position.PredictedByLatency.Distance2D(Game.MousePosition))
             {
-                if (!this.TargetValid)
-                {
-                    return this.NoTarget();
-                }
-
-                if (this.CastSpells())
-                {
-                    return true;
-                }
-                
-
-                if (this.Unit.TargetSelector.LastDistanceToTarget
-                     < 800)
-                {
-                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
-                }
-
-                return this.Move();
+                return this.Attack();
             }
 
-            return base.IssueMeanwhileActions();
-        }
-
-        public override bool PreciseIssue()
-        {
-            if (this.AttackRange.TrueForm)
-            {
-                return false;
-            }
-
-            return base.PreciseIssue();
+            return this.Move();
         }
 
         public override bool BeforeAttack()
@@ -121,24 +83,26 @@ namespace Ability.Lycan.ChaseCombo
             return this.Unit.UnitCombo.CastAllSpellsOnTarget();
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            //this.Unit.Fighting = true;
-            //if (this.Unit.TargetSelector.TargetIsSet && this.Bear != null && this.Bear.TargetSelector.LastDistanceToTarget < 1000)
-            //{
-            //    this.Bear.Fighting = true;
-            //}
-        }
-
         public override void Dispose()
         {
             base.Dispose();
-            //this.Unit.Fighting = false;
-            //if (this.Bear != null)
-            //{
-            //    this.Bear.Fighting = false;
-            //}
+
+            // this.Unit.Fighting = false;
+            // if (this.Bear != null)
+            // {
+            // this.Bear.Fighting = false;
+            // }
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            // this.Unit.Fighting = true;
+            // if (this.Unit.TargetSelector.TargetIsSet && this.Bear != null && this.Bear.TargetSelector.LastDistanceToTarget < 1000)
+            // {
+            // this.Bear.Fighting = true;
+            // }
         }
 
         public override bool Meanwhile()
@@ -148,13 +112,57 @@ namespace Ability.Lycan.ChaseCombo
                 return true;
             }
 
-            return this.KeepRange();
+            if (!this.Target.SourceUnit.CanMove()
+                && this.Unit.TargetSelector.LastDistanceToTarget
+                > this.Target.Position.PredictedByLatency.Distance2D(Game.MousePosition))
+            {
+                return this.Attack();
+            }
+
+            return this.Move();
+        }
+
+        public override bool IssueMeanwhileActions()
+        {
+            if (this.modifiers.Shapeshift)
+            {
+                if (!this.TargetValid)
+                {
+                    return this.NoTarget();
+                }
+
+                if (this.CastSpells())
+                {
+                    return true;
+                }
+
+
+                if (this.Unit.TargetSelector.LastDistanceToTarget
+                     < 800)
+                {
+                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+                }
+
+                return this.Move();
+            }
+
+            return base.IssueMeanwhileActions();
+        }
+
+        public override bool PreciseIssue()
+        {
+            if (this.modifiers.Shapeshift)
+            {
+                return false;
+            }
+
+            return base.PreciseIssue();
         }
 
         public override bool NoTarget()
         {
             this.Unit.TargetSelector.GetTarget();
-            
+
             if (this.CastSpellsNoTarget())
             {
                 return true;

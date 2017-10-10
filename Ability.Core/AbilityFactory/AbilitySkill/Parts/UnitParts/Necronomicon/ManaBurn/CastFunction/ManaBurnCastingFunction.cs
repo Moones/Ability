@@ -27,7 +27,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.UnitParts.Necronomicon.
 
         public override bool CanCast()
         {
-            Console.WriteLine(this.Skill.Owner.TargetSelector.Target.Mana.Current + 70 > this.damageCalculator.ManaBurnValue);
+            //Console.WriteLine(this.Skill.Owner.TargetSelector.Target.Mana.Current + 70 > this.damageCalculator.ManaBurnValue);
             return base.CanCast()
                    && this.Skill.Owner.TargetSelector.Target.Mana.Current + 70 > this.damageCalculator.ManaBurnValue;
         }

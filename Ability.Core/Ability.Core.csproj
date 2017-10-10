@@ -180,6 +180,7 @@
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\BattleCry\BattleCrySkillComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\BattleCry\CastingFunction\BattleCryCastingFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\HeroParts\LoneDruid\Rabid\CastingFunction\RabidCastingFunction.cs" />
+    <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\DiffusalBlade\CastingFunction\DiffusalCastFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\DiffusalBlade\DiffusalBladeItemComposer.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\CastingFunction\MaskOfMadnessCastingFunction.cs" />
     <Compile Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\MaskOfMadnessItemComposer.cs" />
@@ -320,6 +321,10 @@
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\ControllableUnits\LoneDruidControllableUnits.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\LoneDruidComposer.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\LoneDruid\SkillBook\LoneDruidSkillBook.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Lycan\ControllableUnits\LycanControllableUnits.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Lycan\LycanComposer.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Lycan\Modifiers\LycanModifiers.cs" />
+    <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Lycan\TargetSelector\LycanTargetSelector.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Meepo\MeepoUnitMenu.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\PhantomAssassin\PhantomAssassinUnitComposer.cs" />
     <Compile Include="AbilityFactory\AbilityUnit\Parts\Heroes\Rubick\RubickUnitComposer.cs" />
@@ -563,7 +568,6 @@
   <ItemGroup>
     <Folder Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillComposer\" />
     <Folder Include="AbilityFactory\AbilitySkill\Parts\DefaultParts\SkillOverlay\Types\" />
-    <Folder Include="AbilityFactory\AbilitySkill\Parts\ItemParts\DiffusalBlade\CastingFunction\" />
     <Folder Include="AbilityFactory\AbilitySkill\Parts\ItemParts\MaskOfMadness\CastRange\" />
     <Folder Include="AbilityFactory\AbilityTalent\Parts\Default\TalentLevel\" />
     <Folder Include="AbilityFactory\AbilityUnit\Parts\Default\Composer\" />

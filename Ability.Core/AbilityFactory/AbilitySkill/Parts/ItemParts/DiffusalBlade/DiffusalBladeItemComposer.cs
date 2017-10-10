@@ -10,30 +10,19 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.DiffusalBlade
 
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.DiffusalBlade.CastingFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.Medallion.CastingFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage;
 
-    //[Export(typeof(IAbilitySkillItemComposer))]
-    //[AbilitySkillItemMetadata((uint)AbilityId.item_diffusal_blade, (uint)AbilityId.item_diffusal_blade_2)]
+    [Export(typeof(IAbilitySkillItemComposer))]
+    [AbilitySkillItemMetadata((uint)AbilityId.item_diffusal_blade, (uint)AbilityId.item_diffusal_blade_2)]
     internal class DiffusalBladeItemComposer : DefaultSkillComposer
     {
         internal DiffusalBladeItemComposer()
         {
-            this.AssignPart<ICastFunction>(
-                skill =>
-                {
-                    if (skill.Owner.SourceUnit.IsControllable)
-                    {
-                        if (!skill.Owner.IsEnemy)
-                        {
-                            return new MedallionCastingFunction(skill);
-                        }
-                    }
-
-                    return null;
-                });
+            this.AssignControllablePart<ICastFunction>(skill => new DiffusalCastFunction(skill));
         }
     }
 }

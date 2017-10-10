@@ -1,4 +1,4 @@
-﻿// <copyright file="BearBodyblocker.cs" company="EnsageSharp">
+﻿// <copyright file="ControllableUnitSpellsOrbwalker.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -11,19 +11,26 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-namespace Ability.Lycan.BodyblockCombo
+namespace Ability.Lycan.ChaseCombo
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker;
 
-    public class BearBodyblocker : UnitBodyblocker
+    public class ControllableUnitSpellsOrbwalker : ControllableUnitOrbwalker
     {
         #region Constructors and Destructors
 
-        public BearBodyblocker(IAbilityUnit unit)
+        public ControllableUnitSpellsOrbwalker(IAbilityUnit unit)
             : base(unit)
         {
-            this.IssueSleep = 150;
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public override bool CastSpells()
+        {
+            return this.Unit.UnitCombo.CastAllSpellsOnTarget();
         }
 
         #endregion
