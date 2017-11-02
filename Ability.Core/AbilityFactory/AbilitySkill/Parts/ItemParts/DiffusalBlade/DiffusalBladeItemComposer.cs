@@ -17,7 +17,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.DiffusalBlade
     using Ensage;
 
     [Export(typeof(IAbilitySkillItemComposer))]
-    [AbilitySkillItemMetadata((uint)AbilityId.item_diffusal_blade, (uint)AbilityId.item_diffusal_blade_2)]
+    [AbilitySkillItemMetadata((uint)AbilityId.item_diffusal_blade)]
     internal class DiffusalBladeItemComposer : DefaultSkillComposer
     {
         internal DiffusalBladeItemComposer()

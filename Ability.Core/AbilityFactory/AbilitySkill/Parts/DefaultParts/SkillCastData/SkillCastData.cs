@@ -16,6 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
     using System;
 
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.Cooldown;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Mana;
     using Ability.Core.AbilityFactory.Utilities;
 
@@ -103,15 +104,16 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
             this.speedUpdate = new LevelUpdater<IAbilitySkill, float>(
                 this.Skill,
                 () => this.Skill.SourceAbility.GetProjectileSpeed());
-
+            var manaSub = false;
             if (this.Skill.SourceAbility.ManaCost > 0)
             {
+                manaSub = true;
                 this.manaObserver = new DataObserver<IMana>(
                     mana =>
                         {
                             if (this.Skill.SourceAbility.IsValid)
                             {
-                                this.EnoughMana = mana.Current >= this.Skill.SourceAbility.ManaCost;
+                                this.EnoughMana = mana.Current > this.Skill.SourceAbility.ManaCost;
                             }
                             else
                             {
@@ -120,6 +122,40 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
                             }
                         });
                 this.manaObserver.Subscribe(this.Skill.Owner.Mana);
+            }
+            else
+            {
+                DataObserver<ISkillLevel> levelObserver = null;
+                levelObserver = new DataObserver<ISkillLevel>(
+                    level =>
+                    {
+                        if (manaSub)
+                        {
+                            return;
+                        }
+
+                        if (this.Skill.SourceAbility.ManaCost > 0)
+                        {
+                            manaSub = true;
+                            this.manaObserver = new DataObserver<IMana>(
+                                mana =>
+                                {
+                                    if (this.Skill.SourceAbility.IsValid)
+                                    {
+                                        this.EnoughMana = mana.Current > this.Skill.SourceAbility.ManaCost;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(
+                                                "SkillCastData: receiving mana data for invalid skill "
+                                                + this.Skill.Name);
+                                    }
+                                });
+                            this.manaObserver.Subscribe(this.Skill.Owner.Mana);
+                        }
+                    });
+                levelObserver.Subscribe(this.Skill.Level);
+
             }
 
             if (this.Skill.Cooldown != null)

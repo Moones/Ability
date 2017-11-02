@@ -31,11 +31,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
         #endregion
 
         #region Public Methods and Operators
-
-        public void Dispose()
-        {
-        }
-
+        
         public override void Initialize()
         {
             this.UpdateValue();

@@ -86,9 +86,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
         public ItemObserver SolarCrest { get; } = new ItemObserver(AbilityId.item_solar_crest);
         public ItemObserver DrumOfEndurance { get; } = new ItemObserver(AbilityId.item_ancient_janggo);
 
-        public ItemObserver DiffusalBlade { get; } = new ItemObserver(
-            AbilityId.item_diffusal_blade,
-            AbilityId.item_diffusal_blade_2);
+        public ItemObserver DiffusalBlade { get; } = new ItemObserver(AbilityId.item_diffusal_blade);
         public ItemObserver MantaStyle { get; } = new ItemObserver(AbilityId.item_manta);
 
         public ItemObserver Necronomicon { get; } = new ItemObserver(

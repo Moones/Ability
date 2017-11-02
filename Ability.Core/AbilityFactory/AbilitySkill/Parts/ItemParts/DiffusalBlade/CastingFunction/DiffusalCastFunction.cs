@@ -16,7 +16,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.ItemParts.DiffusalBlade
 
         public override bool CanCast()
         {
-            return base.CanCast() && this.Skill.Owner.TargetSelector.Target.Modifiers.HasBuffs;
+            return base.CanCast();
         }
     }
 }
