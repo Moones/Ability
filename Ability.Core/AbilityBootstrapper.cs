@@ -226,8 +226,7 @@ namespace Ability.Core
 
             // Adds all the parts found in the Ability# assembly
             var count = 0f;
-
-            foreach (var cacheAssembly in AssemblyResolver.AssemblyCache)
+            foreach (var cacheAssembly in EnsageSharp.Sandbox.Domain.PluginDomain.Assemblies)
             {
                 if (cacheAssembly.IsLibrary || !cacheAssembly.IsLoaded || !cacheAssembly.Exists || !cacheAssembly.Name.StartsWith("Ability."))
                 {

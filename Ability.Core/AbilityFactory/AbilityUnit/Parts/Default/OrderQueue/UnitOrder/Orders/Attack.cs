@@ -45,7 +45,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
             this.Time = GlobalVariables.Time * 1000 + Game.Ping * 0.99f;
             this.Attacking = this.Unit.SourceUnit.IsAttacking();
-            if (this.Attacking && this.Time >= this.Unit.AttackAnimationTracker.CancelAnimationTime)
+            if (this.Attacking && this.Time > this.Unit.AttackAnimationTracker.CancelAnimationTime)
             {
                 return false;
             }

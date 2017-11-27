@@ -323,7 +323,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 return false;
             }
 
-
+            //Console.WriteLine("orbwalker - ping " + Game.Ping);
             this.Time = GlobalVariables.Time * 1000 + Game.Ping;
             this.NextAttack = this.Time - this.Unit.AttackAnimationTracker.NextAttackTime
                               + this.Unit.TurnRate.GetTurnTime(this.Target) * 1000;
