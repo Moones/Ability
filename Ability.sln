@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.Brewmaster", "Abili
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.Lycan", "Ability.Modules\Lycan\Ability.Lycan.csproj", "{03F0AF7C-FCBF-4A67-B81B-A75052527C03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ability.Invoker", "Invoker\Ability.Invoker.csproj", "{62477786-C914-4EA6-B07E-F6C83325D7F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{03F0AF7C-FCBF-4A67-B81B-A75052527C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03F0AF7C-FCBF-4A67-B81B-A75052527C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03F0AF7C-FCBF-4A67-B81B-A75052527C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62477786-C914-4EA6-B07E-F6C83325D7F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62477786-C914-4EA6-B07E-F6C83325D7F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62477786-C914-4EA6-B07E-F6C83325D7F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62477786-C914-4EA6-B07E-F6C83325D7F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 		{BF65CEAE-4464-4DAD-892F-4D124252D89E} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
 		{37C5340F-EC0A-4A8A-934B-450CD7B7CD13} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
 		{03F0AF7C-FCBF-4A67-B81B-A75052527C03} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
+		{62477786-C914-4EA6-B07E-F6C83325D7F9} = {D6347A85-03BB-4B5C-AC30-7BAB596C9EF7}
 	EndGlobalSection
 EndGlobal

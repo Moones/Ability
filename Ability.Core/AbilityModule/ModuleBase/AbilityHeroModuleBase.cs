@@ -19,8 +19,12 @@ namespace Ability.Core.AbilityModule.ModuleBase
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
+    using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.Combo;
+    using Ability.Core.MenuManager.Menus.AbilityMenu.Items;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
+
+    using Ensage.Common.Menu;
 
     // [InheritedExport(typeof(IAbilityHeroModule))]
     public abstract class AbilityHeroModuleBase : AbilityModuleBase, IAbilityHeroModule
@@ -113,6 +117,29 @@ namespace Ability.Core.AbilityModule.ModuleBase
                 description);
             this.Combos.Add(combo);
             return combo;
+        }
+
+        public void NewKey(string name, uint key, Action keyActivated, Action keyDeactivated, bool toggle = false, string description = null)
+        {
+            var item = new AbilityMenuItem<KeyBind>(
+                name,
+                new KeyBind(key, toggle ? KeyBindType.Toggle : KeyBindType.Press));
+
+            item.NewValueProvider.Subscribe(
+                new DataObserver<KeyBind>(
+                    bind =>
+                        {
+                            if (bind.Active)
+                            {
+                                keyActivated();
+                            }
+                            else
+                            {
+                                keyDeactivated();
+                            }
+                        }));
+
+            item.AddToMenu(this.Menu);
         }
 
         public override void OnClose()
