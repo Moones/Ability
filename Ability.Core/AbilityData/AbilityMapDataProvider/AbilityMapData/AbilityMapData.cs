@@ -34,10 +34,18 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
                     {
                         new RunePosition<BountyRune>(new Vector3(-3151, 3727, 300), "Dire Jungle Bounty", Team.Dire),
                         new RunePosition<BountyRune>(new Vector3(4180, -1692, 300), "Dire Secret Bounty", Team.Dire),
-                        new RunePosition<BountyRune>(new Vector3(3696, -3624, 300), "Radiant Jungle Bounty", Team.Radiant),
-                        new RunePosition<BountyRune>(new Vector3(-4354, 1586, 300), "Radiant Secret Bounty", Team.Radiant)
+                        new RunePosition<BountyRune>(
+                            new Vector3(3696, -3624, 300),
+                            "Radiant Jungle Bounty",
+                            Team.Radiant),
+                        new RunePosition<BountyRune>(
+                            new Vector3(-4354, 1586, 300),
+                            "Radiant Secret Bounty",
+                            Team.Radiant)
                     },
                 0);
+
+        public DireJungle DireJungle { get; } = new DireJungle();
 
         public RuneSpawner<PowerUpRune> PowerUpRuneSpawner { get; } =
             new RuneSpawner<PowerUpRune>(
@@ -47,8 +55,6 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
                         new RunePosition<PowerUpRune>(new Vector3(2241, -1838, 150), "Bot PowerUp", Team.Neutral)
                     },
                 120);
-
-        public DireJungle DireJungle { get; } = new DireJungle();
 
         #endregion
     }

@@ -1,11 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="BearRuneForRune.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.LoneDruid.RuneTaker
 {
+    using System;
+    using System.Collections.Generic;
+
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData;
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune.Types;
     using Ability.Core.AbilityFactory.AbilityUnit;
@@ -15,10 +25,16 @@ namespace Ability.LoneDruid.RuneTaker
 
     public class BearRuneForRune : RunForRune<BountyRune>
     {
+        #region Constructors and Destructors
+
         public BearRuneForRune(IAbilityUnit unit, RunePosition<BountyRune> rune, List<Vector3> path)
             : base(unit, rune, path)
         {
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public override bool CanExecute()
         {
@@ -30,5 +46,7 @@ namespace Ability.LoneDruid.RuneTaker
 
             return base.CanExecute();
         }
+
+        #endregion
     }
 }

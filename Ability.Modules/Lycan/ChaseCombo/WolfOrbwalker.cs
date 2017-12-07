@@ -13,9 +13,6 @@
 // </copyright>
 namespace Ability.Lycan.ChaseCombo
 {
-    using System;
-    using System.Linq;
-
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Lycan.ControllableUnits;
@@ -52,6 +49,11 @@ namespace Ability.Lycan.ChaseCombo
 
         #region Public Methods and Operators
 
+        public override bool AfterAttack()
+        {
+            return base.AfterAttack();
+        }
+
         public override bool Attack()
         {
             if (this.ControllableUnits.IsClosestWolf(this.Unit))
@@ -69,9 +71,7 @@ namespace Ability.Lycan.ChaseCombo
                 return this.NoTarget();
             }
 
-
-            if (this.Unit.TargetSelector.LastDistanceToTarget
-                    < 800)
+            if (this.Unit.TargetSelector.LastDistanceToTarget < 800)
             {
                 return this.Attack();
             }
@@ -81,7 +81,7 @@ namespace Ability.Lycan.ChaseCombo
 
         public override bool Move()
         {
-            //Console.WriteLine(this.Unit.SourceUnit.NetworkActivity);
+            // Console.WriteLine(this.Unit.SourceUnit.NetworkActivity);
             // Console.WriteLine(this.Unit.Owner == null);
             if (this.RunAround(this.Unit.Owner, this.Target))
             {
@@ -94,11 +94,6 @@ namespace Ability.Lycan.ChaseCombo
         public override void MoveBeforeAttack()
         {
             this.Move();
-        }
-
-        public override bool AfterAttack()
-        {
-            return base.AfterAttack();
         }
 
         public override bool NoTarget()

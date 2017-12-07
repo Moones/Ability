@@ -37,11 +37,10 @@ namespace Ability.Core.AbilityManager.UI.Elements.Body.Bodies.DamageManipulation
         internal DamageManipulation(Vector2 size, Vector2 position, IAbilityManager abilityManager)
             : base(size, position)
         {
-            //foreach (var unitManagerUnit in abilityManager.LocalTeam.UnitManager.Units)
-            //{
-            //    this.entries.Add(new DamageManipulationEntry(unitManagerUnit.Value));
-            //}
-
+            // foreach (var unitManagerUnit in abilityManager.LocalTeam.UnitManager.Units)
+            // {
+            // this.entries.Add(new DamageManipulationEntry(unitManagerUnit.Value));
+            // }
             foreach (var abilityManagerTeam in abilityManager.Teams)
             {
                 abilityManagerTeam.UnitManager.UnitAdded.Subscribe(

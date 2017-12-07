@@ -23,8 +23,9 @@ namespace Ability.Core.AbilityModule
     {
         #region Public Properties
 
-        DataProvider<IAbilityModule> ModuleActivated { get; set; }
         List<IAbilityModule> ActiveModules { get; }
+
+        DataProvider<IAbilityModule> ModuleActivated { get; set; }
 
         #endregion
     }

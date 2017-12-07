@@ -16,12 +16,11 @@ namespace Ability.Lycan.RetreatCombo
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Items;
+    using Ability.Lycan.ChaseCombo;
 
     using Ensage;
     using Ensage.Common.Extensions;
     using Ensage.Common.Menu;
-
-    using Ability.Lycan.ChaseCombo;
 
     public class BearRetreatOrbwalker : BearOrbwalker
     {

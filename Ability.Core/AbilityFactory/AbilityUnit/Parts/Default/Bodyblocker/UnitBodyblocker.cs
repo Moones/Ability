@@ -27,6 +27,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
     {
         #region Fields
 
+        private bool enabled;
+
         private Sleeper issueSleeper = new Sleeper();
 
         private double lastRad;
@@ -40,8 +42,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
         private bool targetWasMoving;
 
         private bool wasMoving;
-
-        private bool enabled;
 
         #endregion
 
@@ -216,11 +216,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker
                 {
                     if (distanceFromSegment2 < this.Target.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50)
                     {
-                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder.EnsagePathfinding);
+                        infront = Pathfinding.ExtendUntilWall(
+                            position,
+                            direction,
+                            distance + 500,
+                            this.Unit.Pathfinder.EnsagePathfinding);
                     }
                     else
                     {
-                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder.EnsagePathfinding);
+                        infront = Pathfinding.ExtendUntilWall(
+                            unitPosition,
+                            direction,
+                            500,
+                            this.Unit.Pathfinder.EnsagePathfinding);
                     }
                 }
 

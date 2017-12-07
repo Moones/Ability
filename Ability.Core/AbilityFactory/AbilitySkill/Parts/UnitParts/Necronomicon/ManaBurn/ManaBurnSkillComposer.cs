@@ -18,7 +18,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.UnitParts.Necronomicon.
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.UnitParts.Necronomicon.ManaBurn.CastFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.UnitParts.Necronomicon.ManaBurn.DamageCalculator;

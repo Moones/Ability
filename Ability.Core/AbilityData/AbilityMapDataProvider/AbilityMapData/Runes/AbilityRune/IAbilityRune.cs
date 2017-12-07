@@ -23,6 +23,8 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.A
     {
         #region Public Properties
 
+        bool Disposed { get; set; }
+
         double Handle { get; }
 
         string Name { get; }
@@ -32,8 +34,6 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.A
         Notifier RuneDisposed { get; }
 
         Rune SourceRune { get; }
-
-        bool Disposed { get; set; }
 
         string TypeName { get; }
 

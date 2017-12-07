@@ -88,6 +88,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
 
         ICastRange CastRange { get; set; }
 
+        Sleeper CastSleeper { get; }
+
         /// <summary>
         ///     Gets or sets the charges.
         /// </summary>
@@ -245,8 +247,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         ///     Gets or sets the variables.
         /// </summary>
         SkillDynamic Variables { get; set; }
-
-        Sleeper CastSleeper { get; }
 
         #endregion
 

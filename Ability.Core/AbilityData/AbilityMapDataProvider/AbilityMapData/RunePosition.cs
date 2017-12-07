@@ -51,12 +51,6 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
 
         #region Public Properties
 
-        public string Name { get; }
-
-        public Team Team { get; }
-
-        public bool HasRune { get; set; }
-
         public T CurrentRune
         {
             get
@@ -80,6 +74,10 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
             }
         }
 
+        public bool HasRune { get; set; }
+
+        public string Name { get; }
+
         public DataProvider<T> NewRuneProvider { get; } = new DataProvider<T>();
 
         public float NextSpawnTime
@@ -96,6 +94,8 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
         }
 
         public Vector3 Position { get; }
+
+        public Team Team { get; }
 
         #endregion
 

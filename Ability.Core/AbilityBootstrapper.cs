@@ -18,7 +18,6 @@ namespace Ability.Core
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Security.Permissions;
 
     using Ability.Core.AbilityData.AbilityDataCollector;
@@ -31,8 +30,6 @@ namespace Ability.Core
     using Ensage;
     using Ensage.Common;
     using Ensage.Common.Extensions;
-
-    using EnsageSharp.Sandbox;
 
     /// <summary>
     ///     The program.
@@ -48,6 +45,8 @@ namespace Ability.Core
         ///     The container.
         /// </summary>
         private static CompositionContainer container;
+
+        private static AbilityBootstrapper instance;
 
         /// <summary>The loaded.</summary>
         private static bool loaded;
@@ -106,13 +105,18 @@ namespace Ability.Core
 
         #region Public Methods and Operators
 
+        public static void Close()
+        {
+            instance.Events_OnClose(null, null);
+        }
+
         /// <summary>
         ///     The compose parts.
         /// </summary>
         /// <param name="composeObject">
         ///     The compose object.
         /// </param>
-        //[PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        // [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public static void ComposeParts(object composeObject)
         {
             // Fill the imports of this object
@@ -126,8 +130,6 @@ namespace Ability.Core
             }
         }
 
-        private static AbilityBootstrapper instance;
-
         /// <summary>The load.</summary>
         public static void Load()
         {
@@ -139,11 +141,6 @@ namespace Ability.Core
             loaded = true;
             instance = new AbilityBootstrapper();
             instance.Initialize();
-        }
-
-        public static void Close()
-        {
-            instance.Events_OnClose(null, null);
         }
 
         #endregion
@@ -226,17 +223,21 @@ namespace Ability.Core
 
             // Adds all the parts found in the Ability# assembly
             var count = 0f;
-            //foreach (var cacheAssembly in EnsageSharp.Sandbox.Domain.PluginDomain.Assemblies)
-            foreach (var cacheAssembly in AssemblyResolver.AssemblyCache)
+
+            // foreach (var cacheAssembly in EnsageSharp.Sandbox.Domain.PluginDomain.Assemblies)
+            foreach (var cacheAssembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (cacheAssembly.IsLibrary || !cacheAssembly.IsLoaded || !cacheAssembly.Exists || !cacheAssembly.Name.StartsWith("Ability."))
+                // Console.WriteLine(cacheAssembly.GetName().Name);
+                if (!cacheAssembly.GetName().Name.StartsWith("Ability.")
+                    || cacheAssembly.GetName().Name == "Ability.Core")
                 {
                     continue;
                 }
 
                 count++;
-                //Console.WriteLine(cacheAssembly.AssemblyName + " " + cacheAssembly.Name);
-                catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly.Assembly));
+
+                // Console.WriteLine(cacheAssembly.AssemblyName + " " + cacheAssembly.Name);
+                catalog.Catalogs.Add(new AssemblyCatalog(cacheAssembly));
             }
 
             if (count == 0)
@@ -245,6 +246,7 @@ namespace Ability.Core
             }
 
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(AbilityBootstrapper).Assembly));
+
             // Environment.
             // catalog.Catalogs.Add(new AssemblyCatalog());
             container = new CompositionContainer(catalog);

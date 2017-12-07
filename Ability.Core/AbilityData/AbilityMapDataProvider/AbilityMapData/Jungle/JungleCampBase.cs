@@ -20,16 +20,21 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle
 
     public class JungleCamp
     {
+        #region Constructors and Destructors
+
         public JungleCamp(Vector3 position, Vector3 waitPosition, Vector3 stackPosition, float maxStacks)
         {
         }
 
+        #endregion
+
+        #region Public Properties
+
         public Vector3 Position { get; }
 
-        public void Update()
-        {
+        #endregion
 
-        }
+        #region Public Methods and Operators
 
         public bool CreepBelongHere(Creep entity)
         {
@@ -45,5 +50,11 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Jungle
 
             return false;
         }
+
+        public void Update()
+        {
+        }
+
+        #endregion
     }
 }

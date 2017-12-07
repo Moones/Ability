@@ -45,6 +45,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
 
         #region Public Properties
 
+        public Notifier FightingNotifier { get; } = new Notifier();
+
         public float LastDistanceToTarget { get; set; }
 
         public float MaxTargetDistance { get; set; }
@@ -75,10 +77,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 {
                     this.TargetIsSet = false;
                     this.Unit.Fighting = false;
-                    //Console.WriteLine(this.Unit.PrettyName + " fighting false");
+
+                    // Console.WriteLine(this.Unit.PrettyName + " fighting false");
                 }
 
-                //this.TargetChanged.Notify();
+                // this.TargetChanged.Notify();
             }
         }
 
@@ -91,8 +94,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         public Notifier TargetStartAttacking { get; } = new Notifier();
 
         public Notifier TargetStartMoving { get; } = new Notifier();
-
-        public Notifier FightingNotifier { get; } = new Notifier();
 
         public IAbilityUnit Unit { get; set; }
 
@@ -109,7 +110,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             var mouseDistance = 9999999f;
             var mousePosition = Game.MousePosition;
             IAbilityUnit result = null;
-            //Console.WriteLine("looking for target");
+
+            // Console.WriteLine("looking for target");
             foreach (var teamOtherTeam in this.Unit.Team.OtherTeams)
             {
                 if (teamOtherTeam?.UnitManager == null || !teamOtherTeam.UnitManager.Units.Any())
@@ -125,7 +127,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                         continue;
                     }
 
-                    //Console.WriteLine("unit " + unitManagerUnit.Value.Name);
+                    // Console.WriteLine("unit " + unitManagerUnit.Value.Name);
                     var distance = unitManagerUnit.Value.Position.Current.Distance2D(mousePosition);
                     if (distance < mouseDistance)
                     {
@@ -135,10 +137,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
                 }
             }
 
-            //if (result != null)
-            //{
-            //    Console.WriteLine("setting target " + result.Name);
-            //}
+            // if (result != null)
+            // {
+            // Console.WriteLine("setting target " + result.Name);
+            // }
             this.Target = result;
             return result;
         }
@@ -189,12 +191,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
             if (this.LastDistanceToTarget < 1500 && !this.Unit.Fighting)
             {
                 this.Unit.Fighting = true;
-                //Console.WriteLine(this.Unit.PrettyName + " fighting true");
+
+                // Console.WriteLine(this.Unit.PrettyName + " fighting true");
             }
             else if (this.Unit.Fighting && this.LastDistanceToTarget > 1500)
             {
                 this.Unit.Fighting = false;
-                //Console.WriteLine(this.Unit.PrettyName + " fighting false");
+
+                // Console.WriteLine(this.Unit.PrettyName + " fighting false");
             }
 
             this.TargetDistanceChanged.Notify();

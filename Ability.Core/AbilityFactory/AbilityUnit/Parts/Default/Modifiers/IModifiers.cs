@@ -24,11 +24,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
     {
         #region Public Properties
 
+        bool AbleToIssueAttack { get; set; }
+
+        bool Attackable { get; set; }
+
         bool AttackImmune { get; set; }
 
         bool ConsumedAghanim { get; set; }
 
         bool Disarmed { get; set; }
+
+        bool HasBuffs { get; set; }
 
         bool Immobile { get; }
 
@@ -47,12 +53,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
         bool Silenced { get; set; }
 
         bool Stunned { get; set; }
-
-        bool Attackable { get; set; }
-
-        bool AbleToIssueAttack { get; set; }
-
-        bool HasBuffs { get; set; }
 
         #endregion
 

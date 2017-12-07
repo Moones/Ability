@@ -22,33 +22,31 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     {
         #region Public Properties
 
+        bool Canceled { get; set; }
+
+        Color Color { get; set; }
+
         bool ExecuteOnce { get; }
 
         uint Id { get; set; }
 
-        OrderType OrderType { get; }
-
-        uint Priority { get; }
-
-        IAbilityUnit Unit { get; }
-
         string Name { get; }
 
-        Color Color { get; set; }
-
-        bool ShouldExecuteFast { get; set; }
+        OrderType OrderType { get; }
 
         bool PrintInLog { get; set; }
 
-        float ExecuteFast();
+        uint Priority { get; }
 
-        bool Canceled { get; set; }
+        bool ShouldExecuteFast { get; set; }
 
-
+        IAbilityUnit Unit { get; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        void Cancel();
 
         bool CanExecute();
 
@@ -58,7 +56,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         float Execute();
 
-        void Cancel();
+        float ExecuteFast();
 
         #endregion
     }

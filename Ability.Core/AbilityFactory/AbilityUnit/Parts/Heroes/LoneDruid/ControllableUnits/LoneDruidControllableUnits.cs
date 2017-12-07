@@ -28,9 +28,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.Control
 
         #endregion
 
+        #region Public Properties
+
         public IAbilityUnit Bear { get; set; }
 
         public Notifier BearAdded { get; } = new Notifier();
+
+        #endregion
 
         #region Public Methods and Operators
 

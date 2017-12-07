@@ -21,14 +21,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
     {
         #region Public Properties
 
+        DataProvider<IAbilityUnit> AddedUnit { get; }
+
         DataProvider<IAbilityUnit> ControllableUnitAdded { get; }
 
         DataProvider<IAbilityUnit> ControllableUnitRemoved { get; }
 
+        DataProvider<IAbilityUnit> RemovedUnit { get; }
+
         Dictionary<double, IAbilityUnit> Units { get; }
 
-        DataProvider<IAbilityUnit> AddedUnit { get; }
-        DataProvider<IAbilityUnit> RemovedUnit { get; }
+        #endregion
+
+        #region Public Methods and Operators
 
         void UnitAdded(IAbilityUnit unit);
 

@@ -13,11 +13,7 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker
 {
-    using System;
-
     using Ability.Core.AbilityFactory.Utilities;
-
-    using Ensage;
 
     public class AttackAnimationTracker : IAttackAnimationTracker
     {
@@ -32,13 +28,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
 
         #region Public Properties
 
-        public float CancelAnimationTime { get; set; }
+        public bool AttackReady { get; set; }
 
-        public float NextAttackTime { get; set; }
+        public Notifier AttackReadyNotifier { get; set; } = new Notifier();
+
+        public float CancelAnimationTime { get; set; }
 
         public float LastAttackStartTime { get; set; }
 
-        public Notifier AttackReadyNotifier { get; set; } = new Notifier();
+        public float NextAttackTime { get; set; }
 
         public FunctionManager<bool> OnAttackCancel { get; } = new FunctionManager<bool>();
 
@@ -54,10 +52,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
         {
             this.LastAttackStartTime = GlobalVariables.Time * 1000;
 
-            this.CancelAnimationTime = this.Unit.AttackAnimation.GetAttackPoint() * 1000f + this.LastAttackStartTime + 70;
+            this.CancelAnimationTime = this.Unit.AttackAnimation.GetAttackPoint() * 1000f + this.LastAttackStartTime
+                                       + 70;
             this.NextAttackTime = this.Unit.AttackAnimation.GetAttackRate() * 1000f + this.LastAttackStartTime - 1;
         }
-        
 
         public void Dispose()
         {
@@ -65,28 +63,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationT
 
         public void Initialize()
         {
-            //this.Unit.DataReceiver.Drawings.Subscribe(
-            //    () =>
-            //        {
-            //            if (this.Unit.TargetSelector.TargetIsSet)
-            //            {
-            //                var time = GlobalVariables.Time * 1000 + Game.Ping;
-            //                var nextAttack = time - this.Unit.AttackAnimationTracker.NextAttackTime
-            //                                 + this.Unit.TurnRate.GetTurnTime(this.Unit.TargetSelector.Target) * 1000;
-            //                if (nextAttack >= 0)
-            //                {
-            //                    this.AttackReadyNotifier.Notify();
-            //                    this.AttackReady = true;
-            //                }
-            //                else
-            //                {
-            //                    this.AttackReady = false;
-            //                }
-            //            }
-            //        });
+            // this.Unit.DataReceiver.Drawings.Subscribe(
+            // () =>
+            // {
+            // if (this.Unit.TargetSelector.TargetIsSet)
+            // {
+            // var time = GlobalVariables.Time * 1000 + Game.Ping;
+            // var nextAttack = time - this.Unit.AttackAnimationTracker.NextAttackTime
+            // + this.Unit.TurnRate.GetTurnTime(this.Unit.TargetSelector.Target) * 1000;
+            // if (nextAttack >= 0)
+            // {
+            // this.AttackReadyNotifier.Notify();
+            // this.AttackReady = true;
+            // }
+            // else
+            // {
+            // this.AttackReady = false;
+            // }
+            // }
+            // });
         }
-
-        public bool AttackReady { get; set; }
 
         #endregion
     }

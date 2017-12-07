@@ -14,10 +14,9 @@
 namespace Ability.Lycan.RetreatCombo
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
+    using Ability.Lycan.ChaseCombo;
 
     using Ensage;
-
-    using Ability.Lycan.ChaseCombo;
 
     public class LoneDruidRetreatOrbwalker : LoneDruidOrbwalker
     {

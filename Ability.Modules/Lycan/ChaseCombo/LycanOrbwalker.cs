@@ -36,6 +36,10 @@ namespace Ability.Lycan.ChaseCombo
             this.modifiers = unit.Modifiers as LycanModifiers;
         }
 
+        #endregion
+
+        #region Properties
+
         private LycanModifiers modifiers { get; set; }
 
         #endregion
@@ -105,6 +109,31 @@ namespace Ability.Lycan.ChaseCombo
             // }
         }
 
+        public override bool IssueMeanwhileActions()
+        {
+            if (this.modifiers.Shapeshift)
+            {
+                if (!this.TargetValid)
+                {
+                    return this.NoTarget();
+                }
+
+                if (this.CastSpells())
+                {
+                    return true;
+                }
+
+                if (this.Unit.TargetSelector.LastDistanceToTarget < 800)
+                {
+                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+                }
+
+                return this.Move();
+            }
+
+            return base.IssueMeanwhileActions();
+        }
+
         public override bool Meanwhile()
         {
             if (this.CastSpells())
@@ -122,43 +151,6 @@ namespace Ability.Lycan.ChaseCombo
             return this.Move();
         }
 
-        public override bool IssueMeanwhileActions()
-        {
-            if (this.modifiers.Shapeshift)
-            {
-                if (!this.TargetValid)
-                {
-                    return this.NoTarget();
-                }
-
-                if (this.CastSpells())
-                {
-                    return true;
-                }
-
-
-                if (this.Unit.TargetSelector.LastDistanceToTarget
-                     < 800)
-                {
-                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
-                }
-
-                return this.Move();
-            }
-
-            return base.IssueMeanwhileActions();
-        }
-
-        public override bool PreciseIssue()
-        {
-            if (this.modifiers.Shapeshift)
-            {
-                return false;
-            }
-
-            return base.PreciseIssue();
-        }
-
         public override bool NoTarget()
         {
             this.Unit.TargetSelector.GetTarget();
@@ -169,6 +161,16 @@ namespace Ability.Lycan.ChaseCombo
             }
 
             return base.NoTarget();
+        }
+
+        public override bool PreciseIssue()
+        {
+            if (this.modifiers.Shapeshift)
+            {
+                return false;
+            }
+
+            return base.PreciseIssue();
         }
 
         #endregion

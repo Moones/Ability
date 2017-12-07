@@ -54,7 +54,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUnits;
 
     using Ensage;
-    using Ensage.Common.Extensions;
     using Ensage.Common.Objects;
 
     /// <summary>
@@ -98,8 +97,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
                 this.SourceHero = hero;
             }
 
-            //this.SourceHero.GetRealName()
+            // this.SourceHero.GetRealName()
             this.PrettyName = Game.Localize(this.Name);
+
             // foreach (var hero in Heroes.GetByTeam(GlobalVariables.EnemyTeam))
             // {
             // this.DamageDealtDictionary.Add(hero.Handle, 0);
@@ -113,6 +113,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         public IAttackAnimation AttackAnimation { get; set; }
 
         public IAttackAnimationTracker AttackAnimationTracker { get; set; }
+
+        public IAttackDamage AttackDamage { get; set; }
 
         public IUnitAttackRange AttackRange { get; set; }
 
@@ -132,12 +134,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         public IDisableManager DisableManager { get; set; }
 
-        public IMovementManager MovementManager { get; set; }
-
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
         /// </summary>
         public bool Draw { get; set; }
+
+        public bool Fighting { get; set; }
 
         /// <summary>
         ///     Gets or sets the health.
@@ -187,6 +189,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public IModifiers Modifiers { get; set; }
 
+        public IMovementManager MovementManager { get; set; }
+
         public IMovementTracker MovementTracker { get; set; }
 
         /// <summary>
@@ -194,7 +198,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         public string Name { get; set; }
 
-        public string PrettyName { get; }
+        public IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>Gets the order issuers.</summary>
         public IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers => this.orderIssuers;
@@ -205,6 +209,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         // public IUnitOverlay Overlay { get; set; }
         public IUnitOrderQueue OrderQueue { get; set; }
 
+        public IAbilityUnit Owner { get; set; }
+
         /// <summary>
         ///     Gets or sets the overlay entry provider.
         /// </summary>
@@ -213,10 +219,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         public IReadOnlyDictionary<Type, IAbilityUnitPart> Parts => this.parts;
 
         public IPathfinder Pathfinder { get; set; }
-
-        public bool Fighting { get; set; }
-
-        public IAbilityUnit Owner { get; set; }
 
         /// <summary>
         ///     Gets or sets the position.
@@ -227,6 +229,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         ///     Gets or sets the fog of war exploit.
         /// </summary>
         public IPositionTracker PositionTracker { get; set; }
+
+        public string PrettyName { get; }
 
         /// <summary>
         ///     Gets or sets the screen position.
@@ -254,17 +258,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         public IUnitTurnRate TurnRate { get; set; }
 
+        public IUnitCombo UnitCombo { get; set; }
+
         /// <summary>Gets or sets the unit composer.</summary>
         public IAbilityUnitHeroComposer UnitComposer { get; set; }
-
-        public IUnitCombo UnitCombo { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit control.
         /// </summary>
         public IUnitControl UnitControl { get; set; }
-
-        public IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit handle.
@@ -435,8 +437,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
             // }
             // }
         }
-
-        public IAttackDamage AttackDamage { get; set; }
 
         #endregion
     }

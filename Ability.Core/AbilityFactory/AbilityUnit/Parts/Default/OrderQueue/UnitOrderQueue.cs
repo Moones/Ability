@@ -35,6 +35,43 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
         private uint lastId;
 
+        private DrawText orderText;
+
+        private IUnitOrder processedOrder;
+
+        private bool queueEmpty = true;
+
+        private Sleeper sleeper = new Sleeper();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        public UnitOrderQueue(IAbilityUnit unit)
+        {
+            this.Unit = unit;
+            this.Unit.AddOrderIssuer(this);
+
+            this.orderText = new DrawText
+                                 {
+                                    Shadow = true, TextSize = new Vector2(this.Unit.ScreenInfo.HealthBarSize.X / 3) 
+                                 };
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public GetValue<bool, bool> DrawOrder { get; set; }
+
+        public bool Enabled { get; set; }
+
+        public uint Id { get; set; }
+
+        public bool IsWorking { get; set; }
+
+        public DataProvider<IUnitOrder> NewOrderQueued { get; } = new DataProvider<IUnitOrder>();
+
         public IUnitOrder ProcessedOrder
         {
             get
@@ -49,40 +86,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
             }
         }
 
-        private bool queueEmpty = true;
-
-        private Sleeper sleeper = new Sleeper();
-
-        private IUnitOrder processedOrder;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        public UnitOrderQueue(IAbilityUnit unit)
-        {
-            this.Unit = unit;
-            this.Unit.AddOrderIssuer(this);
-
-            this.orderText = new DrawText
-                                 { Shadow = true, TextSize = new Vector2(this.Unit.ScreenInfo.HealthBarSize.X / 3) };
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public bool Enabled { get; set; }
-
-        public uint Id { get; set; }
-
-        public bool IsWorking { get; set; }
-
-        public DataProvider<IUnitOrder> NewOrderQueued { get; } = new DataProvider<IUnitOrder>();
-
         public Notifier QueueEmpty { get; } = new Notifier();
-
-        public GetValue<bool, bool> DrawOrder { get; set; }
 
         public DataProvider<IUnitOrder> StartedExecution { get; } = new DataProvider<IUnitOrder>();
 
@@ -119,7 +123,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                 if (this.IssueNow(order))
                 {
                     this.ProcessedOrder = order;
-                    //this.queueEmpty = false;
+
+                    // this.queueEmpty = false;
                     this.NewOrderQueued.Next(order);
                 }
             }
@@ -134,6 +139,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                     {
                         Console.WriteLine("Started Executing: " + this.ProcessedOrder.Name);
                     }
+
                     this.NewOrderQueued.Next(order);
                 }
                 else
@@ -153,7 +159,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
             if (this.count == 0)
             {
-                //this.queueEmpty = true;
+                // this.queueEmpty = true;
                 this.QueueEmpty.Notify();
                 this.ProcessedOrder = null;
                 return false;
@@ -250,7 +256,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                 Console.WriteLine("Started Executing: " + order.Name);
             }
 
-
             if (delay > 0)
             {
                 this.sleeper.Sleep(delay + Game.Ping);
@@ -264,8 +269,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
             return true;
         }
 
-        private DrawText orderText;
-
         public bool PreciseIssue()
         {
             if (this.queueEmpty)
@@ -273,17 +276,16 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
                 return false;
             }
 
-            //if (this.ProcessedOrder.PrintInLog && this.DrawOrder.Value)
-            //{
-            //    this.orderText.Text = this.ProcessedOrder.Name;
-            //    this.orderText.Color = this.ProcessedOrder.Color;
-            //    this.orderText.CenterOnRectangle(
-            //        this.Unit.ScreenInfo.HealthBarPosition,
-            //        this.Unit.ScreenInfo.HealthBarSize);
-            //    this.orderText.Position += new Vector2(0, this.Unit.ScreenInfo.HealthBarSize.Y / 2);
-            //    this.orderText.Draw();
-            //}
-
+            // if (this.ProcessedOrder.PrintInLog && this.DrawOrder.Value)
+            // {
+            // this.orderText.Text = this.ProcessedOrder.Name;
+            // this.orderText.Color = this.ProcessedOrder.Color;
+            // this.orderText.CenterOnRectangle(
+            // this.Unit.ScreenInfo.HealthBarPosition,
+            // this.Unit.ScreenInfo.HealthBarSize);
+            // this.orderText.Position += new Vector2(0, this.Unit.ScreenInfo.HealthBarSize.Y / 2);
+            // this.orderText.Draw();
+            // }
             if (!this.ProcessedOrder.ShouldExecuteFast)
             {
                 return false;

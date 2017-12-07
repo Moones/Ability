@@ -25,33 +25,43 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         ItemObserver AbyssalBlade { get; }
 
+        ItemObserver AghanimScepter { get; }
+
+        ItemObserver Blademail { get; }
+
+        ItemObserver Blink { get; }
+
+        ItemObserver Bloodthorn { get; }
+
+        ItemObserver Bottle { get; }
+
+        ItemObserver DiffusalBlade { get; }
+
+        ItemObserver DrumOfEndurance { get; }
+
+        ItemObserver IronTalon { get; }
+
+        Dictionary<AbilityId, ItemObserver> ItemObservers { get; }
+
         IReadOnlyDictionary<double, IAbilitySkill> Items { get; }
 
-        ItemObserver Mjollnir { get; }
+        ItemObserver MantaStyle { get; }
 
-        ItemObserver PhaseBoots { get; }
-
-        ItemObserver TravelBoots { get; }
-        ItemObserver Bottle { get; }
-        ItemObserver IronTalon { get; }
         ItemObserver MaskOfMadness { get; }
 
         ItemObserver MedallionOfCourage { get; }
 
-        ItemObserver SolarCrest { get; }
-        ItemObserver DrumOfEndurance { get; }
+        ItemObserver Mjollnir { get; }
 
-        ItemObserver DiffusalBlade { get; }
-        ItemObserver MantaStyle { get; }
+        ItemObserver Necronomicon { get; }
 
-        ItemObserver Necronomicon { get; } 
-        ItemObserver Blademail { get; }
-        ItemObserver AghanimScepter { get; }
-        ItemObserver Blink { get; }
         ItemObserver Orchid { get; }
-        ItemObserver Bloodthorn { get; }
 
-        Dictionary<AbilityId, ItemObserver> ItemObservers { get; }
+        ItemObserver PhaseBoots { get; }
+
+        ItemObserver SolarCrest { get; }
+
+        ItemObserver TravelBoots { get; }
 
         #endregion
 

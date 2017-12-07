@@ -25,6 +25,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
     public class CastSkill : UnitOrderBase
     {
+        #region Fields
+
+        private bool executed;
+
+        #endregion
+
         #region Constructors and Destructors
 
         public CastSkill(OrderType orderType, IAbilitySkill skill, Func<bool> executeFunction)
@@ -82,13 +88,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         public override void Enqueue()
         {
             this.Skill.CastData.Queued = true;
-            //this.target = this.Skill.Owner.TargetSelector.Target;
+
+            // this.target = this.Skill.Owner.TargetSelector.Target;
         }
 
-        private bool executed;
-
-        //private IAbilityUnit target;
-
+        // private IAbilityUnit target;
         public override float Execute()
         {
             if (this.Sleeper.Sleeping)

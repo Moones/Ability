@@ -242,7 +242,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulati
             }
 
             this.DamageBlocks.Add(handle, value);
-            //Console.WriteLine("added damage block " + value);
+
+            // Console.WriteLine("added damage block " + value);
             this.DamageBlock = this.DamageBlocks.MaxOrDefault(x => x.Value).Value;
         }
 

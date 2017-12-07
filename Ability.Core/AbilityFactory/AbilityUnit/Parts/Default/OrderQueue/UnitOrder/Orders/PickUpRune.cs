@@ -16,12 +16,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
 
-    using Ensage;
     using Ensage.Common.Extensions.SharpDX;
 
     public class PickUpRune : UnitOrderBase
     {
         #region Fields
+
+        private bool executed;
 
         private IAbilityRune rune;
 
@@ -45,8 +46,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         }
 
         #endregion
-
-        private bool executed;
 
         #region Public Methods and Operators
 

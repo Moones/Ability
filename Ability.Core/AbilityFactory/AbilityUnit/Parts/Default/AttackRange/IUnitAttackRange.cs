@@ -19,11 +19,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange
     {
         #region Public Properties
 
-        float Value { get; set; }
+        bool TargetIsInRange { get; set; }
 
         Notifier TargetIsInRangeNotifier { get; set; }
 
-        bool TargetIsInRange { get; set; }
+        float Value { get; set; }
 
         #endregion
 

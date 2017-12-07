@@ -17,7 +17,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.Hu
 
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.HurlBoulder.CastFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
@@ -31,11 +30,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.Hu
 
         public HurlBoulderSkillComposer()
         {
-            this.AssignControllablePart<ICastFunction>(
-                skill =>
-                    {
-                            return new HurlBoulderCastFunction(skill);
-                    });
+            this.AssignControllablePart<ICastFunction>(skill => { return new HurlBoulderCastFunction(skill); });
         }
 
         #endregion

@@ -13,23 +13,10 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
-    using Ability.Core.AbilityFactory.Utilities;
-
-    using Ensage;
-    using Ensage.Common.Extensions;
 
     public class UnitCombo : IUnitCombo
     {
-        #region Fields
-        
-
-        #endregion
-
         #region Constructors and Destructors
 
         public UnitCombo(IAbilityUnit unit)
@@ -41,34 +28,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
 
         #region Public Properties
 
+        public List<ComboEntry> DisableEntries { get; set; }
+
+        public List<ComboEntry> Entries { get; set; }
+
+        public List<List<ComboEntry>> NukeCombos { get; set; }
+
         public IAbilityUnit Unit { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
-
-        public void Dispose()
-        {
-        }
-
-        public virtual void Initialize()
-        {
-            this.Entries = new List<ComboEntry>
-                               {
-                                   new ComboEntry(this.Unit.ItemManager.Mjollnir),
-                                   new ComboEntry(this.Unit.ItemManager.MaskOfMadness),
-                                   new ComboEntry(this.Unit.ItemManager.SolarCrest),
-                                   new ComboEntry(this.Unit.ItemManager.MedallionOfCourage)
-                               };
-
-            this.DisableEntries = new List<ComboEntry>
-                                      {
-                                          new ComboEntry(this.Unit.ItemManager.AbyssalBlade),
-                                          new ComboEntry(this.Unit.ItemManager.Orchid),
-                                          new ComboEntry(this.Unit.ItemManager.Bloodthorn),
-                                          new ComboEntry(this.Unit.ItemManager.DiffusalBlade)
-                                      };
-        }
 
         public virtual bool CastAllSpellsOnTarget()
         {
@@ -115,9 +85,27 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
             return false;
         }
 
-        public virtual bool NukeTarget()
+        public void Dispose()
         {
-            return false;
+        }
+
+        public virtual void Initialize()
+        {
+            this.Entries = new List<ComboEntry>
+                               {
+                                   new ComboEntry(this.Unit.ItemManager.Mjollnir),
+                                   new ComboEntry(this.Unit.ItemManager.MaskOfMadness),
+                                   new ComboEntry(this.Unit.ItemManager.SolarCrest),
+                                   new ComboEntry(this.Unit.ItemManager.MedallionOfCourage)
+                               };
+
+            this.DisableEntries = new List<ComboEntry>
+                                      {
+                                          new ComboEntry(this.Unit.ItemManager.AbyssalBlade),
+                                          new ComboEntry(this.Unit.ItemManager.Orchid),
+                                          new ComboEntry(this.Unit.ItemManager.Bloodthorn),
+                                          new ComboEntry(this.Unit.ItemManager.DiffusalBlade)
+                                      };
         }
 
         public virtual bool NoTarget()
@@ -130,11 +118,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
             return false;
         }
 
-        public List<ComboEntry> Entries { get; set; }
-
-        public List<ComboEntry> DisableEntries { get; set; }
-
-        public List<List<ComboEntry>> NukeCombos { get; set; }
+        public virtual bool NukeTarget()
+        {
+            return false;
+        }
 
         #endregion
     }

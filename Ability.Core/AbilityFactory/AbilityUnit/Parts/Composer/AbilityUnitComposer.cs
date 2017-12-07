@@ -23,7 +23,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackAnimationTracker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackDamage;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.AttackRange;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DamageManipulation;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.DisableManager;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Health;
@@ -75,14 +74,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
             this.AssignEnemyPart<IMovementTracker>(unit => new MovementTracker(unit));
             this.AssignPart<IControllableUnits>(
                 unit =>
-                {
-                    if (unit.IsLocalHero)
                     {
-                        return new ControllableUnits(unit);
-                    }
+                        if (unit.IsLocalHero)
+                        {
+                            return new ControllableUnits(unit);
+                        }
 
-                    return null;
-                });
+                        return null;
+                    });
 
             this.AssignPart<IDamageManipulation>(unit => new DamageManipulation(unit));
             this.AssignControllablePart<IUnitOrderQueue>(unit => new UnitOrderQueue(unit));
@@ -91,8 +90,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
             this.AssignPart<IUnitTurnRate>(unit => new UnitTurnRate(unit));
             this.AssignPart<IAttackAnimation>(unit => new AttackAnimation(unit));
             this.AssignControllablePart<IAttackAnimationTracker>(unit => new AttackAnimationTracker(unit));
-            //this.AssignControllablePart<IUnitCombo>(unit => new UnitCombo(unit));
 
+            // this.AssignControllablePart<IUnitCombo>(unit => new UnitCombo(unit));
             this.AssignPart<IPathfinder>(unit => new Pathfinder(unit));
             this.AssignPart<IAttackDamage>(unit => new AttackDamage(unit));
         }
@@ -105,10 +104,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
         public IDictionary<Type, Action<IAbilityUnit>> Assignments { get; } =
             new Dictionary<Type, Action<IAbilityUnit>>();
 
-
         public IDictionary<Type, Action<IAbilityUnit>> ControllableAssignments { get; } =
             new Dictionary<Type, Action<IAbilityUnit>>();
-
 
         public IDictionary<Type, Action<IAbilityUnit>> EnemyAssignments { get; } =
             new Dictionary<Type, Action<IAbilityUnit>>();
@@ -116,15 +113,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>The assign part.</summary>
-        /// <param name="factory">The factory.</param>
-        /// <typeparam name="T">The type of part</typeparam>
-        public void AssignPart<T>(Func<IAbilityUnit, T> factory) where T : IAbilityUnitPart
-        {
-            var type = typeof(T);
-            this.Assignments[type] = unit => unit.AddPart(factory);
-        }
 
         public void AssignControllablePart<T>(Func<IAbilityUnit, T> factory) where T : IAbilityUnitPart
         {
@@ -136,6 +124,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer
         {
             var type = typeof(T);
             this.EnemyAssignments[type] = unit => unit.AddPart(factory);
+        }
+
+        /// <summary>The assign part.</summary>
+        /// <param name="factory">The factory.</param>
+        /// <typeparam name="T">The type of part</typeparam>
+        public void AssignPart<T>(Func<IAbilityUnit, T> factory) where T : IAbilityUnitPart
+        {
+            var type = typeof(T);
+            this.Assignments[type] = unit => unit.AddPart(factory);
         }
 
         /// <summary>

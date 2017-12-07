@@ -62,16 +62,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
 
                         return null;
                     });
-            this.AssignPart<ICastRange>(
-                skill =>
-                    {
-                        return new CastRange(skill);
-                    });
-            this.AssignControllablePart<ICastFunction>(
-                skill =>
-                    {
-                        return new DefaultCastingFunction(skill);
-                    });
+            this.AssignPart<ICastRange>(skill => { return new CastRange(skill); });
+            this.AssignControllablePart<ICastFunction>(skill => { return new DefaultCastingFunction(skill); });
 
             // this.AssignPart<ISkillOverlayProvider>(skill => new SkillOverlayProvider(skill));
             // this.AssignPart<ISkillDamageCalculator>(
@@ -102,6 +94,12 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
 
         #region Public Methods and Operators
 
+        public void AssignControllablePart<T>(Func<IAbilitySkill, T> factory) where T : IAbilitySkillPart
+        {
+            var type = typeof(T);
+            this.ControllableAssignments[type] = unit => unit.AddPart(factory);
+        }
+
         /// <summary>The assign part.</summary>
         /// <param name="factory">The factory.</param>
         /// <typeparam name="T">The type of part</typeparam>
@@ -109,12 +107,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
         {
             var type = typeof(T);
             this.Assignments[type] = unit => unit.AddPart(factory);
-        }
-
-        public void AssignControllablePart<T>(Func<IAbilitySkill, T> factory) where T : IAbilitySkillPart
-        {
-            var type = typeof(T);
-            this.ControllableAssignments[type] = unit => unit.AddPart(factory);
         }
 
         /// <summary>
@@ -130,7 +122,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer
             {
                 return;
             }
-            
+
             foreach (var keyValuePair in this.Assignments)
             {
                 keyValuePair.Value.Invoke(skill);

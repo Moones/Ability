@@ -15,20 +15,28 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
 {
     using System.Collections.Generic;
 
-    using Ability.Core.AbilityFactory.Utilities;
-
     public interface IUnitCombo : IAbilityUnitPart
     {
-        List<ComboEntry> Entries { get; set; }
+        #region Public Properties
+
         List<ComboEntry> DisableEntries { get; set; }
+
+        List<ComboEntry> Entries { get; set; }
+
         List<List<ComboEntry>> NukeCombos { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         bool CastAllSpellsOnTarget();
 
         bool DisableTarget();
 
+        bool NoTarget();
+
         bool NukeTarget();
 
-        bool NoTarget();
+        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="CastRange.cs" company="EnsageSharp">
+﻿// <copyright file="CastRangeLevelIndependent.cs" company="EnsageSharp">
 //    Copyright (c) 2017 Moones.
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 {
-    using System;
-
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillLevel;
-    using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.Utilities;
-
     public class CastRangeLevelIndependent : CastRange
     {
         #region Constructors and Destructors
@@ -31,18 +25,18 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
         #endregion
 
         #region Public Methods and Operators
-        
+
         public override void Initialize()
         {
             this.UpdateValue();
 
-            //this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
-            //    () =>
-            //        {
-            //            this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
-            //        });
-            //this.Skill.Owner.TargetSelector.TargetChanged.Subscribe(
-            //    () => { this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value; });
+            // this.Skill.Owner.TargetSelector.TargetDistanceChanged.Subscribe(
+            // () =>
+            // {
+            // this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
+            // });
+            // this.Skill.Owner.TargetSelector.TargetChanged.Subscribe(
+            // () => { this.IsTargetInRange = this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value; });
         }
 
         #endregion

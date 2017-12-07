@@ -14,8 +14,6 @@
 namespace Ability.Core.AbilityFactory.Database
 {
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
-    using System.Security.Permissions;
     using System.Text;
 
     using Ability.Core.AbilityFactory.AbilitySkill.Data;
@@ -27,7 +25,7 @@ namespace Ability.Core.AbilityFactory.Database
     /// <summary>
     ///     The default priority database.
     /// </summary>
-    //[Export(typeof(IAbilityDatabase))]
+    // [Export(typeof(IAbilityDatabase))]
     internal class AbilityDatabase : IAbilityDatabase
     {
         #region Fields
@@ -56,7 +54,7 @@ namespace Ability.Core.AbilityFactory.Database
 
         #region Constructors and Destructors
 
-        //[PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        // [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         internal AbilityDatabase()
         {
             // var asd = JObject.Parse(Encoding.Default.GetString(Resources.PriorityData).Substring(3));

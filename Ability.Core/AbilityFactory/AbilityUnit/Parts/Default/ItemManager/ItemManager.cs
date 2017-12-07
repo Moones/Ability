@@ -60,6 +60,24 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         public ItemObserver AbyssalBlade { get; } = new ItemObserver(AbilityId.item_abyssal_blade);
 
+        public ItemObserver AghanimScepter { get; } = new ItemObserver(AbilityId.item_ultimate_scepter);
+
+        public ItemObserver Blademail { get; } = new ItemObserver(AbilityId.item_blade_mail);
+
+        public ItemObserver Blink { get; } = new ItemObserver(AbilityId.item_blink);
+
+        public ItemObserver Bloodthorn { get; } = new ItemObserver(AbilityId.item_bloodthorn);
+
+        public ItemObserver Bottle { get; } = new ItemObserver(AbilityId.item_bottle);
+
+        public ItemObserver DiffusalBlade { get; } = new ItemObserver(AbilityId.item_diffusal_blade);
+
+        public ItemObserver DrumOfEndurance { get; } = new ItemObserver(AbilityId.item_ancient_janggo);
+
+        public ItemObserver IronTalon { get; } = new ItemObserver(AbilityId.item_iron_talon);
+
+        public Dictionary<AbilityId, ItemObserver> ItemObservers => this.all;
+
         public IReadOnlyDictionary<double, IAbilitySkill> Items
         {
             get
@@ -68,33 +86,28 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
             }
         }
 
-        public ItemObserver Mjollnir { get; } = new ItemObserver(AbilityId.item_mjollnir);
+        public ItemObserver MantaStyle { get; } = new ItemObserver(AbilityId.item_manta);
 
-        public ItemObserver PhaseBoots { get; } = new ItemObserver(AbilityId.item_phase_boots);
-
-        public ItemObserver TravelBoots { get; } = new ItemObserver(
-            AbilityId.item_travel_boots,
-            AbilityId.item_travel_boots_2);
-
-        public Dictionary<AbilityId, ItemObserver> ItemObservers => this.all;
-
-        public ItemObserver Bottle { get; } = new ItemObserver(AbilityId.item_bottle);
-        public ItemObserver IronTalon { get; } = new ItemObserver(AbilityId.item_iron_talon);
         public ItemObserver MaskOfMadness { get; } = new ItemObserver(AbilityId.item_mask_of_madness);
 
         public ItemObserver MedallionOfCourage { get; } = new ItemObserver(AbilityId.item_medallion_of_courage);
-        public ItemObserver SolarCrest { get; } = new ItemObserver(AbilityId.item_solar_crest);
-        public ItemObserver DrumOfEndurance { get; } = new ItemObserver(AbilityId.item_ancient_janggo);
 
-        public ItemObserver DiffusalBlade { get; } = new ItemObserver(AbilityId.item_diffusal_blade);
-        public ItemObserver MantaStyle { get; } = new ItemObserver(AbilityId.item_manta);
+        public ItemObserver Mjollnir { get; } = new ItemObserver(AbilityId.item_mjollnir);
 
         public ItemObserver Necronomicon { get; } = new ItemObserver(
             AbilityId.item_necronomicon,
             AbilityId.item_necronomicon_2,
             AbilityId.item_necronomicon_3);
 
-        public ItemObserver Blademail { get; } = new ItemObserver(AbilityId.item_blade_mail);
+        public ItemObserver Orchid { get; } = new ItemObserver(AbilityId.item_orchid);
+
+        public ItemObserver PhaseBoots { get; } = new ItemObserver(AbilityId.item_phase_boots);
+
+        public ItemObserver SolarCrest { get; } = new ItemObserver(AbilityId.item_solar_crest);
+
+        public ItemObserver TravelBoots { get; } = new ItemObserver(
+            AbilityId.item_travel_boots,
+            AbilityId.item_travel_boots_2);
 
         public IAbilityUnit Unit { get; set; }
 
@@ -109,7 +122,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         public void Initialize()
         {
-
             this.updateId = this.Unit.DataReceiver.Updates.Subscribe(this.Update);
         }
 
@@ -226,14 +238,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
                 }
             }
         }
-
-        public ItemObserver AghanimScepter { get; } = new ItemObserver(AbilityId.item_ultimate_scepter);
-
-        public ItemObserver Blink { get; } = new ItemObserver(AbilityId.item_blink);
-
-        public ItemObserver Orchid { get; } = new ItemObserver(AbilityId.item_orchid);
-
-        public ItemObserver Bloodthorn { get; } = new ItemObserver(AbilityId.item_bloodthorn);
 
         #endregion
     }

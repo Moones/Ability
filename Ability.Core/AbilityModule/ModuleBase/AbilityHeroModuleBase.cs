@@ -83,11 +83,6 @@ namespace Ability.Core.AbilityModule.ModuleBase
             this.AbilityDataCollector.AddOrbwalker(orbwalker);
         }
 
-        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
-        {
-            this.AbilityDataCollector.RemoveOrbwalker(orbwalker);
-        }
-
         public OneKeyCombo NewCombo(
             string name,
             List<IUnitOrbwalker> orbwalkers,
@@ -119,7 +114,13 @@ namespace Ability.Core.AbilityModule.ModuleBase
             return combo;
         }
 
-        public void NewKey(string name, uint key, Action keyActivated, Action keyDeactivated, bool toggle = false, string description = null)
+        public void NewKey(
+            string name,
+            uint key,
+            Action keyActivated,
+            Action keyDeactivated,
+            bool toggle = false,
+            string description = null)
         {
             var item = new AbilityMenuItem<KeyBind>(
                 name,
@@ -148,6 +149,11 @@ namespace Ability.Core.AbilityModule.ModuleBase
             {
                 oneKeyCombo.Dispose();
             }
+        }
+
+        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
+        {
+            this.AbilityDataCollector.RemoveOrbwalker(orbwalker);
         }
 
         #endregion

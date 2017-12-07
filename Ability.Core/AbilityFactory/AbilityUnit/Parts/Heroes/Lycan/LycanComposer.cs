@@ -14,7 +14,7 @@
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.Lycan
 {
     using System.ComponentModel.Composition;
-    
+
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;

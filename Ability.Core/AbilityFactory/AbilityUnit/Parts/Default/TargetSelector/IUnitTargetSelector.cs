@@ -19,6 +19,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
     {
         #region Public Properties
 
+        Notifier FightingNotifier { get; }
+
         float LastDistanceToTarget { get; set; }
 
         float MaxTargetDistance { get; set; }
@@ -34,8 +36,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.TargetSelector
         Notifier TargetStartAttacking { get; }
 
         Notifier TargetStartMoving { get; }
-
-        Notifier FightingNotifier { get; }
 
         #endregion
 

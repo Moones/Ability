@@ -48,8 +48,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.ItemManager
 
         public Notifier ItemEquipped { get; } = new Notifier();
 
-        public AbilityId[] ItemIds { get; }
         public AbilityId ItemId { get; }
+
+        public AbilityId[] ItemIds { get; }
 
         public Dictionary<uint, IAbilitySkill> Items { get; set; }
 

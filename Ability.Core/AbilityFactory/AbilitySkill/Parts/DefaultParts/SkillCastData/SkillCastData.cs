@@ -128,34 +128,33 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastD
                 DataObserver<ISkillLevel> levelObserver = null;
                 levelObserver = new DataObserver<ISkillLevel>(
                     level =>
-                    {
-                        if (manaSub)
                         {
-                            return;
-                        }
+                            if (manaSub)
+                            {
+                                return;
+                            }
 
-                        if (this.Skill.SourceAbility.ManaCost > 0)
-                        {
-                            manaSub = true;
-                            this.manaObserver = new DataObserver<IMana>(
-                                mana =>
-                                {
-                                    if (this.Skill.SourceAbility.IsValid)
-                                    {
-                                        this.EnoughMana = mana.Current > this.Skill.SourceAbility.ManaCost;
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(
-                                                "SkillCastData: receiving mana data for invalid skill "
-                                                + this.Skill.Name);
-                                    }
-                                });
-                            this.manaObserver.Subscribe(this.Skill.Owner.Mana);
-                        }
-                    });
+                            if (this.Skill.SourceAbility.ManaCost > 0)
+                            {
+                                manaSub = true;
+                                this.manaObserver = new DataObserver<IMana>(
+                                    mana =>
+                                        {
+                                            if (this.Skill.SourceAbility.IsValid)
+                                            {
+                                                this.EnoughMana = mana.Current > this.Skill.SourceAbility.ManaCost;
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine(
+                                                    "SkillCastData: receiving mana data for invalid skill "
+                                                    + this.Skill.Name);
+                                            }
+                                        });
+                                this.manaObserver.Subscribe(this.Skill.Owner.Mana);
+                            }
+                        });
                 levelObserver.Subscribe(this.Skill.Level);
-
             }
 
             if (this.Skill.Cooldown != null)

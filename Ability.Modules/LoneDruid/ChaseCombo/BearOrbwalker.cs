@@ -122,7 +122,7 @@ namespace Ability.Lycan.ChaseCombo
             {
                 return true;
             }
-            
+
             this.Bodyblock();
             return true;
         }

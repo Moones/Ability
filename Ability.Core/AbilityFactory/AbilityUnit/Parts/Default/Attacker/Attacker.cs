@@ -20,6 +20,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
 
     public class Attacker : IAttacker
     {
+        #region Fields
+
+        private Attack attackOrder;
+
+        private int attackReady;
+
+        private int targetChanged;
+
+        private int targetDistanceChanged;
+
+        #endregion
+
         #region Public Properties
 
         public Notifier AttackOrderSent { get; } = new Notifier();
@@ -29,32 +41,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
         #endregion
 
         #region Public Methods and Operators
-
-        public void Attack(IAbilityUnit target)
-        {
-            this.Attack(target.SourceUnit);
-        }
-
-        public void Attack(Unit unit)
-        {
-            this.AttackOrderSent.Notify();
-            this.Unit.SourceUnit.Attack(unit);
-        }
-
-        public void Dispose()
-        {
-        }
-
-        private Attack attackOrder;
-
-        public void Initialize()
-        {
-            this.attackOrder = new Attack(this.Unit);
-        }
-
-        private int targetChanged;
-        private int targetDistanceChanged;
-        private int attackReady;
 
         public void Activate()
         {
@@ -83,15 +69,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
                         if (this.Unit.AttackRange.TargetIsInRange && this.Unit.Modifiers.AbleToIssueAttack
                             && this.Unit.TargetSelector.Target.Modifiers.Attackable)
                         {
-
                         }
                     });
         }
 
-        private void Attack()
+        public void Attack(IAbilityUnit target)
         {
+            this.Attack(target.SourceUnit);
+        }
 
-            this.Unit.OrderQueue.EnqueueOrder(this.attackOrder);
+        public void Attack(Unit unit)
+        {
+            this.AttackOrderSent.Notify();
+            this.Unit.SourceUnit.Attack(unit);
         }
 
         public void Deactivate()
@@ -99,6 +89,24 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Attacker
             this.attackOrder.Cancel();
 
             this.Unit.TargetSelector.TargetChanged.Unsubscribe(this.targetChanged);
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public void Initialize()
+        {
+            this.attackOrder = new Attack(this.Unit);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void Attack()
+        {
+            this.Unit.OrderQueue.EnqueueOrder(this.attackOrder);
         }
 
         #endregion

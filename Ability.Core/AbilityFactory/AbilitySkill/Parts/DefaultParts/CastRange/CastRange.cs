@@ -29,6 +29,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         private float bonusValue;
 
+        private int targetDistanceChanged;
+
         #endregion
 
         #region Constructors and Destructors
@@ -76,16 +78,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         public float Value { get; set; }
 
-        public bool TargetInRange(IAbilityUnit target)
-        {
-            return this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
-        }
-
         #endregion
 
         #region Public Methods and Operators
-
-        private int targetDistanceChanged;
 
         public void Dispose()
         {
@@ -124,9 +119,15 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
             }
         }
 
+        public bool TargetInRange(IAbilityUnit target)
+        {
+            return this.Skill.Owner.TargetSelector.LastDistanceToTarget <= this.Value;
+        }
+
         public virtual void UpdateValue()
         {
-            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange + 150, 300) + this.Skill.Owner.SourceUnit.HullRadius;
+            this.BaseValue = Math.Max(this.Skill.SourceAbility.CastRange + 150, 300)
+                             + this.Skill.Owner.SourceUnit.HullRadius;
         }
 
         #endregion

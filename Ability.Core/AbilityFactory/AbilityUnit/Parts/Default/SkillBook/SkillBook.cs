@@ -274,7 +274,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                     newitems.Add(skill.SkillHandle, skill);
                     this.items = newitems;
                 }
-                
+
                 this.Unit.ItemManager.ItemAdded(skill);
             }
             else
@@ -299,7 +299,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 newallSkills.Add(skill.SkillHandle, skill);
                 this.allSkills = newallSkills;
             }
-            
 
             // if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
             // {
@@ -319,14 +318,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
             newitems.Remove(item.SkillHandle);
             this.items = newitems;
-            
 
             this.Unit.ItemManager.ItemRemoved(item);
 
             var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
             newallSkills.Remove(item.SkillHandle);
             this.allSkills = newallSkills;
-            
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
@@ -393,7 +390,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
                 var newitems = this.items.ToDictionary(x => x.Key, x => x.Value);
                 newitems.Remove(skill.SkillHandle);
                 this.items = newitems;
-                
 
                 this.Unit.ItemManager.ItemRemoved(skill);
             }
@@ -413,7 +409,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook
             var newallSkills = this.allSkills.ToDictionary(x => x.Key, x => x.Value);
             newallSkills.Remove(skill.SkillHandle);
             this.allSkills = newallSkills;
-            
 
             // if (skill.ModifierGenerator != null && skill.ModifierGenerator.Workers.Any(x => x.AffectsSelf))
             // {

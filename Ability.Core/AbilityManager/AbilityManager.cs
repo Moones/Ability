@@ -235,7 +235,6 @@ namespace Ability.Core.AbilityManager
                 return;
             }
 
-
             // Console.WriteLine(unit.Name);
             // foreach (var modifier in unit.Modifiers)
             // {
@@ -255,7 +254,6 @@ namespace Ability.Core.AbilityManager
                 this.LocalTeam.OtherTeams.Add(team);
                 this.TeamAdd.Next(team);
             }
-
 
             Console.WriteLine("adding enemy " + team.Name + " " + GlobalVariables.EnemyTeam);
             var abilityUnit = this.AbilityFactory.Value.CreateNewUnit(unit, team);
@@ -524,10 +522,10 @@ namespace Ability.Core.AbilityManager
             var size = new Vector2((float)(HUDInfo.ScreenSizeX() / 2.3), HUDInfo.ScreenSizeY() / 2);
 
             this.ui =
-            new AbilityManagerUserInterface(
-            new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
-            size,
-            this);
+                new AbilityManagerUserInterface(
+                    new Vector2(HUDInfo.ScreenSizeX() - size.X - 10, (float)(HUDInfo.ScreenSizeY() / 2 - size.Y / 1.5)),
+                    size,
+                    this);
             this.TeamAdd.Next(this.LocalTeam);
             this.TeamAdd.Next(enemyTeam);
             ObjectManager.OnAddEntity += this.OnAddEntity;
@@ -853,7 +851,7 @@ namespace Ability.Core.AbilityManager
             var abilityUnit = this.AbilityFactory.Value.CreateNewUnit(unit, this.LocalTeam, owner);
 
             this.AssignSkills(unit, abilityUnit);
-            
+
             abilityUnit.Initialize();
             foreach (var keyValuePair in abilityUnit.Parts)
             {
@@ -865,13 +863,10 @@ namespace Ability.Core.AbilityManager
                 this.controllableUnits.Add(unit.Handle, abilityUnit);
             }
 
-
             this.allies.Add(unit.Handle, abilityUnit);
             this.units.Add(unit.Handle, abilityUnit);
             this.OnUnitAdded(new UnitEventArgs { AbilityUnit = abilityUnit });
             this.abilityUnitProvider.Next(abilityUnit);
-
-
 
             if (abilityUnit.IsLocalHero)
             {
@@ -893,7 +888,7 @@ namespace Ability.Core.AbilityManager
                     {
                         continue;
                     }
-                    
+
                     if (skill.Name.Contains("special_bonus"))
                     {
                         if (abilityUnit.SkillBook.Talents.ContainsKey(skill.Handle))
@@ -1047,27 +1042,24 @@ namespace Ability.Core.AbilityManager
         private void Unit_OnModifierAdded(Unit sender, ModifierChangedEventArgs args)
         {
             var hero = sender;
-            if (hero == null || (hero.Team != GlobalVariables.Team && !(hero is Hero)) || (hero is Building)
-                || (hero.Team == GlobalVariables.Team && !(hero is Hero) && !hero.IsControllable))
+            if (hero == null || hero.Team != GlobalVariables.Team && !(hero is Hero) || hero is Building
+                || hero.Team == GlobalVariables.Team && !(hero is Hero) && !hero.IsControllable)
             {
                 return;
             }
 
-            //Console.WriteLine(
-            //    "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
-            //    + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
-            //    + args.Modifier.Owner?.Name + " ");
-
-
-
+            // Console.WriteLine(
+            // "name: " + args.Modifier.Name + " sender: " + sender.Name + " caster: " + args.Modifier.Caster?.Name
+            // + " ability: " + args.Modifier.Ability?.Name + " parent: " + args.Modifier.Parent?.Name + " owner: "
+            // + args.Modifier.Owner?.Name + " ");
             IAbilityUnit affectedUnit = null;
             if (sender.Team == GlobalVariables.Team)
             {
                 if (!this.Allies.TryGetValue(hero.Handle, out affectedUnit))
                 {
                     if (args.Modifier.Name.Equals(
-                        "modifier_item_helm_of_the_dominator_bonushealth",
-                        StringComparison.CurrentCultureIgnoreCase) && hero.IsControllable)
+                            "modifier_item_helm_of_the_dominator_bonushealth",
+                            StringComparison.CurrentCultureIgnoreCase) && hero.IsControllable)
                     {
                         this.AddUnit(hero);
                     }

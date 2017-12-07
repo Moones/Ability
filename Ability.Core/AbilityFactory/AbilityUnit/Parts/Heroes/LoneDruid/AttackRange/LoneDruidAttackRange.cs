@@ -34,15 +34,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackR
 
         #region Public Properties
 
-        public bool TrueForm { get; set; }
-        public bool PikeLance { get; set; }
-        public bool TalentBonus { get; set; }
         public int attackRange { get; set; }
+
+        public bool PikeLance { get; set; }
+
+        public bool TalentBonus { get; set; }
+
+        public bool TrueForm { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
-        
+
         public override void Initialize()
         {
             base.Initialize();
@@ -51,26 +54,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackR
                 this.Unit.SourceUnit.HasModifiers(
                     new[] { "modifier_lone_druid_true_form", "modifier_lone_druid_true_form_transform" },
                     false);
-            this.PikeLance = this.Unit.SourceUnit.HasModifiers(
+            this.PikeLance =
+                this.Unit.SourceUnit.HasModifiers(
                     new[] { "modifier_item_hurricane_pike", "modifier_item_dragon_lance" },
                     false);
             this.TalentBonus = this.Unit.SourceUnit.HasModifier("modifier_special_bonus_attack_range");
 
-                                
             this.attackRange = 550;
             Console.WriteLine(this.attackRange + "Default");
 
             if (this.PikeLance)
             {
                 this.attackRange += 140;
-                this.Value = attackRange;
+                this.Value = this.attackRange;
                 Console.WriteLine(this.attackRange + "PikeLance");
             }
 
-            if(this.TalentBonus)
+            if (this.TalentBonus)
             {
                 this.attackRange += 175;
-                this.Value = attackRange;
+                this.Value = this.attackRange;
                 Console.WriteLine(this.attackRange + "TalentBonus");
             }
 
@@ -87,39 +90,35 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackR
                         {
                             if (this.TrueForm && modifier.Name == "modifier_lone_druid_druid_form_transform")
                             {
-                                this.Value = attackRange;
+                                this.Value = this.attackRange;
                                 this.TrueForm = false;
                                 Console.WriteLine("trueform " + this.TrueForm);
                                 Console.WriteLine("ranged mode" + this.Value);
                             }
-                            
 
-                            if(!this.TalentBonus && modifier.Name == "modifier_special_bonus_attack_range")
+                            if (!this.TalentBonus && modifier.Name == "modifier_special_bonus_attack_range")
                             {
-                                attackRange += 175;
+                                this.attackRange += 175;
                                 this.TalentBonus = true;
                                 Console.WriteLine(this.attackRange + "Talent bonus leveled.");
-                                if (!this.TrueForm) this.Value = attackRange;
+                                if (!this.TrueForm) this.Value = this.attackRange;
                             }
 
-                            if(!this.PikeLance && modifier.Name == "modifier_item_dragon_lance")
+                            if (!this.PikeLance && modifier.Name == "modifier_item_dragon_lance")
                             {
-                                attackRange += 140;
+                                this.attackRange += 140;
                                 this.PikeLance = true;
                                 Console.WriteLine(this.attackRange + "Dragon Lance Purchased");
-                                if (!this.TrueForm) this.Value = attackRange;
+                                if (!this.TrueForm) this.Value = this.attackRange;
                             }
 
                             if (!this.PikeLance && modifier.Name == "modifier_item_hurricane_pike")
                             {
-                                attackRange += 140;
+                                this.attackRange += 140;
                                 this.PikeLance = true;
                                 Console.WriteLine(this.attackRange + "Hurricane Pike Purchased");
-                                if (!this.TrueForm) this.Value = attackRange;
+                                if (!this.TrueForm) this.Value = this.attackRange;
                             }
-
-
-
                         }));
 
             this.Unit.Modifiers.ModifierRemoved.Subscribe(
@@ -134,23 +133,21 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackR
                                 Console.WriteLine("attack 2range: " + this.Value);
                             }
 
-                            if(this.PikeLance && modifier.Name == "modifier_item_dragon_lance")
-                            {                                
-                                attackRange -= 140;
+                            if (this.PikeLance && modifier.Name == "modifier_item_dragon_lance")
+                            {
+                                this.attackRange -= 140;
                                 this.PikeLance = false;
                                 Console.WriteLine(this.attackRange + "Dragon Lance Removed");
-                                if (!this.TrueForm) this.Value = attackRange;
+                                if (!this.TrueForm) this.Value = this.attackRange;
                             }
 
-                            if(this.PikeLance && modifier.Name == "modifier_item_hurricane_pike")
-                            {                                
-                                attackRange -= 140;
+                            if (this.PikeLance && modifier.Name == "modifier_item_hurricane_pike")
+                            {
+                                this.attackRange -= 140;
                                 this.PikeLance = false;
                                 Console.WriteLine(this.attackRange + "Pike removed");
-                                if (!this.TrueForm) this.Value = attackRange;
+                                if (!this.TrueForm) this.Value = this.attackRange;
                             }
-
-
                         }));
         }
 

@@ -13,15 +13,13 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.ThunderClap
 {
-    using System;
     using System.ComponentModel.Composition;
 
     using Ability.Core.AbilityFactory.AbilitySkill.Metadata;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.SkillCastData;
-    using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.ThunderClap.CastRange;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.ThunderClap.CastFunction;
+    using Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.ThunderClap.CastRange;
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.SkillComposer;
 
     using Ensage;
@@ -34,16 +32,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.Th
 
         public ThunderClapSkillComposer()
         {
-            this.AssignPart<ICastRange>(
-                skill =>
-                    {
-                        return new ThunderClapCastRange(skill);
-                    });
-            this.AssignControllablePart<ICastFunction>(
-                skill =>
-                    {
-                        return new ThunderClapCastFunction(skill);
-                    });
+            this.AssignPart<ICastRange>(skill => { return new ThunderClapCastRange(skill); });
+            this.AssignControllablePart<ICastFunction>(skill => { return new ThunderClapCastFunction(skill); });
         }
 
         #endregion

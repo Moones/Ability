@@ -23,12 +23,10 @@ namespace Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData
         /// <summary>Gets the bounty rune spawner.</summary>
         RuneSpawner<BountyRune> BountyRuneSpawner { get; }
 
-        /// <summary>Gets the power up rune spawner.</summary>
-        RuneSpawner<PowerUpRune> PowerUpRuneSpawner { get; }
-
         DireJungle DireJungle { get; }
 
-
+        /// <summary>Gets the power up rune spawner.</summary>
+        RuneSpawner<PowerUpRune> PowerUpRuneSpawner { get; }
 
         #endregion
     }

@@ -36,7 +36,6 @@ namespace Ability.Core.AbilityFactory
 
     using Ensage;
     using Ensage.Common.Menu;
-    using Ensage.Common.Objects;
     using Ensage.Heroes;
 
     /// <summary>
@@ -74,7 +73,7 @@ namespace Ability.Core.AbilityFactory
         /// <summary>
         ///     Gets or sets the ability priority database.
         /// </summary>
-        //[Import(typeof(IAbilityDatabase))]
+        // [Import(typeof(IAbilityDatabase))]
         protected Lazy<IAbilityDatabase> AbilityDatabase { get; set; }
 
         [ImportMany]
@@ -107,11 +106,7 @@ namespace Ability.Core.AbilityFactory
         /// </returns>
         public IControllableSkill CreateNewControllableSkill(Ability skill, IAbilityUnit owner)
         {
-            var abilitySkill = new ControllableSkill(skill)
-                                   {
-                                       Json = new SkillJson(),
-                                       Owner = owner
-                                   };
+            var abilitySkill = new ControllableSkill(skill) { Json = new SkillJson(), Owner = owner };
 
             // abilitySkill.Json.CastPriority = this.AbilityDatabase.Value.GetCastPriority(
             // skill.StoredName(),
@@ -176,11 +171,7 @@ namespace Ability.Core.AbilityFactory
         /// </returns>
         public IUncontrollableSkill CreateNewSkill(Ability skill, IAbilityUnit owner)
         {
-            var abilitySkill = new UncontrollableSkill(skill)
-                                   {
-                                       Json = new SkillJson(),
-                                       Owner = owner
-                                   };
+            var abilitySkill = new UncontrollableSkill(skill) { Json = new SkillJson(), Owner = owner };
 
             // abilitySkill.Json.CastPriority = this.AbilityDatabase.Value.GetCastPriority(
             // skill.StoredName(),

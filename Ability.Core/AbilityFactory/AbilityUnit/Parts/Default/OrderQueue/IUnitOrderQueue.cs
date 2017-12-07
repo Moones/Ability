@@ -22,13 +22,13 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
     {
         #region Public Properties
 
+        GetValue<bool, bool> DrawOrder { get; set; }
+
         bool IsWorking { get; set; }
 
         DataProvider<IUnitOrder> NewOrderQueued { get; }
 
         Notifier QueueEmpty { get; }
-
-        GetValue<bool,bool> DrawOrder { get; set; }
 
         DataProvider<IUnitOrder> StartedExecution { get; }
 

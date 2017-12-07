@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="Attack.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders
 {
+    using System;
+
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
     using Ability.Core.Utilities;
 
@@ -14,21 +23,36 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
     public class Attack : UnitOrderBase
     {
+        #region Fields
+
+        private bool executedOnce;
+
+        private Sleeper sleeper = new Sleeper();
+
+        private IAbilityUnit target;
+
+        #endregion
+
+        #region Constructors and Destructors
+
         public Attack(IAbilityUnit unit)
             : base(OrderType.DealDamageToEnemy, unit, "Attack target" + unit.TargetSelector.Target.Name)
         {
             this.PrintInLog = false;
             this.ShouldExecuteFast = true;
         }
-        
 
-        public float Time { get; set; }
+        #endregion
+
+        #region Public Properties
 
         public bool Attacking { get; set; }
 
-        private bool executedOnce;
+        public float Time { get; set; }
 
-        private Sleeper sleeper = new Sleeper();
+        #endregion
+
+        #region Public Methods and Operators
 
         public override bool CanExecute()
         {
@@ -53,8 +77,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             return true;
         }
 
-        private IAbilityUnit target;
-
         public override void Enqueue()
         {
             this.target = this.Unit.TargetSelector.Target;
@@ -67,8 +89,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             {
                 return 0;
             }
-            
-            //Console.WriteLine("Executing attack " + this.Unit.PrettyName + " target: " + this.Unit.TargetSelector.Target.PrettyName);
+
+            // Console.WriteLine("Executing attack " + this.Unit.PrettyName + " target: " + this.Unit.TargetSelector.Target.PrettyName);
             this.sleeper.Sleep(300);
             this.executedOnce = true;
             this.attack();
@@ -92,14 +114,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
             return 0;
         }
 
+        #endregion
+
+        #region Methods
+
         private void attack()
         {
-            //if (this.Unit.TargetSelector.Target == null)
-            //{
-            //    return;
-            //}
-
+            // if (this.Unit.TargetSelector.Target == null)
+            // {
+            // return;
+            // }
             this.Unit.SourceUnit.Attack(this.Unit.TargetSelector.Target.SourceUnit);
         }
+
+        #endregion
     }
 }

@@ -23,6 +23,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastRange
 
         float Value { get; set; }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         bool TargetInRange(IAbilityUnit target);
 
         #endregion

@@ -13,8 +13,6 @@
 // </copyright>
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.DamageCalculator.Workers
 {
-    using System;
-
     using Ability.Core.AbilityFactory.AbilityUnit;
 
     internal class MagicalSkillDamageCalculatorWorker : SkillManipulatedDamageCalculatorWorker

@@ -33,15 +33,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
 
         #region Public Properties
 
+        public DataProvider<IAbilityUnit> AddedUnit { get; } = new DataProvider<IAbilityUnit>();
+
         public DataProvider<IAbilityUnit> ControllableUnitAdded { get; } = new DataProvider<IAbilityUnit>();
 
         public DataProvider<IAbilityUnit> ControllableUnitRemoved { get; } = new DataProvider<IAbilityUnit>();
 
-        public Dictionary<double, IAbilityUnit> Units { get; } = new Dictionary<double, IAbilityUnit>();
-
-        public DataProvider<IAbilityUnit> AddedUnit { get; } = new DataProvider<IAbilityUnit>();
+        public DataProvider<IAbilityUnit> RemovedUnit { get; } = new DataProvider<IAbilityUnit>();
 
         public IAbilityUnit Unit { get; set; }
+
+        public Dictionary<double, IAbilityUnit> Units { get; } = new Dictionary<double, IAbilityUnit>();
 
         #endregion
 
@@ -54,8 +56,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.LocalHero.ControllableUn
         public virtual void Initialize()
         {
         }
-
-        public DataProvider<IAbilityUnit> RemovedUnit { get; } = new DataProvider<IAbilityUnit>();
 
         public virtual void UnitAdded(IAbilityUnit unit)
         {

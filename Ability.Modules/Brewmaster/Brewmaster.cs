@@ -16,15 +16,12 @@ namespace Ability.Brewmaster
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
-    
+
     using Ability.Brewmaster.ChaseCombo;
-    using Ability.Brewmaster.RetreatCombo;
     using Ability.Core.AbilityFactory.AbilityUnit;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Bodyblocker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.Combo;
     using Ability.Core.AbilityModule.Metadata;
@@ -48,9 +45,9 @@ namespace Ability.Brewmaster
 
         #region Public Properties
 
-        public OneKeyCombo ChaseCombo { get; set; }
-
         public BrewmasterOrbwalker BrewmasterOrbwalker { get; set; }
+
+        public OneKeyCombo ChaseCombo { get; set; }
 
         public OneKeyCombo RetreatCombo { get; set; }
 
@@ -95,33 +92,38 @@ namespace Ability.Brewmaster
                 false,
                 "In this combo Brewmaster will chase enemy");
 
-            //this.RetreatCombo = this.NewCombo(
-            //    "RetreatCombo",
-            //    new List<IUnitOrbwalker> { new BrewmasterRetreatOrbwalker(this.LocalHero) },
-            //    new List<IOrderIssuer>(),
-            //    'H',
-            //    () => { this.Bear?.TargetSelector.GetTarget(); },
-            //    () => { this.Bear?.TargetSelector.ResetTarget(); },
-            //    false,
-            //    "lone will run to mouse, bear will attack/bodyblock target or run if low hp");
-
-            this.LocalHero.ControllableUnits.AddedUnit.Subscribe(new DataObserver<IAbilityUnit>(unit => this.UnitAdded(unit)));
-            this.LocalHero.ControllableUnits.RemovedUnit.Subscribe(new DataObserver<IAbilityUnit>(unit => this.UnitRemoved(unit)));
+            // this.RetreatCombo = this.NewCombo(
+            // "RetreatCombo",
+            // new List<IUnitOrbwalker> { new BrewmasterRetreatOrbwalker(this.LocalHero) },
+            // new List<IOrderIssuer>(),
+            // 'H',
+            // () => { this.Bear?.TargetSelector.GetTarget(); },
+            // () => { this.Bear?.TargetSelector.ResetTarget(); },
+            // false,
+            // "lone will run to mouse, bear will attack/bodyblock target or run if low hp");
+            this.LocalHero.ControllableUnits.AddedUnit.Subscribe(
+                new DataObserver<IAbilityUnit>(unit => this.UnitAdded(unit)));
+            this.LocalHero.ControllableUnits.RemovedUnit.Subscribe(
+                new DataObserver<IAbilityUnit>(unit => this.UnitRemoved(unit)));
 
             var runeTakerMenu = new AbilitySubMenu("RuneTaker");
             runeTakerMenu.AddToMenu(this.Menu);
 
             brewRuneTaker.ConnectToMenu(runeTakerMenu, false, false);
-            
+
             foreach (var controllableUnitsUnit in this.LocalHero.ControllableUnits.Units)
             {
                 this.UnitAdded(controllableUnitsUnit.Value);
             }
         }
 
+        #endregion
+
+        #region Methods
+
         private void UnitAdded(IAbilityUnit unit)
         {
-            //unit.TargetSelector.Target = this
+            // unit.TargetSelector.Target = this
             if (unit.PrettyName == "Earth")
             {
                 unit.AddPart<IUnitOrbwalker>(abilityUnit => new EarthOrbwalker(unit));
@@ -138,8 +140,8 @@ namespace Ability.Brewmaster
             this.AddOrbwalker(unit.Orbwalker);
 
             this.ChaseCombo.AddOrderIssuer(unit.Orbwalker);
-            //this.RetreatCombo.AddOrderIssuer(unit.Orbwalker);
 
+            // this.RetreatCombo.AddOrderIssuer(unit.Orbwalker);
             if (this.ChaseCombo.Key.Value.Active)
             {
                 unit.AddOrderIssuer(unit.Orbwalker);
@@ -148,7 +150,6 @@ namespace Ability.Brewmaster
 
             unit.Fighting = this.LocalHero.Fighting;
             unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
-
         }
 
         private void UnitRemoved(IAbilityUnit unit)
@@ -156,8 +157,9 @@ namespace Ability.Brewmaster
             this.RemoveOrbwalker(unit.Orbwalker);
 
             this.ChaseCombo.RemoveOrderIssuer(unit.Orbwalker);
-            //this.RetreatCombo.RemoveOrderIssuer(unit.Orbwalker);
-            //this.BodyBlockCombo.RemoveOrderIssuer(unit.Orbwalker);
+
+            // this.RetreatCombo.RemoveOrderIssuer(unit.Orbwalker);
+            // this.BodyBlockCombo.RemoveOrderIssuer(unit.Orbwalker);
         }
 
         #endregion

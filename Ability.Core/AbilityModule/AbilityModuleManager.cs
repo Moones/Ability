@@ -198,7 +198,6 @@ namespace Ability.Core.AbilityModule
                 }
             }
 
-
             if (!this.ActiveModules.Any())
             {
                 DelayAction.Add(100, () => AbilityBootstrapper.Close());

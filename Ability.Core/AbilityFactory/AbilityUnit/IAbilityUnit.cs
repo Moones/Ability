@@ -63,6 +63,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         IAttackAnimationTracker AttackAnimationTracker { get; set; }
 
+        IAttackDamage AttackDamage { get; set; }
+
         IUnitAttackRange AttackRange { get; set; }
 
         IControllableUnits ControllableUnits { get; set; }
@@ -81,14 +83,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         IDisableManager DisableManager { get; set; }
 
-        IMovementManager MovementManager { get; set; }
-
-        IAttackDamage AttackDamage { get; set; }
-
         /// <summary>
         ///     Gets or sets a value indicating whether draw.
         /// </summary>
         bool Draw { get; set; }
+
+        bool Fighting { get; set; }
 
         /// <summary>
         ///     Gets the health.
@@ -135,6 +135,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         IModifiers Modifiers { get; set; }
 
+        IMovementManager MovementManager { get; set; }
+
         IMovementTracker MovementTracker { get; set; }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// </summary>
         string Name { get; set; }
 
-        string PrettyName { get; }
+        IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>Gets the order issuers.</summary>
         IReadOnlyDictionary<uint, IOrderIssuer> OrderIssuers { get; }
@@ -154,6 +156,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <summary>Gets or sets the order queue.</summary>
         IUnitOrderQueue OrderQueue { get; set; }
 
+        IAbilityUnit Owner { get; set; }
+
         /// <summary>
         ///     Gets the overlay entry provider.
         /// </summary>
@@ -164,14 +168,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
         /// <summary>Gets the pathfinder.</summary>
         IPathfinder Pathfinder { get; set; }
 
-        bool Fighting { get; set; }
-
-        IAbilityUnit Owner { get; set; }
-
         /// <summary>
         ///     Gets the position.
         /// </summary>
         IPosition Position { get; set; }
+
+        string PrettyName { get; }
 
         /// <summary>
         ///     Gets the screen position.
@@ -202,17 +204,15 @@ namespace Ability.Core.AbilityFactory.AbilityUnit
 
         IUnitTurnRate TurnRate { get; set; }
 
+        IUnitCombo UnitCombo { get; set; }
+
         /// <summary>Gets or sets the unit composer.</summary>
         IAbilityUnitHeroComposer UnitComposer { get; set; }
-
-        IUnitCombo UnitCombo { get; set; }
 
         /// <summary>
         ///     Gets the unit control.
         /// </summary>
         IUnitControl UnitControl { get; set; }
-
-        IUnitOrbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit handle.

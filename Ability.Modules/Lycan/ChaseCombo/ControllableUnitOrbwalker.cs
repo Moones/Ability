@@ -13,7 +13,6 @@
 // </copyright>
 namespace Ability.Lycan.ChaseCombo
 {
-    using System;
     using System.Linq;
 
     using Ability.Core.AbilityFactory.AbilityUnit;
@@ -37,34 +36,36 @@ namespace Ability.Lycan.ChaseCombo
 
         public override bool Move()
         {
-            //Console.WriteLine(this.Unit.Owner == null);
-            if (this.Unit.Owner.ControllableUnits.Units.Any(
+            // Console.WriteLine(this.Unit.Owner == null);
+            if (
+                this.Unit.Owner.ControllableUnits.Units.Any(
                     x => x.Value.UnitHandle != this.Unit.UnitHandle && this.RunAround(x.Value, this.Target)))
             {
-                //Console.WriteLine("111111111111111111");
+                // Console.WriteLine("111111111111111111");
                 return true;
             }
 
-            //Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAA");
+            // Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAA");
             return this.Bodyblocker.Bodyblock() || this.MoveToMouse();
         }
 
         public override void MoveBeforeAttack()
         {
-            //Console.WriteLine("BBBBBBBBBB");
+            // Console.WriteLine("BBBBBBBBBB");
             this.Move();
         }
 
         public override bool NoTarget()
         {
-            if (this.Unit.Owner.ControllableUnits.Units.Any(
+            if (
+                this.Unit.Owner.ControllableUnits.Units.Any(
                     x => x.Value.UnitHandle != this.Unit.UnitHandle && this.RunAround(x.Value, Game.MousePosition)))
             {
-                //Console.WriteLine("22222222222222222");
+                // Console.WriteLine("22222222222222222");
                 return true;
             }
-            //Console.WriteLine("CCCCCCCCCCCC");
 
+            // Console.WriteLine("CCCCCCCCCCCC");
             this.Unit.SourceUnit.Move(Game.MousePosition);
             return true;
         }

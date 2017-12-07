@@ -1,17 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright file="RuneTaker.cs" company="EnsageSharp">
+//    Copyright (c) 2017 Moones.
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
+// </copyright>
 namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData;
-    using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune;
     using Ability.Core.AbilityData.AbilityMapDataProvider.AbilityMapData.Runes.AbilityRune.Types;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders;
     using Ability.Core.AbilityFactory.Utilities;
-    using Ability.Core.MenuManager.GetValue;
     using Ability.Core.MenuManager.Menus.AbilityMenu;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Items;
     using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
@@ -24,6 +33,18 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
 
     public class RuneTaker : IRuneTaker
     {
+        #region Fields
+
+        private Vector3 lastOrderPosition;
+
+        private RunePosition<BountyRune> latestBounty;
+
+        private IOrderedEnumerable<RunePosition<BountyRune>> orderedBounties;
+
+        #endregion
+
+        #region Constructors and Destructors
+
         public RuneTaker(IAbilityUnit unit, IAbilityMapData abilityMapData, bool autoRunToTake)
         {
             this.Unit = unit;
@@ -40,22 +61,31 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
             this.Menu = menu;
         }
 
-        public void Dispose()
-        {
-        }
+        #endregion
 
-        public virtual IAbilityUnit Unit { get; set; }
-
-        public bool AutoRunToTake { get; set; }
-        public bool TakeBountyOnStart { get; set; }
-
-        public void Initialize()
-        {
-        }
+        #region Public Properties
 
         public IAbilityMapData AbilityMapData { get; }
 
+        public bool AutoRunToTake { get; set; }
+
+        public RunePosition<BountyRune> ClosestBounty { get; private set; }
+
+        public bool Enabled { get; set; }
+
+        public uint Id { get; set; }
+
         public AbilitySubMenu Menu { get; }
+
+        public Sleeper Sleeper { get; } = new Sleeper();
+
+        public bool TakeBountyOnStart { get; set; }
+
+        public virtual IAbilityUnit Unit { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public virtual void ConnectToMenu(AbilityMenu menu, bool addAutoRun, bool addTakeBounty)
         {
@@ -88,11 +118,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
             }
         }
 
-        public bool Enabled { get; set; }
+        public void Dispose()
+        {
+        }
 
-        public uint Id { get; set; }
+        public virtual void EnqueueRunForRune(List<Vector3> path)
+        {
+            this.Unit.OrderQueue.EnqueueOrder(new RunForRune<BountyRune>(this.Unit, this.ClosestBounty, path));
+        }
 
-        public Sleeper Sleeper { get; } = new Sleeper();
+        public virtual void EnqueueRunForRune(RunePosition<BountyRune> rune)
+        {
+        }
+
+        public virtual void EnqueueRunForRune(RunePosition<PowerUpRune> rune)
+        {
+        }
+
+        public void Initialize()
+        {
+        }
 
         public bool Issue()
         {
@@ -121,44 +166,51 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
             return false;
         }
 
-        private bool TakePowerUpRune()
+        public bool PreciseIssue()
         {
-            foreach (var runePosition in this.AbilityMapData.PowerUpRuneSpawner.Positions)
+            if (!this.Enabled)
             {
-                if (runePosition.HasRune && runePosition.CurrentRune != null
-                    && this.Unit.Position.PredictedByLatency.Distance2D(runePosition.Position) < 350)
-                {
-                    if (this.ShouldTakeRune(runePosition))
-                    {
-                        Console.WriteLine("pickup order sent");
-                        this.Unit.OrderQueue.EnqueueOrder(new PickUpRune(this.Unit, runePosition.CurrentRune));
-                        this.Sleeper.Sleep(1000);
-                        return true;
-                    }
-                }
+                return false;
             }
 
-            return false;
+            return false; // throw new NotImplementedException();
         }
-        
-        private IOrderedEnumerable<RunePosition<BountyRune>> orderedBounties;
 
-        public RunePosition<BountyRune> ClosestBounty { get; private set; }
+        public virtual bool ShouldRunForRune(RunePosition<BountyRune> rune)
+        {
+            return true;
+        }
 
-        private Vector3 lastOrderPosition;
+        public virtual bool ShouldRunForRune(RunePosition<PowerUpRune> rune)
+        {
+            return true;
+        }
 
-        private RunePosition<BountyRune> latestBounty;
+        public virtual bool ShouldTakeRune(RunePosition<BountyRune> rune)
+        {
+            return true;
+        }
+
+        public virtual bool ShouldTakeRune(RunePosition<PowerUpRune> rune)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region Methods
 
         private bool TakeBountyRune()
         {
-            if (this.Unit.Position.PredictedByLatency.Distance2D(this.lastOrderPosition) > 500 || this.lastOrderPosition == Vector3.Zero)
+            if (this.Unit.Position.PredictedByLatency.Distance2D(this.lastOrderPosition) > 500
+                || this.lastOrderPosition == Vector3.Zero)
             {
                 var list = new List<RunePosition<BountyRune>>(this.AbilityMapData.BountyRuneSpawner.Positions);
-                //if (this.latestBounty != null)
-                //{
-                //    list.Remove(this.latestBounty);
-                //}
 
+                // if (this.latestBounty != null)
+                // {
+                // list.Remove(this.latestBounty);
+                // }
                 foreach (var runePosition in this.AbilityMapData.BountyRuneSpawner.Positions)
                 {
                     if (!this.ShouldTakeRune(runePosition))
@@ -203,12 +255,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
             }
 
             List<Vector3> path;
-            var walkDuration = (this.Unit.Pathfinder.PathDistance(this.ClosestBounty.Position, out path)
-                                / this.Unit.SourceUnit.MovementSpeed);
-            if ((this.ClosestBounty.HasRune && this.ClosestBounty.CurrentRune != null
-                 && !this.ClosestBounty.CurrentRune.Disposed)
-                || (this.ClosestBounty.NextSpawnTime - Game.GameTime < walkDuration + 5
-                    && this.ClosestBounty.NextSpawnTime - Game.GameTime >= walkDuration))
+            var walkDuration = this.Unit.Pathfinder.PathDistance(this.ClosestBounty.Position, out path)
+                               / this.Unit.SourceUnit.MovementSpeed;
+            if (this.ClosestBounty.HasRune && this.ClosestBounty.CurrentRune != null
+                && !this.ClosestBounty.CurrentRune.Disposed
+                || this.ClosestBounty.NextSpawnTime - Game.GameTime < walkDuration + 5
+                && this.ClosestBounty.NextSpawnTime - Game.GameTime >= walkDuration)
             {
                 if (this.ShouldRunForRune(this.ClosestBounty))
                 {
@@ -223,51 +275,26 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker
             return false;
         }
 
-        public virtual void EnqueueRunForRune(List<Vector3> path)
+        private bool TakePowerUpRune()
         {
-            this.Unit.OrderQueue.EnqueueOrder(new RunForRune<BountyRune>(this.Unit, this.ClosestBounty, path));
-        }
-
-        public virtual bool ShouldTakeRune(RunePosition<BountyRune> rune)
-        {
-            return true;
-        }
-
-        public virtual bool ShouldTakeRune(RunePosition<PowerUpRune> rune)
-        {
-            return true;
-        }
-
-        public virtual bool ShouldRunForRune(RunePosition<BountyRune> rune)
-        {
-            return true;
-        }
-
-        public virtual bool ShouldRunForRune(RunePosition<PowerUpRune> rune)
-        {
-            return true;
-        }
-
-
-        public virtual void EnqueueRunForRune(RunePosition<BountyRune> rune)
-        {
-
-        }
-
-        public virtual void EnqueueRunForRune(RunePosition<PowerUpRune> rune)
-        {
-
-        }
-
-
-        public bool PreciseIssue()
-        {
-            if (!this.Enabled)
+            foreach (var runePosition in this.AbilityMapData.PowerUpRuneSpawner.Positions)
             {
-                return false;
+                if (runePosition.HasRune && runePosition.CurrentRune != null
+                    && this.Unit.Position.PredictedByLatency.Distance2D(runePosition.Position) < 350)
+                {
+                    if (this.ShouldTakeRune(runePosition))
+                    {
+                        Console.WriteLine("pickup order sent");
+                        this.Unit.OrderQueue.EnqueueOrder(new PickUpRune(this.Unit, runePosition.CurrentRune));
+                        this.Sleeper.Sleep(1000);
+                        return true;
+                    }
+                }
             }
 
-            return false; //throw new NotImplementedException();
+            return false;
         }
+
+        #endregion
     }
 }

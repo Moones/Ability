@@ -23,7 +23,6 @@ namespace Ability.Lycan
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.ControllableUnits;
-    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.SpiritBear.SkillBook;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.Combo;
     using Ability.Core.AbilityModule.Metadata;
@@ -31,17 +30,24 @@ namespace Ability.Lycan
     using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
     using Ability.LoneDruid.ChaseCombo;
     using Ability.LoneDruid.RuneTaker;
-
-    using Ensage;
-
     using Ability.Lycan.BodyblockCombo;
     using Ability.Lycan.ChaseCombo;
     using Ability.Lycan.RetreatCombo;
+
+    using Ensage;
 
     [Export(typeof(IAbilityHeroModule))]
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_lone_druid)]
     internal class LoneDruidModule : AbilityHeroModuleBase
     {
+        #region Fields
+
+        private BearRuneTaker BearRuneTaker;
+
+        private LoneDruidControllableUnits controllableUnits;
+
+        #endregion
+
         #region Constructors and Destructors
 
         public LoneDruidModule()
@@ -169,7 +175,6 @@ namespace Ability.Lycan
 
             loneRuneTaker.ConnectToMenu(runeTakerMenu, false, false);
 
-
             if (this.controllableUnits.Bear != null)
             {
                 this.BearAdded();
@@ -181,51 +186,9 @@ namespace Ability.Lycan
             }
         }
 
-        private LoneDruidControllableUnits controllableUnits;
+        #endregion
 
-        private BearRuneTaker BearRuneTaker;
-
-
-
-        private void UnitAdded(IAbilityUnit unit)
-        {
-           //unit.TargetSelector.Target = this
-            if (unit.UnitCombo != null)
-            {
-                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitSpellsOrbwalker(unit));
-            }
-            else
-            {
-                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitOrbwalker(unit));
-            }
-
-            this.AddOrbwalker(unit.Orbwalker);
-            
-            //unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
-            //unit.Fighting = this.LocalHero.Fighting;
-
-            this.BodyBlockCombo.AddOrderIssuer(unit.Orbwalker);
-            this.ChaseCombo.AddOrderIssuer(unit.Orbwalker);
-            this.RetreatCombo.AddOrderIssuer(unit.Orbwalker);
-
-            if (this.RetreatCombo.Key.Value.Active || this.ChaseCombo.Key.Value.Active || this.BodyBlockCombo.Key.Value.Active)
-            {
-                unit.AddOrderIssuer(unit.Orbwalker);
-                unit.Orbwalker.Enabled = true;
-            }
-
-            unit.Fighting = this.LocalHero.Fighting;
-            unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
-        }
-
-        private void UnitRemoved(IAbilityUnit unit)
-        {
-            this.RemoveOrbwalker(unit.Orbwalker);
-
-            this.ChaseCombo.RemoveOrderIssuer(unit.Orbwalker);
-            this.RetreatCombo.RemoveOrderIssuer(unit.Orbwalker);
-            this.BodyBlockCombo.RemoveOrderIssuer(unit.Orbwalker);
-        }
+        #region Methods
 
         private void BearAdded()
         {
@@ -286,7 +249,47 @@ namespace Ability.Lycan
 
             this.LoneDruidOrbwalker.Bear = this.Bear;
         }
-        
+
+        private void UnitAdded(IAbilityUnit unit)
+        {
+            // unit.TargetSelector.Target = this
+            if (unit.UnitCombo != null)
+            {
+                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitSpellsOrbwalker(unit));
+            }
+            else
+            {
+                unit.AddPart<IUnitOrbwalker>(abilityUnit => new ControllableUnitOrbwalker(unit));
+            }
+
+            this.AddOrbwalker(unit.Orbwalker);
+
+            // unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
+            // unit.Fighting = this.LocalHero.Fighting;
+            this.BodyBlockCombo.AddOrderIssuer(unit.Orbwalker);
+            this.ChaseCombo.AddOrderIssuer(unit.Orbwalker);
+            this.RetreatCombo.AddOrderIssuer(unit.Orbwalker);
+
+            if (this.RetreatCombo.Key.Value.Active || this.ChaseCombo.Key.Value.Active
+                || this.BodyBlockCombo.Key.Value.Active)
+            {
+                unit.AddOrderIssuer(unit.Orbwalker);
+                unit.Orbwalker.Enabled = true;
+            }
+
+            unit.Fighting = this.LocalHero.Fighting;
+            unit.TargetSelector.Target = this.LocalHero.TargetSelector.Target;
+        }
+
+        private void UnitRemoved(IAbilityUnit unit)
+        {
+            this.RemoveOrbwalker(unit.Orbwalker);
+
+            this.ChaseCombo.RemoveOrderIssuer(unit.Orbwalker);
+            this.RetreatCombo.RemoveOrderIssuer(unit.Orbwalker);
+            this.BodyBlockCombo.RemoveOrderIssuer(unit.Orbwalker);
+        }
+
         #endregion
     }
 }

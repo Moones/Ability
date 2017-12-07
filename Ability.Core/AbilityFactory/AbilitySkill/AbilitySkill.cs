@@ -180,6 +180,8 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
 
         public ICastRange CastRange { get; set; }
 
+        public Sleeper CastSleeper { get; } = new Sleeper();
+
         /// <summary>
         ///     Gets or sets the charges.
         /// </summary>
@@ -363,8 +365,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill
         #endregion
 
         #region Public Methods and Operators
-
-        public Sleeper CastSleeper { get; } = new Sleeper();
 
         /// <summary>The add part.</summary>
         /// <param name="partFactory">The part factory.</param>

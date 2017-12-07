@@ -19,20 +19,25 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
     public interface ICastFunction : IAbilitySkillPart
     {
+        #region Public Properties
+
+        Func<bool> CastFunc { get; set; }
+
+        IAbilityUnit LastTarget { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
         bool CanCast();
-
-        bool TargetIsValid(IAbilityUnit target);
-
-        IAbilityUnit LastTarget { get; set; }
 
         bool Cast(IAbilityUnit target);
 
         bool Cast();
 
         bool Cast(IAbilityUnit[] targets);
-        Func<bool> CastFunc { get; set; }
+
+        bool TargetIsValid(IAbilityUnit target);
 
         #endregion
     }

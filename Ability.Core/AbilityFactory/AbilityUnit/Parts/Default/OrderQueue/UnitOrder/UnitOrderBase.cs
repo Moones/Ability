@@ -35,21 +35,34 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         #region Public Properties
 
+        public bool Canceled { get; set; }
+
+        public Color Color { get; set; }
+
         public bool ExecuteOnce { get; set; }
 
         public uint Id { get; set; }
 
+        public string Name { get; }
+
         public OrderType OrderType { get; }
+
+        public bool PrintInLog { get; set; } = true;
 
         public uint Priority { get; }
 
-        public IAbilityUnit Unit { get; }
+        public bool ShouldExecuteFast { get; set; }
 
-        public string Name { get; }
+        public IAbilityUnit Unit { get; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public void Cancel()
+        {
+            this.Canceled = true;
+        }
 
         public abstract bool CanExecute();
 
@@ -61,24 +74,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
         {
         }
 
-        public bool ShouldExecuteFast { get; set; }
-
-        public bool PrintInLog { get; set; } = true;
+        public abstract float Execute();
 
         public virtual float ExecuteFast()
         {
             return 0;
-        }
-
-        public abstract float Execute();
-
-        public Color Color { get; set; }
-
-        public bool Canceled { get; set; }
-
-        public void Cancel()
-        {
-            this.Canceled = true;
         }
 
         #endregion

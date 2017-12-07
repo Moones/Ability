@@ -30,8 +30,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
         private Func<IAbilityUnit, bool> validTarget;
 
-        public Func<bool> CastFunc { get; set; }
-
         #endregion
 
         #region Constructors and Destructors
@@ -45,6 +43,10 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
 
         #region Public Properties
 
+        public Func<bool> CastFunc { get; set; }
+
+        public IAbilityUnit LastTarget { get; set; }
+
         public IAbilitySkill Skill { get; set; }
 
         #endregion
@@ -55,13 +57,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
         {
             return this.Skill.CanCast() && this.canCast();
         }
-
-        public virtual bool TargetIsValid(IAbilityUnit target)
-        {
-            return this.validTarget(target);
-        }
-
-        public IAbilityUnit LastTarget { get; set; }
 
         public virtual bool Cast(IAbilityUnit target)
         {
@@ -81,7 +76,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
             {
                 return false;
             }
-            
+
             return this.CastFunc();
         }
 
@@ -116,16 +111,15 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                 }
                 else
                 {
-                    this.CastFunc =
-                        () =>
-                            {
-                                this.Skill.Owner.OrderQueue.EnqueueOrder(
-                                    new CastSkill(
-                                        OrderType.DealDamageToEnemy,
-                                        this.Skill,
-                                        () => this.Skill.SourceAbility.UseAbility()));
-                                return true;
-                            };
+                    this.CastFunc = () =>
+                        {
+                            this.Skill.Owner.OrderQueue.EnqueueOrder(
+                                new CastSkill(
+                                    OrderType.DealDamageToEnemy,
+                                    this.Skill,
+                                    () => this.Skill.SourceAbility.UseAbility()));
+                            return true;
+                        };
                 }
 
                 this.canCast =
@@ -171,7 +165,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                                                 this.Skill.Owner.TargetSelector.Target.SourceUnit)));
                                 return true;
                             };
-
                     }
                 }
                 else
@@ -186,7 +179,6 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                             return true;
                         };
                 }
-
 
                 this.canCast =
                     () =>
@@ -211,10 +203,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                                 () =>
                                     this.Skill.SourceAbility.UseAbility(
                                         this.Skill.Owner.TargetSelector.Target.Position.PredictedByLatency)));
-                    return true;
-                };
+                        return true;
+                    };
             }
-
 
             if (this.Skill.SourceAbility.TargetTeamType.HasFlag(TargetTeamType.Enemy))
             {
@@ -222,26 +213,23 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
                 {
                     this.validTarget =
                         (target) =>
-                            target.SourceUnit.IsAlive
-                            && !target.Modifiers.MagicImmune
-                            && !target.Modifiers.Invul;
+                            target.SourceUnit.IsAlive && !target.Modifiers.MagicImmune && !target.Modifiers.Invul;
                 }
                 else
                 {
-                    this.validTarget =
-                        (target) =>
-                            target.SourceUnit.IsAlive
-                            && !target.Modifiers.Invul;
+                    this.validTarget = (target) => target.SourceUnit.IsAlive && !target.Modifiers.Invul;
                 }
             }
             else
             {
                 this.validTarget =
-                    (target) =>
-                        target.SourceUnit.IsAlive
-                        && !target.Modifiers.MagicImmune
-                        && !target.Modifiers.Invul;
+                    (target) => target.SourceUnit.IsAlive && !target.Modifiers.MagicImmune && !target.Modifiers.Invul;
             }
+        }
+
+        public virtual bool TargetIsValid(IAbilityUnit target)
+        {
+            return this.validTarget(target);
         }
 
         #endregion

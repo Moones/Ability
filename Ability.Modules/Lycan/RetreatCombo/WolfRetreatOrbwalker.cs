@@ -14,7 +14,6 @@
 namespace Ability.Lycan.RetreatCombo
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
-
     using Ability.Lycan.ChaseCombo;
 
     public class WolfRetreatOrbwalker : WolfOrbwalker

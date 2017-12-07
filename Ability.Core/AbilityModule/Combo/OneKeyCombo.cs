@@ -109,16 +109,16 @@ namespace Ability.Core.AbilityModule.Combo
             this.OrderIssuers = newList;
         }
 
+        public void Dispose()
+        {
+            this.Key.Dispose();
+        }
+
         public void RemoveOrderIssuer(IOrderIssuer orderIssuer)
         {
             var newList = new List<IOrderIssuer>(this.OrderIssuers);
             newList.Remove(orderIssuer);
             this.OrderIssuers = newList;
-        }
-
-        public void Dispose()
-        {
-            this.Key.Dispose();
         }
 
         #endregion

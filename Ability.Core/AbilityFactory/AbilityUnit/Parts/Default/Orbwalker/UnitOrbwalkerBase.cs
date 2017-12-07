@@ -35,6 +35,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         private bool beforeAttackExecuted;
 
+        private bool enabled;
+
         private Sleeper issueSleeper = new Sleeper();
 
         private IAbilityUnit target;
@@ -42,8 +44,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
         private Reacter targetReset;
 
         private IAbilityUnit unit;
-
-        private bool enabled;
 
         #endregion
 
@@ -210,13 +210,10 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 return this.NoTarget();
             }
 
-            //if (this.beforeAttackExecuted && !this.Attacking)
-            //{
-            //    return this.Attack();
-            //}
-
-
-
+            // if (this.beforeAttackExecuted && !this.Attacking)
+            // {
+            // return this.Attack();
+            // }
             if (this.MoveToAttack)
             {
                 if (this.CastSpells())
@@ -233,14 +230,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
         public virtual bool IsTargetValid()
         {
-            //Console.WriteLine((this.Target.SourceUnit.IsAlive)
-            //       + " " + (this.Target.Visibility.Visible)
-            //       + " " + (this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value)
-            //       + " " + (this.Target.Modifiers.Attackable));
-            return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsValid && this.Target.SourceUnit.IsAlive
-                   && this.Target.Visibility.Visible
-                   && this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value
-                   && this.Target.Modifiers.Attackable;
+            // Console.WriteLine((this.Target.SourceUnit.IsAlive)
+            // + " " + (this.Target.Visibility.Visible)
+            // + " " + (this.Unit.TargetSelector.LastDistanceToTarget < this.MaxTargetDistance + this.Unit.AttackRange.Value)
+            // + " " + (this.Target.Modifiers.Attackable));
+            return this.Unit.TargetSelector.TargetIsSet && this.Target.SourceUnit.IsValid
+                   && this.Target.SourceUnit.IsAlive && this.Target.Visibility.Visible
+                   && this.Unit.TargetSelector.LastDistanceToTarget
+                   < this.MaxTargetDistance + this.Unit.AttackRange.Value && this.Target.Modifiers.Attackable;
         }
 
         public bool KeepRange()
@@ -316,14 +313,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
 
             this.TargetValid = this.IsTargetValid();
 
-            //Console.WriteLine(this.TargetValid);
+            // Console.WriteLine(this.TargetValid);
             if (!this.TargetValid)
             {
                 this.MeanWhile = true;
                 return false;
             }
 
-            //Console.WriteLine("orbwalker - ping " + Game.Ping);
+            // Console.WriteLine("orbwalker - ping " + Game.Ping);
             this.Time = GlobalVariables.Time * 1000 + Game.Ping;
             this.NextAttack = this.Time - this.Unit.AttackAnimationTracker.NextAttackTime
                               + this.Unit.TurnRate.GetTurnTime(this.Target) * 1000;
@@ -471,11 +468,19 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker
                 {
                     if (distanceFromSegment2 < unit.SourceUnit.HullRadius + this.Unit.SourceUnit.HullRadius + 50)
                     {
-                        infront = Pathfinding.ExtendUntilWall(position, direction, distance + 500, this.Unit.Pathfinder.EnsagePathfinding);
+                        infront = Pathfinding.ExtendUntilWall(
+                            position,
+                            direction,
+                            distance + 500,
+                            this.Unit.Pathfinder.EnsagePathfinding);
                     }
                     else
                     {
-                        infront = Pathfinding.ExtendUntilWall(unitPosition, direction, 500, this.Unit.Pathfinder.EnsagePathfinding);
+                        infront = Pathfinding.ExtendUntilWall(
+                            unitPosition,
+                            direction,
+                            500,
+                            this.Unit.Pathfinder.EnsagePathfinding);
                     }
                 }
 

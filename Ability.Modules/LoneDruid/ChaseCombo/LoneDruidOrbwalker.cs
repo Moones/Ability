@@ -13,19 +13,18 @@
 // </copyright>
 namespace Ability.Lycan.ChaseCombo
 {
-    using System;
-
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.AttackRange;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.SkillBook;
 
-    using Ensage;
-    using Ensage.Common.Extensions;
-
     public class LoneDruidOrbwalker : UnitOrbwalkerBase
     {
+        #region Fields
+
         private bool enabled;
+
+        #endregion
 
         #region Constructors and Destructors
 
@@ -60,43 +59,6 @@ namespace Ability.Lycan.ChaseCombo
             return this.KeepRange();
         }
 
-        public override bool IssueMeanwhileActions()
-        {
-            if (this.AttackRange.TrueForm)
-            {
-                if (!this.TargetValid)
-                {
-                    return this.NoTarget();
-                }
-
-                if (this.CastSpells())
-                {
-                    return true;
-                }
-                
-
-                if (this.Unit.TargetSelector.LastDistanceToTarget
-                     < 800)
-                {
-                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
-                }
-
-                return this.Move();
-            }
-
-            return base.IssueMeanwhileActions();
-        }
-
-        public override bool PreciseIssue()
-        {
-            if (this.AttackRange.TrueForm)
-            {
-                return false;
-            }
-
-            return base.PreciseIssue();
-        }
-
         public override bool BeforeAttack()
         {
             if (this.CastSpells())
@@ -121,24 +83,51 @@ namespace Ability.Lycan.ChaseCombo
             return this.Unit.UnitCombo.CastAllSpellsOnTarget();
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            //this.Unit.Fighting = true;
-            //if (this.Unit.TargetSelector.TargetIsSet && this.Bear != null && this.Bear.TargetSelector.LastDistanceToTarget < 1000)
-            //{
-            //    this.Bear.Fighting = true;
-            //}
-        }
-
         public override void Dispose()
         {
             base.Dispose();
-            //this.Unit.Fighting = false;
-            //if (this.Bear != null)
-            //{
-            //    this.Bear.Fighting = false;
-            //}
+
+            // this.Unit.Fighting = false;
+            // if (this.Bear != null)
+            // {
+            // this.Bear.Fighting = false;
+            // }
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            // this.Unit.Fighting = true;
+            // if (this.Unit.TargetSelector.TargetIsSet && this.Bear != null && this.Bear.TargetSelector.LastDistanceToTarget < 1000)
+            // {
+            // this.Bear.Fighting = true;
+            // }
+        }
+
+        public override bool IssueMeanwhileActions()
+        {
+            if (this.AttackRange.TrueForm)
+            {
+                if (!this.TargetValid)
+                {
+                    return this.NoTarget();
+                }
+
+                if (this.CastSpells())
+                {
+                    return true;
+                }
+
+                if (this.Unit.TargetSelector.LastDistanceToTarget < 800)
+                {
+                    return this.Unit.SourceUnit.Attack(this.Target.SourceUnit);
+                }
+
+                return this.Move();
+            }
+
+            return base.IssueMeanwhileActions();
         }
 
         public override bool Meanwhile()
@@ -154,13 +143,23 @@ namespace Ability.Lycan.ChaseCombo
         public override bool NoTarget()
         {
             this.Unit.TargetSelector.GetTarget();
-            
+
             if (this.CastSpellsNoTarget())
             {
                 return true;
             }
 
             return base.NoTarget();
+        }
+
+        public override bool PreciseIssue()
+        {
+            if (this.AttackRange.TrueForm)
+            {
+                return false;
+            }
+
+            return base.PreciseIssue();
         }
 
         #endregion

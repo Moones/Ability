@@ -18,7 +18,6 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     using Ability.Core.AbilityData.AbilityMapDataProvider;
     using Ability.Core.AbilityFactory.AbilitySkill;
@@ -47,6 +46,8 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
         ///     The update sleeper.
         /// </summary>
         private readonly Sleeper updateSleeper = new Sleeper();
+
+        private bool closed;
 
         private Vector3 lastBlinkPosition;
 
@@ -120,22 +121,12 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
             this.Orbwalkers = newList;
         }
 
-        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
-        {
-            var newList = new List<IUnitOrbwalker>(this.Orbwalkers);
-            newList.Remove(orbwalker);
-
-            this.Orbwalkers = newList;
-        }
-
         /// <summary>The menu.</summary>
         /// <returns>The <see cref="GetMenu" />.</returns>
         public Menu GetMenu()
         {
             return this.menu;
         }
-
-        private bool closed;
 
         /// <summary>
         ///     The on close.
@@ -232,6 +223,14 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
 
                         Entity.OnAnimationChanged += this.Unit_OnAnimationChanged;
                     });
+        }
+
+        public void RemoveOrbwalker(IUnitOrbwalker orbwalker)
+        {
+            var newList = new List<IUnitOrbwalker>(this.Orbwalkers);
+            newList.Remove(orbwalker);
+
+            this.Orbwalkers = newList;
         }
 
         #endregion

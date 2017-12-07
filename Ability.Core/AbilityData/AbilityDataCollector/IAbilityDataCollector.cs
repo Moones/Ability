@@ -21,6 +21,7 @@ namespace Ability.Core.AbilityData.AbilityDataCollector
         #region Public Methods and Operators
 
         void AddOrbwalker(IUnitOrbwalker orbwalker);
+
         void RemoveOrbwalker(IUnitOrbwalker orbwalker);
 
         #endregion

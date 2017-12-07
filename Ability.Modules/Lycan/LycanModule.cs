@@ -25,11 +25,10 @@ namespace Ability.Lycan
     using Ability.Core.AbilityModule.Combo;
     using Ability.Core.AbilityModule.Metadata;
     using Ability.Core.AbilityModule.ModuleBase;
-
-    using Ensage;
-
     using Ability.Lycan.ChaseCombo;
     using Ability.Lycan.RetreatCombo;
+
+    using Ensage;
 
     [Export(typeof(IAbilityHeroModule))]
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_lycan)]

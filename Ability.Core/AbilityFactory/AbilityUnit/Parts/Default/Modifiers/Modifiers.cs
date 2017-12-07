@@ -70,17 +70,48 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         #region Public Properties
 
+        public bool AbleToIssueAttack { get; set; }
+
+        public bool Alacrity { get; set; }
+
+        public bool AphoticShield { get; set; }
+
+        public bool Attackable { get; set; }
+
         public bool AttackImmune { get; set; }
+
+        public bool Bloodrage { get; set; }
+
+        public Dictionary<string, Action<bool>> Buffs { get; set; }
+
+        public bool ChillingTouch { get; set; }
 
         public bool ConsumedAghanim { get; set; }
 
         public bool Disarmed { get; set; }
 
+        public bool Empower { get; set; }
+
+        public bool FlameGuard { get; set; }
+
+        public bool FrostArmor { get; set; }
+
+        public bool GuardianAngel { get; set; }
+
+        public bool HasBuffs { get; set; }
+
+        public bool HasDebuffs { get; set; }
+
         public bool Immobile => this.immobile;
 
-        public float ImmobileDuration => (this.immobile && this.immobileModifier.IsValid) ? this.immobileModifier.RemainingTime : 0;
+        public float ImmobileDuration
+            => this.immobile && this.immobileModifier.IsValid ? this.immobileModifier.RemainingTime : 0;
+
+        public bool InnerVitality { get; set; }
 
         public bool Invul { get; set; }
+
+        public bool IonShell { get; set; }
 
         public bool MagicImmune { get; set; }
 
@@ -88,31 +119,40 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
         public DataProvider<Modifier> ModifierRemoved { get; } = new DataProvider<Modifier>();
 
+        public bool Overpower { get; set; }
+
+        public bool QuadrupleTap { get; set; }
+
+        public bool Rabid { get; set; }
+
+        public bool Recall { get; set; }
+
+        public bool RocketBarrage { get; set; }
+
         public bool Rooted { get; set; }
+
+        public bool SadistActive { get; set; }
 
         public bool Silenced { get; set; }
 
+        public bool Sprint { get; set; }
+
+        public bool Strafe { get; set; }
+
         public bool Stunned { get; set; }
 
-        public bool HasBuffs { get; set; }
-        public bool HasDebuffs { get; set; }
-
-        public bool AphoticShield { get; set; }
-
-        public bool ChillingTouch { get; set; }
-
-        public bool Bloodrage { get; set; }
+        public bool Surge { get; set; }
 
         public bool TestOfFaithTeleport { get; set; }
-        public bool Strafe { get; set; }
-        public bool IonShell { get; set; }
 
-        public Dictionary<string, Action<bool>> Buffs { get; set; } 
+        public bool Transform { get; set; }
 
         /// <summary>
         ///     Gets or sets the unit.
         /// </summary>
         public IAbilityUnit Unit { get; set; }
+
+        public bool Windrun { get; set; }
 
         #endregion
 
@@ -199,7 +239,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
                                  { "modifier_windrunner_windrun", b => this.Windrun = b }
                              };
 
-
             this.AttackImmune = this.Unit.SourceUnit.IsAttackImmune();
             this.Invul = this.Unit.SourceUnit.IsInvul();
             this.MagicImmune = this.Unit.SourceUnit.IsMagicImmune();
@@ -217,38 +256,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
                             || this.Empower || this.QuadrupleTap || this.Transform || this.SadistActive
                             || this.GuardianAngel || this.Sprint || this.Overpower || this.Windrun;
         }
-
-        public bool Windrun { get; set; }
-
-        public bool Overpower { get; set; }
-
-        public bool Sprint { get; set; }
-
-        public bool GuardianAngel { get; set; }
-
-        public bool SadistActive { get; set; }
-
-        public bool Transform { get; set; }
-
-        public bool QuadrupleTap { get; set; }
-
-        public bool Empower { get; set; }
-
-        public bool Rabid { get; set; }
-
-        public bool FrostArmor { get; set; }
-
-        public bool Recall { get; set; }
-
-        public bool Alacrity { get; set; }
-
-        public bool InnerVitality { get; set; }
-
-        public bool RocketBarrage { get; set; }
-
-        public bool FlameGuard { get; set; }
-
-        public bool Surge { get; set; }
 
         /// <summary>
         ///     The modifier removed.
@@ -287,10 +294,6 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Modifiers
 
             this.ModifierRemoved.Next(modifier);
         }
-
-        public bool Attackable { get; set; }
-
-        public bool AbleToIssueAttack { get; set; }
 
         #endregion
     }
