@@ -25,7 +25,7 @@ namespace Ability.Core.AbilityModule.ModuleBase
 
     using Ensage.Common.Menu;
 
-    public abstract class AbilityModuleBase : IAbilityModule
+    public abstract class AbilityModuleBase :  IAbilityModule
     {
         #region Fields
 

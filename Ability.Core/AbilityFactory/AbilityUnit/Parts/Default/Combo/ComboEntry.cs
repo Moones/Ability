@@ -22,9 +22,9 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo
     {
         #region Constructors and Destructors
 
-        public ComboEntry(IAbilitySkill skill)
+        public ComboEntry(IAbilitySkill skill, Func<bool> cast = null)
         {
-            this.Cast = skill.CastFunction.Cast;
+            this.Cast = cast ?? skill.CastFunction.Cast;
         }
 
         public ComboEntry(ItemObserver item)

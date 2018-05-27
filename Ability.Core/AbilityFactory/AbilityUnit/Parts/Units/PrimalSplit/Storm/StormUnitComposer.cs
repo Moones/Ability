@@ -15,9 +15,12 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm
 {
     using System.ComponentModel.Composition;
 
+    using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit.Metadata;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Composer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Combo;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.SkillBook;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm.UnitCombo;
 
     [Export(typeof(IAbilityUnitComposer))]
@@ -29,6 +32,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm
         internal StormUnitComposer()
         {
             this.AssignControllablePart<IUnitCombo>(unit => new StormCombo(unit));
+            this.AssignPart<ISkillBook<IAbilitySkill>>(unit => new StormSkillBook(unit));
         }
 
         #endregion

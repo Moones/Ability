@@ -117,11 +117,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
             this.lastId++;
             order.Id = this.lastId;
             order.Enqueue();
-
             if (this.queueEmpty)
             {
                 if (this.IssueNow(order))
                 {
+                    //Console.WriteLine("Enqueued: " + order.Name);
                     this.ProcessedOrder = order;
 
                     // this.queueEmpty = false;
@@ -187,6 +187,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
 
         public bool Issue()
         {
+            //Console.WriteLine("queue update " + this.Unit.PrettyName);
             if (this.queueEmpty)
             {
                 return false;
@@ -241,15 +242,17 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue
         {
             if (this.sleeper.Sleeping)
             {
+                //Console.WriteLine("sleeping");
                 return true;
             }
 
             if (!order.CanExecute() || order.Canceled)
             {
+                //Console.WriteLine("cant execute");
                 return false;
             }
 
-            // Console.WriteLine("processing order " + order.OrderType);
+             //Console.WriteLine("processing order " + order.OrderType);
             var delay = order.Execute();
             if (order.PrintInLog)
             {

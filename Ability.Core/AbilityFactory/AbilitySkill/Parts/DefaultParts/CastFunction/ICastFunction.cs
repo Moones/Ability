@@ -21,7 +21,7 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
     {
         #region Public Properties
 
-        Func<bool> CastFunc { get; set; }
+        Func<IAbilityUnit, bool> CastFunc { get; set; }
 
         IAbilityUnit LastTarget { get; set; }
 

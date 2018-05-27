@@ -16,12 +16,16 @@ namespace Ability.Brewmaster
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Linq;
 
     using Ability.Brewmaster.ChaseCombo;
+    using Ability.Core.AbilityFactory.AbilitySkill;
     using Ability.Core.AbilityFactory.AbilityUnit;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderIssuer;
     using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.RuneTaker;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.SkillBook;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Heroes.LoneDruid.SkillBook;
     using Ability.Core.AbilityFactory.Utilities;
     using Ability.Core.AbilityModule.Combo;
     using Ability.Core.AbilityModule.Metadata;
@@ -29,6 +33,7 @@ namespace Ability.Brewmaster
     using Ability.Core.MenuManager.Menus.AbilityMenu.Submenus;
 
     using Ensage;
+    using Ensage.Common.Extensions;
 
     [Export(typeof(IAbilityHeroModule))]
     [AbilityHeroModuleMetadata((uint)HeroId.npc_dota_hero_brewmaster)]
@@ -50,6 +55,10 @@ namespace Ability.Brewmaster
         public OneKeyCombo ChaseCombo { get; set; }
 
         public OneKeyCombo RetreatCombo { get; set; }
+
+        public IAbilityUnit StormBear { get; set; }
+
+        public StormSkillBook StormSkillBook { get; set; }
 
         #endregion
 
@@ -115,6 +124,102 @@ namespace Ability.Brewmaster
             {
                 this.UnitAdded(controllableUnitsUnit.Value);
             }
+
+            this.NewKey(
+                "Cast Cyclone",
+                'D',
+                () =>
+                    {
+                        if (this.StormBear != null && this.StormBear.SourceUnit.IsValid && this.StormBear.SourceUnit.IsAlive)
+                        {
+                            var mouseDistance = 9999999f;
+                            var mousePosition = Game.MousePosition;
+                            IAbilityUnit result = null;
+
+                            // Console.WriteLine("looking for target");
+                            foreach (var teamOtherTeam in this.LocalHero.Team.OtherTeams)
+                            {
+                                if (teamOtherTeam?.UnitManager == null || !teamOtherTeam.UnitManager.Units.Any())
+                                {
+                                    continue;
+                                }
+
+                                foreach (var unitManagerUnit in teamOtherTeam.UnitManager.Units)
+                                {
+                                    if (!unitManagerUnit.Value.SourceUnit.IsValid || !unitManagerUnit.Value.SourceUnit.IsAlive
+                                        || !unitManagerUnit.Value.Visibility.Visible || unitManagerUnit.Value.Health.Current <= 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    // Console.WriteLine("unit " + unitManagerUnit.Value.Name);
+                                    var distance = unitManagerUnit.Value.Position.Current.Distance2D(mousePosition);
+                                    if (distance < mouseDistance)
+                                    {
+                                        mouseDistance = distance;
+                                        result = unitManagerUnit.Value;
+                                    }
+                                }
+                            }
+
+                            if (result != null && result.Position.Current.Distance(Game.MousePosition) < 1000)
+                            {
+                                this.StormSkillBook.Cyclone.CastFunction.Cast(result);
+                                //Console.WriteLine("Casting storm cyclone on " + result.PrettyName);
+                            }
+                        }
+                    },
+                () => { },
+                false,
+                "Will cast Cyclone with StormBear on target near mouse");
+
+            this.NewKey(
+                "Cast Dispel",
+                'X',
+                () =>
+                {
+                    if (this.StormBear != null && this.StormBear.SourceUnit.IsValid && this.StormBear.SourceUnit.IsAlive)
+                    {
+                        var mouseDistance = 9999999f;
+                        var mousePosition = Game.MousePosition;
+                        IAbilityUnit result = null;
+
+                        // Console.WriteLine("looking for target");
+                        foreach (var teamOtherTeam in this.LocalHero.Team.OtherTeams)
+                        {
+                            if (teamOtherTeam?.UnitManager == null || !teamOtherTeam.UnitManager.Units.Any())
+                            {
+                                continue;
+                            }
+
+                            foreach (var unitManagerUnit in teamOtherTeam.UnitManager.Units)
+                            {
+                                if (!unitManagerUnit.Value.SourceUnit.IsValid || !unitManagerUnit.Value.SourceUnit.IsAlive
+                                    || !unitManagerUnit.Value.Visibility.Visible || unitManagerUnit.Value.Health.Current <= 0)
+                                {
+                                    continue;
+                                }
+
+                                // Console.WriteLine("unit " + unitManagerUnit.Value.Name);
+                                var distance = unitManagerUnit.Value.Position.Current.Distance2D(mousePosition);
+                                if (distance < mouseDistance)
+                                {
+                                    mouseDistance = distance;
+                                    result = unitManagerUnit.Value;
+                                }
+                            }
+                        }
+
+                        if (result != null && result.Position.Current.Distance(Game.MousePosition) < 1000)
+                        {
+                            this.StormSkillBook.Dispel.CastFunction.Cast(result);
+                            //Console.WriteLine("Casting storm cyclone on " + result.PrettyName);
+                        }
+                    }
+                },
+                () => { },
+                false,
+                "Will cast Dispel with StormBear on target near mouse");
         }
 
         #endregion
@@ -123,6 +228,12 @@ namespace Ability.Brewmaster
 
         private void UnitAdded(IAbilityUnit unit)
         {
+            if (unit.PrettyName == "Storm")
+            {
+                //Console.WriteLine("AddedStorm");
+                this.StormBear = unit;
+                this.StormSkillBook = this.StormBear.SkillBook as StormSkillBook;
+            }
             // unit.TargetSelector.Target = this
             if (unit.PrettyName == "Earth")
             {

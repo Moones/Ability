@@ -33,10 +33,11 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         #region Constructors and Destructors
 
-        public CastSkill(OrderType orderType, IAbilitySkill skill, Func<bool> executeFunction)
+        public CastSkill(OrderType orderType, IAbilitySkill skill, Func<bool> executeFunction, IAbilityUnit target)
             : base(orderType, skill.Owner, "Cast skill " + skill.Name)
         {
             this.Skill = skill;
+            this.Target = target;
             this.ExecutionInterval = this.Skill.IsItem ? 250 : (float)(this.Skill.CastData.CastPoint * 250);
             this.ExecuteAction = executeFunction;
             this.Color = Color.GreenYellow;
@@ -54,6 +55,8 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
 
         public Sleeper Sleeper { get; set; } = new Sleeper();
 
+        public IAbilityUnit Target { get; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -70,7 +73,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
                 return false;
             }
 
-            if (!this.Skill.CastFunction.TargetIsValid(this.Skill.Owner.TargetSelector.Target))
+            if (!this.Skill.CastFunction.TargetIsValid(this.Target))
             {
                 this.Skill.Owner.SourceUnit.Stop();
 
@@ -105,7 +108,7 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitO
                 this.executed = true;
                 if (this.Skill.AbilityInfo.IsDisable)
                 {
-                    this.Skill.Owner.TargetSelector.Target.DisableManager.CastingDisable(this.Skill.HitDelay.Get());
+                    this.Target.DisableManager.CastingDisable(this.Skill.HitDelay.Get());
                 }
 
                 this.Sleeper.Sleep(this.ExecutionInterval);

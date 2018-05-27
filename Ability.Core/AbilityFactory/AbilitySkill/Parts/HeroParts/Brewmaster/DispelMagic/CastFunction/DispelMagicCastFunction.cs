@@ -14,6 +14,9 @@
 namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.DispelMagic.CastFunction
 {
     using Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFunction.Generic;
+    using Ability.Core.AbilityFactory.AbilityUnit;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.OrderPriority;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.OrderQueue.UnitOrder.Orders;
 
     public class DispelMagicCastFunction : DefaultCastingFunction
     {
@@ -30,8 +33,9 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.HeroParts.Brewmaster.Di
 
         public override bool CanCast()
         {
-            return base.CanCast() && this.Skill.Owner.TargetSelector.Target.Modifiers.HasBuffs;
+            return base.CanCast();
         }
+        
 
         #endregion
     }

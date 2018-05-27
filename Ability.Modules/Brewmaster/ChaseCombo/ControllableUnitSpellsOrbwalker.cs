@@ -14,8 +14,9 @@
 namespace Ability.Brewmaster.ChaseCombo
 {
     using Ability.Core.AbilityFactory.AbilityUnit;
+    using Ability.Core.AbilityFactory.AbilityUnit.Parts.Default.Orbwalker;
 
-    public class ControllableUnitSpellsOrbwalker : ControllableUnitOrbwalker
+    public class ControllableUnitSpellsOrbwalker : UnitOrbwalkerBase
     {
         #region Constructors and Destructors
 

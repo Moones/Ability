@@ -41,12 +41,14 @@ namespace Ability.Core.AbilityFactory.AbilityUnit.Parts.Units.PrimalSplit.Storm.
             // Console.WriteLine(
             // skillBookAllSkill.Name + " " + skillBookAllSkill.Id + " " + AbilityId.brewmaster_storm_wind_walk);
             // }
+            var dispell =
+                this.Unit.SkillBook.AllSkills.FirstOrDefault(
+                    x => x.Value.SourceAbility.Id == AbilityId.brewmaster_storm_dispel_magic).Value;
             this.Entries = new List<ComboEntry>
                                {
                                    new ComboEntry(
-                                       this.Unit.SkillBook.AllSkills.FirstOrDefault(
-                                               x => x.Value.SourceAbility.Id == AbilityId.brewmaster_storm_dispel_magic)
-                                           .Value),
+                                       dispell,
+                                       () => dispell.Owner.TargetSelector.Target.Modifiers.HasBuffs && dispell.CastFunction.Cast()),
                                    new ComboEntry(
                                        this.Unit.SkillBook.AllSkills.FirstOrDefault(
                                            x => x.Value.SourceAbility.Id == AbilityId.brewmaster_storm_wind_walk).Value)

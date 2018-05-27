@@ -26,19 +26,15 @@ namespace Ability.Core.AbilityFactory.AbilitySkill.Parts.DefaultParts.CastFuncti
         {
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        public override bool Cast(IAbilityUnit target)
-        {
-            throw new NotImplementedException();
-        }
-
         public override bool Cast(IAbilityUnit[] targets)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region Public Methods and Operators
+        
 
         #endregion
     }
