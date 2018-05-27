@@ -124,7 +124,8 @@ namespace Ability.Core.AbilityModule.ModuleBase
         {
             var item = new AbilityMenuItem<KeyBind>(
                 name,
-                new KeyBind(key, toggle ? KeyBindType.Toggle : KeyBindType.Press));
+                new KeyBind(key, toggle ? KeyBindType.Toggle : KeyBindType.Press),
+                description);
 
             item.NewValueProvider.Subscribe(
                 new DataObserver<KeyBind>(
